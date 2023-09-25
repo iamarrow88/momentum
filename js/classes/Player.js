@@ -1,62 +1,54 @@
 import basic from '../actions/commonFunctions.js';
 import sprite from '../../assets/svg/sprite.svg';
-import play from '../../assets/svg/play.svg';
-
-/* !TODO
- *   html код плеера +
- *   стили страницы
- *   функция по замене иконок (плей и тп)
- *   функция начала и окончания воспроизведения
- *    функция переключения треков (след/предыдущий)
- *    функция переключения треков по клику на трек
- *    если song__title больше, чем определенное кол во знаков, то сократить
- *   на все, что нажимается, сделать курсор пойнтер
- *   все инпуты выровнять, чтобы нормально смотрелось (В т ч в адаптиве)
- *   перевод ошибки погоды при смене языка?
- * */
 
 const Player = {
   fields: {
     trackMap: {},
     volume: null,
-    prevPlayedTrack: null,
-    nextPlayedTrack: null,
-    currentTrackId: null,
+    prevPlayedTrackID: null,
+    nextPlayedTrackID: null,
+    currentTrackID: null,
     numberOfTracks: Object.keys(this.trackMap).length,
   },
 
-  setPreviousTrackId(currentTrackId){
-    const prev = currentTrackId - 1;
+  setPreviousTrackID(currentTrackID){
+    const prev = currentTrackID - 1;
+    let resultTrack;
     if(prev < 0) {
-      this.prevPlayedTrack = this.numberOfTracks - 1;
+      resultTrack = this.numberOfTracks - 1;
     } else if(prev > this.numberOfTracks - 1){
-      this.prevPlayedTrack = 0;
+      resultTrack = 0;
     } else {
-      this.prevPlayedTrack = prev;
+      resultTrack = prev
     }
+    this.prevPlayedTrackID = resultTrack;
+    localStorage.setItem('prevPlayedTrackID', resultTrack);
   },
-  setNextTrackId(currentTrackId){ /* 0 1 2 3*/
-    const next = currentTrackId + 1;
-    if(next > this.currentTrackId - 1){
-      this.nextPlayedTrack = 0;
+  setNextTrackID(currentTrackID){ /* 0 1 2 3*/
+    const next = currentTrackID + 1;
+    let resultTrack;
+    if(next > this.currentTrackID - 1){
+       resultTrack = 0;
     } else if(next < 0) {
-      this.nextPlayedTrack = this.numberOfTracks - 1;
+       resultTrack = this.numberOfTracks - 1;
     } else {
-      this.nextPlayedTrack = next;
+       resultTrack = next;
     }
+    this.nextPlayedTrack = resultTrack;
+    localStorage.setItem('nextPlayedTrack', resultTrack);
   },
 
-  getPrevPlayedTrack(){
-    return this.prevPlayedTrack;
+  getPrevPlayedTrackID(){
+    return this.prevPlayedTrackID;
   },
 
-  getNextPlayedTrack() {
-    return this.nextPlayedTrack;
+  getNextPlayedTrackID() {
+    return this.nextPlayedTrackID;
   },
   setPlayer(){
     this.createPlayer();
-    this.setPreviousTrackId = this.currentTrackId;
-    this.setNextTrackId = this.currentTrackId;
+    this.setPreviousTrackID = this.currentTrackID;
+    this.setNextTrackID = this.currentTrackID;
   },
 
   createElement(tag, className, parentElement) {
