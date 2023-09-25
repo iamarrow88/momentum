@@ -22,7 +22,11 @@ const basic = {
     }
     return subObject;
   },
-
+  searchHTMLElements() {
+    for (let className in this.fields.HTMLElements) {
+      this.fields.HTMLElements[className] = document.querySelector(this.fields.HTMLElements[className]);
+    }
+  }
 }
 
 export default basic;

@@ -1,4 +1,5 @@
 import asyncFunctions from '../actions/asyncFunctions.js';
+import basic from "../actions/commonFunctions.js";
 
 const Weather = {
   fields: {
@@ -27,18 +28,18 @@ const Weather = {
   },
   start(){
     this.setUrl();
-    this.searchHTMLElements();
+    basic.searchHTMLElements.call(this);
     this.setCityName();
     this.getWeather();
   },
   setUrl(){
     this.url = `https://api.openweathermap.org/data/2.5/weather?q=${this.fields.city}&APPID=${this.fields.APIKey}&lang=${this.fields.lang}&units=metric`;
   },
-  searchHTMLElements(){
+  /*searchHTMLElements(){
     for(let className in this.fields.HTMLElements){
       this.fields.HTMLElements[className] = document.querySelector(this.fields.HTMLElements[className]);
     }
-  },
+  },*/
   setCityName(){
     this.fields.HTMLElements.cityNameBlock.innerHTML = this.fields.city;
   },
