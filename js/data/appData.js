@@ -1,6 +1,6 @@
-import en from './translation/languages/en.js';
-import ru from './translation/languages/ru.js';
-
+import translation from "./translation/translation.js";
+import tracks from './tracks.js';
+import svgPath from './svgPath.js';
 const appData = {
   HTMLElements: {
     'audio': 'player__audio',
@@ -16,38 +16,6 @@ const appData = {
   },
   SVGClassButtons: ["play", "pause", "play-prev", "play-next", "volume"],
   blocks: ['Player', 'Weather', 'Clocks', 'Date', 'Greets', 'ToDo', 'Quotes', 'Settings', 'Background'],
-  trackMap: [
-    {
-      id: 0,
-      author: 'The Moth & The Flame',
-      title: 'Simple',
-      btn: null,
-    },
-    {
-      id: 1,
-      author: 'Coldplay',
-      title: 'Paradise',
-      btn: null,
-    },
-    {
-      id: 2,
-      author: 'Lord Huron',
-      title: 'The Night We Met',
-      btn: null,
-    },
-    {
-      id: 3,
-      author: 'Arcane Roots',
-      title: 'Half the World',
-      btn: null,
-    },
-  ],
-  svgUrl: {
-    "play": "assets/svg/sprite.svg#play",
-    "pause": "assets/svg/sprite.svg#pause",
-    "volume": "assets/svg/sprite.svg#volume",
-    "mute": "assets/svg/sprite.svg#mute",
-  },
   toggleButtons: ["play", "pause", "play-prev", "play-next", "volume", "mute"],
   DATE_OPTIONS: { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' },
   selectedLang: 'en',
@@ -56,6 +24,5 @@ const appData = {
     lang: ['Player', 'Weather', 'Clocks', 'Date', 'Greets', 'ToDo', 'Quotes', 'Settings']
   }
 }
-appData.translation.eng = en;
-appData.translation.ru = ru;
+appData.translation = translation;
 export default appData;
