@@ -1,3 +1,13 @@
+/* !TODO
+*    смена иконки в плеере при проигрывании,остановке музыки
+*    смена языка в приложении (рус, англ, бел)
+*    регулировка звука в плеере
+*    доделать тудушку
+*    передалать настройки (спрятать показать меню, плеер и тп
+*    сделать ловушку для цитат, если не подгружается новая (типа упс, не получили цитату, вот вам нашенская рандомная
+*    переписать все на классах
+*    подгрузка обоев из API*/
+
 const BACKGROUND = document.querySelector('body');
 const COVER = document.querySelector('.cover');
 const PLAYLIST = document.querySelector('.play-list');
@@ -114,7 +124,8 @@ const allAboutThisPage = {
     classesToHide: ['player', 'weather', 'time', 'date', 'greeting-container', 'to-do', 'quote'],
     langForDate: null,
 };
-console.log('Знаю, что половина всего не работает, но уж как есть)')
+
+
 
 /*--------------------- GET DATE NAD TIME, SET NAME IN THE GREETINGS BLOCK  ------------------------------*/
 

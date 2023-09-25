@@ -5,6 +5,7 @@ import Clocks from "./classes/Clocks.js";
 import basicActions from "./actions/commonFunctions.js";
 import App from "./classes/App.js";
 import Weather from './classes/Weather.js';
+import Background from "./classes/Background.js";
 /*import Player from './classes/Player.js';*/
 
 
@@ -22,6 +23,7 @@ Application.setProperty = ['Weather', Weather];
 basicActions.setObjectProperties(Application, Weather);
 console.log(Application);
 Weather.start();
+Background.startBackground();
 
 /*basicActions.clocks.getDate(lang);*/
 
