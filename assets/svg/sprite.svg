@@ -181,12 +181,12 @@
 	c-1.04,3.47-6.721,3.55-7.9,0.09C104.087,69.814,103.488,66.344,105.847,64.245z"></path>
   </symbol>
   <symbol xml:space="preserve" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" id="volume">
-    <path fill="none" d="M0 0h50v50H0z"></path>
-    <path d="M10 33H3c-1.103 0-2-.898-2-2V19c0-1.102.897-2 2-2h7" fill="none" stroke="#ffffff" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2.08"></path>
-    <path d="M9.604 32.43C9.256 32.129 9 31.391 9 30.754V19.247c0-.637.256-1.388.604-1.689l12.67-12.632C23.905 3.27 26 3.898 26 6.327v36.988c0 2.614-1.896 3.604-3.785 1.686L9.604 32.43z" fill="none" stroke="#ffffff" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.98"></path>
-    <path d="M30.688 19.417C33.167 20.064 35 22.32 35 25s-1.833 4.936-4.312 5.584" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"></path>
-    <path d="M34.92 13.142A13.461 13.461 0 0 1 42 25c0 5.111-2.85 9.557-7.045 11.835" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"></path>
-    <path d="M38.498 7.82c6.276 3.167 10.579 9.668 10.579 17.18 0 7.512-4.303 14.014-10.579 17.18" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"></path>
+    <path fill="none" stroke="#ffffff" d="M0 0h50v50H0z"></path>
+    <path d="M10 33H3c-1.103 0-2-.898-2-2V19c0-1.102.897-2 2-2h7" stroke="#ffffff" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2.08"></path>
+    <path d="M9.604 32.43C9.256 32.129 9 31.391 9 30.754V19.247c0-.637.256-1.388.604-1.689l12.67-12.632C23.905 3.27 26 3.898 26 6.327v36.988c0 2.614-1.896 3.604-3.785 1.686L9.604 32.43z" stroke="#ffffff" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.98"></path>
+    <path d="M30.688 19.417C33.167 20.064 35 22.32 35 25s-1.833 4.936-4.312 5.584" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"></path>
+    <path d="M34.92 13.142A13.461 13.461 0 0 1 42 25c0 5.111-2.85 9.557-7.045 11.835" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"></path>
+    <path d="M38.498 7.82c6.276 3.167 10.579 9.668 10.579 17.18 0 7.512-4.303 14.014-10.579 17.18" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"></path>
   </symbol>
     <symbol enable-background="new 0 0 50 50" id="mute" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 50">
     <line fill="none" stroke="#ffffff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" x1="32" x2="42" y1="20" y2="30"></line>
