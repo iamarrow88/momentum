@@ -134,12 +134,12 @@ function changeDate(date, lang){
     DATE.textContent = date.toLocaleDateString(locales, DATE_OPTIONS);
 }
 function getDate(lang) {
-    let dateFor = new Date();
-    TIME.innerHTML = dateFor.toLocaleTimeString();
-    if(dateFor.toLocaleTimeString() =='00:00:00') {
-        changeDate(dateFor, lang);
+    let currentDate = new Date();
+    TIME.innerHTML = currentDate.toLocaleTimeString();
+    if(currentDate.toLocaleTimeString() ==='00:00:00') {
+        changeDate(currentDate, lang);
     }
-    greet(dateFor);
+    greet(currentDate);
     setTimeout(() =>{
         getDate(lang);
     }, 1000);
@@ -203,13 +203,13 @@ USER_NAME.addEventListener('change', bringName);
 function getRandomNUm(n) {
     let num = Math.floor(Math.random() * n + 1).toString();
     if(num < 10) num = 0 + num;
-    return num;
+    return num;function getImage(timeOfADay, pictureNumber) {
+        BACKGROUND.style.backgroundImage = `url(./assets/img/${timeOfADay}/${pictureNumber}.webp)`;
+        allAboutThisPage.currentPicture = pictureNumber;
+    }
 }
 
-function getImage(timeOfADay, pictureNumber) {
-    BACKGROUND.style.backgroundImage = `url(./assets/img/${timeOfADay}/${pictureNumber}.webp)`;
-    allAboutThisPage.currentPicture = pictureNumber;
-}
+
 
 PREV_SLIDE.addEventListener('click', function(){
     let currentPicture = (Number(allAboutThisPage.currentPicture) - 1) <= 0 ?
