@@ -16,7 +16,7 @@ const appData = {
   },
   SVGClassButtons: ["play", "pause", "play-prev", "play-next", "volume"],
   blocks: ['Player', 'Weather', 'Clocks', 'Date', 'Greets', 'ToDo', 'Quotes', 'Settings', 'Background'],
-  toggleButtons: ["play", "pause", "play-prev", "play-next", "volume", "mute"],
+
   DATE_OPTIONS: { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' },
   selectedLang: 'en',
   'translation': {},
