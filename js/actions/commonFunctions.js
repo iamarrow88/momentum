@@ -26,7 +26,21 @@ const basic = {
     for (let className in this.fields.HTMLElements) {
       this.fields.HTMLElements[className] = document.querySelector(this.fields.HTMLElements[className]);
     }
-  }
+  },
+  massAddEventListeners(HTMLElement, trigger, handler){
+    if(Array.isArray(HTMLElement)) {
+      HTMLElement.forEach((element, index) => {
+        return element.addEventListener(trigger[index],handler[index]);
+      })
+    }
+    return HTMLElement.addEventListener(trigger,handler);
+  },
+  createElement(tag, className, parentElement) {
+    const element = document.createElement(tag);
+    element.classList.add(className);
+    parentElement.append(element);
+    return element;
+  },
 }
 
 export default basic;

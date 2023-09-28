@@ -1,4 +1,4 @@
-const Background = require('../js/classes/Background.js')
+const Background = require('../js/classes/Background.js');
 
 test('adds 20 + 1 to equal 1', () => {
   expect(Background.getNextPictureNumber('next', 20)).toBe('1');
