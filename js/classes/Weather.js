@@ -5,7 +5,7 @@ const Weather = {
   fields: {
     city: '',
     lang: '',
-    APIKey: '1e86aeecc6661092d35f019637c03153',
+    APIKey: '',
     url: ``,
     iconTemplate: 'a',
     responseData: {
@@ -26,7 +26,10 @@ const Weather = {
     },
     urlToIcon: `https://openweathermap.org/img/wn/`,
   },
-  start(){
+  start(city, lang, weatherAPIKey){
+    this.fields.city = city;
+    this.fields.lang = lang;
+    this.fields.APIKey = weatherAPIKey;
     this.setUrl();
     basic.searchHTMLElements.call(this);
     this.setCityName();
