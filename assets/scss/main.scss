@@ -139,8 +139,8 @@ input:focus-visible::placeholder {
       justify-content: space-between;
 
       .svg-icon {
-        height: 2.5rem;
-        width: 2.5rem;
+        height: 2rem;
+        width: 2rem;
         stroke: aqua;
       }
     }
@@ -155,7 +155,7 @@ input:focus-visible::placeholder {
       width: 60%;
     }
 
-    &__inner {
+    /*&__inner {
       position: relative;
       height: 2px;
       width: 100%;
@@ -170,7 +170,7 @@ input:focus-visible::placeholder {
       background-color: greenyellow;
       border: 2px solid lightgray;
       border-radius: 100%;
-    }
+    }*/
   }
 
   .playlist {
