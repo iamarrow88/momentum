@@ -1,6 +1,7 @@
 task link https://github.com/rolling-scopes-school/tasks/blob/master/tasks/momentum/momentum-stage1.md
 
 ### TODO
+
 -[x]  html код плеера
 -[x]  стили страницы
 -[ ]  fix Player1.js
