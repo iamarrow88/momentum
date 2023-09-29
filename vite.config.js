@@ -1,8 +1,8 @@
-import { defineConfig } from 'vite';
-import Sass from 'sass';
+import { defineConfig } from "vite";
+import Sass from "sass";
 
 export default defineConfig({
-  /*plugins: [
+  /* plugins: [
     new Sass(),
-  ],*/
-})
+  ], */
+});
