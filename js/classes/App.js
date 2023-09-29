@@ -1,5 +1,5 @@
 class App {
-  constructor(lang, customerName, city, picturePathMap, quotesMap, clocks, appData){
+  constructor(lang, customerName, city, picturePathMap, quotesMap, clocks, appData) {
     this.lang = lang;
     this.customerName = customerName;
     this.city = city;
@@ -11,29 +11,28 @@ class App {
     this.appData = appData;
   }
 
-  set setLang(newLang){
-    if(Object.keys(this.appData.translation).includes(newLang)) {
+  set setLang(newLang) {
+    if (Object.keys(this.appData.translation).includes(newLang)) {
       this.lang = this.clocks.lang = newLang;
-      localStorage.setItem('lang', newLang);
+      localStorage.setItem("lang", newLang);
     } else {
-      console.log('Ошибка - введенный язык не найден. Выбран английский язык.\n' +
-      'Attention! The selected language is not found. English was set.')
-      this.lang = this.clocks.lang = 'en';
-      localStorage.setItem('lang', 'en');
+      console.log("Ошибка - введенный язык не найден. Выбран английский язык.\n"
+      + "Attention! The selected language is not found. English was set.");
+      this.lang = this.clocks.lang = "en";
+      localStorage.setItem("lang", "en");
     }
   }
 
-  set setProperty([newPropName, newPropValue]){
+  set setProperty([newPropName, newPropValue]) {
     this[newPropName] = newPropValue;
   }
 
-  startApp(){
-    this.appData.blocks.forEach(block => {
+  startApp() {
+    this.appData.blocks.forEach((block) => {
 
-    })
-    //this.setClockProperties({date: this.date, lang: this.lang, name: this.customerName}, this.clocks);
+    });
+    // this.setClockProperties({date: this.date, lang: this.lang, name: this.customerName}, this.clocks);
   }
-
 }
 
 export default App;

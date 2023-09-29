@@ -1,13 +1,11 @@
-const ToDo = {
-  fields: {
-    lang: '',
-    tasksArray: [],
-  },
-  start(lang, tasksArray) {
-    this.fields.lang = lang;
-    this.fields.tasksArray = tasksArray;
-    console.log('ToDo started');
+import Base from "./base/Base.js";
+
+export default class ToDo extends Base{
+  constructor(lang, tasksArray) {
+    super(lang);
+    this.tasksArray = tasksArray;
+  }
+  startToDo() {
+    console.log("ToD1o started");
   }
 }
-
-export default ToDo;

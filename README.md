@@ -3,7 +3,7 @@ task link https://github.com/rolling-scopes-school/tasks/blob/master/tasks/momen
 ### TODO
 -[x]  html код плеера
 -[x]  стили страницы
--[ ]  fix Player.js
+-[ ]  fix Player1.js
 -[ ]  функция по замене иконок (плей и тп)
 -[ ]  функция начала и окончания воспроизведения
 -[ ]  функция переключения треков (след/предыдущий)

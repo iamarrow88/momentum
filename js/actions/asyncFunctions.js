@@ -3,9 +3,9 @@ const asyncFunctions = {
     const response = await fetch(`${url}`);
     return {
       isOk: response.ok,
-      json: await response.json()
+      json: await response.json(),
     };
-  }
-}
+  },
+};
 
 export default asyncFunctions;

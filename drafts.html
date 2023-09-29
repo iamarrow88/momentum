@@ -9,69 +9,72 @@
   <audio class="player__audio" id="player__audio" preload="auto" autoplay=""></audio>
   <div class="player-controls">
     <div class="player-controls__playback">
-      <div class="play-prev player-icon svg-parent">
-        <svg class="svg-play-prev svg-icon">
-          <use class="svg-use-play" xlink:href="/assets/svg/sprite.svg#play-prev"></use>
+      <div class="player-icon svg-parent play-prev" data-button-name="play-prev">
+        <svg class="svg-icon play-prev" data-button-name="play-prev">
+          <use class="use-play-prev play-prev" data-button-name="play-prev"
+               xlink:href="/assets/svg/sprite.svg#play-prev"></use>
         </svg>
       </div>
-      <div class="play player-icon svg-parent">
-        <svg class="svg-play svg-icon">
-          <use class="svg-use-play" xlink:href="/assets/svg/sprite.svg#play"></use>
+      <div class="player-icon svg-parent play" data-button-name="play">
+        <svg class="svg-icon play" data-button-name="play">
+          <use class="use-play play" data-button-name="play" xlink:href="/assets/svg/sprite.svg#play"></use>
         </svg>
       </div>
-      <div class="play-next player-icon svg-parent">
-        <svg class="svg-play-next svg-icon">
-          <use class="svg-use-play" xlink:href="/assets/svg/sprite.svg#play-next"></use>
+      <div class="player-icon svg-parent play-next" data-button-name="play-next">
+        <svg class="svg-icon play-next" data-button-name="play-next">
+          <use class="use-play-next play-next" data-button-name="play-next"
+               xlink:href="/assets/svg/sprite.svg#play-next"></use>
         </svg>
       </div>
     </div>
-    <div class="player-controls__volume svg-parent">
-      <svg class="svg-volume svg-icon">
-        <use class="svg-use-play" xlink:href="/assets/svg/sprite.svg#volume"></use>
+    <div class="volume player-controls__volume svg-parent" data-button-name="volume">
+      <svg class="volume svg-icon" data-button-name="volume">
+        <use class="volume use-volume" data-button-name="volume" xlink:href="/assets/svg/sprite.svg#volume"></use>
       </svg>
       <div class="volume-bar__wrapper">
-          <input type="range" min="0" max="100" step="1" value="0">
-        <!--<div class="volume-bar__inner">
-          <div class="volume-bar__point"></div>
-        </div>-->
-      </div>
+        <input class="volume-bar__range" type="range" min="0" max="100" step="1" value="0"></div>
     </div>
   </div>
+
   <div class="playlist">
     <ul class="playlist__wrapper">
       <li class="song">
-        <div class="song__content">
+        <div class="song__content" data-song-name="">
           <div class="song__sphere"></div>
           <div class="song__title" data-songid="0">The Moth &amp; The Flame - Simple</div>
-          <svg class="icon song-icon" data-songbtn="0">
-            <use class="svg-use-track0-play icon" xlink:href="/assets/svg/sprite.svg#play"></use>
+          <svg class="track0-play icon song-icon" data-songbtn="0" data-button-name="play-0">
+            <use class="track0-play use-track0-play" data-button-name="play-0"
+                 xlink:href="/assets/svg/sprite.svg#play"></use>
           </svg>
         </div>
       </li>
       <li class="song">
-        <div class="song__content">
+        <div class="song__content" data-song-name="">
           <div class="song__sphere"></div>
           <div class="song__title" data-songid="1">Coldplay - Paradise</div>
-          <svg class="icon song-icon" data-songbtn="1">
-            <use class="svg-use-track1-play icon" xlink:href="/assets/svg/sprite.svg#play"></use>
+          <svg class="track1-play icon song-icon" data-songbtn="1" data-button-name="play-1">
+            <use class="track1-play use-track1-play" data-button-name="play-1"
+                 xlink:href="/assets/svg/sprite.svg#play"></use>
           </svg>
         </div>
       </li>
       <li class="song">
-        <div class="song__content">
+        <div class="song__content" data-song-name="">
           <div class="song__sphere"></div>
           <div class="song__title" data-songid="2">Lord Huron - The Night We Met</div>
-          <svg class="icon song-icon" data-songbtn="2">
-            <use class="svg-use-track2-play icon" xlink:href="/assets/svg/sprite.svg#play"></use>
+          <svg class="track2-play icon song-icon" data-songbtn="2" data-button-name="play-2">
+            <use class="track2-play use-track2-play" data-button-name="play-2"
+                 xlink:href="/assets/svg/sprite.svg#play"></use>
           </svg>
         </div>
       </li>
       <li class="song">
-        <div class="song__content">
+        <div class="song__content" data-song-name="">
           <div class="song__sphere"></div>
           <div class="song__title" data-songid="3">Arcane Roots - Half the World</div>
-          <svg class="icon song-icon" data-songbtn="3">
-            <use class="svg-use-track3-play icon" xlink:href="/assets/svg/sprite.svg#play"></use>
+          <svg class="track3-play icon song-icon" data-songbtn="3" data-button-name="play-3">
+            <use class="track3-play use-track3-play" data-button-name="play-3"
+                 xlink:href="/assets/svg/sprite.svg#play"></use>
           </svg>
         </div>
       </li>
