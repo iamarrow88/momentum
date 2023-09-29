@@ -322,6 +322,7 @@ input:focus-visible::placeholder {
 .time {
   font-family: 'Mooli', sans-serif;
   font-size: 4.5rem;
+  font-weight: bold;
   line-height: 1;
 }
 
@@ -333,6 +334,7 @@ input:focus-visible::placeholder {
 
 .greeting-container {
   margin-bottom: 2rem;
+  font-family: 'Mooli', sans-serif;
   font-size: 4rem;
   line-height: 1.5;
 }
