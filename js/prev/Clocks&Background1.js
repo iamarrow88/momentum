@@ -86,7 +86,7 @@ const ClocksBackground1 = {
         break;
     }
     greetBlock.textContent = `${appData.translation[lang][`${result}`]}, `;
-    const pictureNumber = this.getRandomNUm(this.fields.numberOfPictures);
+    const pictureNumber = this.getRandomNumber(this.fields.numberOfPictures);
     this.setBackgroundImage(this.fields.HTMLElements.background, this.fields.timeOfTheDay, pictureNumber, this.fields);
   },
   checkTimeOfTheDay(hours) {
@@ -103,7 +103,7 @@ const ClocksBackground1 = {
     block.style.backgroundImage = `url(./assets/img/${timeOfADay}/${pictureNumber}.webp)`;
     appData.currentPictureNumber = pictureNumber;
   },
-  getRandomNUm(n) {
+  getRandomNumber(n) {
     let num = Math.floor(Math.random() * n + 1).toString();
     if (num < 10) num = 0 + num;
     return num;
@@ -127,4 +127,6 @@ const ClocksBackground1 = {
   },
 };
 
+/*
 export default ClocksBackground1;
+*/
