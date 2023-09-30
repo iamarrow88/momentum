@@ -22,7 +22,11 @@ export default class Base {
 
   searchHTMLElements() {
     for (const className in this.HTMLElements) {
-      this.HTMLElements[className] = document.querySelector(this.HTMLElements[className]);
+      if(this.HTMLElements[className].isArray){
+        this.HTMLElements[className].element = document.querySelectorAll(this.HTMLElements[className].selector);
+      } else {
+        this.HTMLElements[className].element = document.querySelector(this.HTMLElements[className].selector);
+      }
     }
   }
 
