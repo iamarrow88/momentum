@@ -7,6 +7,7 @@ export default class Base {
     this.city = city;
     this.HTMLElements = HTMLElements;
     this.translation = translation;
+    this.functionsDistribution = {}
   }
 
   changeSvg(svgUse, url) {
@@ -66,5 +67,22 @@ export default class Base {
       })
     }
     return element;
+  }
+
+  allEventsListener(e){
+    let eTargetDataset = e.target.dataset; // содержит любой датасет, нужно выбирать необходимый
+    let eTargetClassList = Array.from(e.target.classList);
+    console.log(eTargetClassList);
+    let eTargetClass;
+    if(eTargetClassList.includes('icon')) {
+      eTargetClass = e.target.firstElementChild.classList[e.target.firstElementChild.classList.length - 1];
+    } else {
+      eTargetClass = e.target.classList[e.target.classList - 1];
+    }
+
+    if (eTargetClass === this.HTMLElements.animationBulbs.selector) {
+      if(this.functionsDistribution[this.HTMLElements.animationBulbs.selector]) this.functionsDistribution[this.HTMLElements.animationBulbs.selector](e);
+      /*this.playAnimationListener();*/
+    }
   }
 }

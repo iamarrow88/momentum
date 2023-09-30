@@ -19,6 +19,7 @@ export default class Player extends Base {
     this.setPreviousTrackID = this._currentTrackID;
     this.setNextTrackID = this._currentTrackID;
     this.setNumberOfTracks(this.tracksMap);
+    this.functionsDistribution[this.HTMLElements.animationBulbs.selector] = this.playAnimationListener;
   }
 
   startPlayer() {
