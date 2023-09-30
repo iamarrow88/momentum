@@ -1,8 +1,8 @@
 const en = {
-  night: "Good night",
-  morning: "Good morning",
-  afternoon: "Good afternoon",
-  evening: "Good evening",
+  night: "Good night, ",
+  morning: "Good morning, ",
+  afternoon: "Good afternoon, ",
+  evening: "Good evening, ",
   "[placeholder]weather-city-input": "Enter your city name",
   "weather-error": "Error",
   "weather-wind-text": "Wind speed: ",

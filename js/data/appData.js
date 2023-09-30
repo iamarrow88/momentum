@@ -4,30 +4,112 @@ import svgPath from "./svgPath.js";
 
 const appData = {
   HTMLElements: {
-    playerBlock: '.player',
-    audioTag: '.player__audio',
-    playPrev: 'div.play-prev',
-    playNext: 'div.play-next',
-    play: 'div.play',
-    pause: 'div.pause',
-    volumeIcon: 'svg.volume',
-    volumeRange: '.volume-bar__range',
-    playlist: '.playlist',
-    animationBulbs: '.song__sphere',
-    time: ".time",
-    date: ".date",
-    greeting: ".greeting",
-    name: ".name",
-    prev: ".slide-prev",
-    next: ".slide-next",
-    background: ".body",
-    errorBlock: ".weather__error-block",
-    iconPath: ".weather-icon",
-    temperature: ".temperature__number",
-    description: ".weather-description",
-    windSpeed: ".wind__speedNumber",
-    humidity: ".humidity__number",
-    cityNameBlock: ".city-name-block",
+    playerBlock: {
+      selector: '.player',
+      element: null
+    },
+    audioTag:{
+      selector: '.player__audio',
+      element: null
+    },
+    playPrev:{
+      selector: 'div.play-prev',
+      element: null
+    },
+    playNext:{
+      selector: 'div.play-next',
+      element: null
+    },
+    play:{
+      selector: 'div.play',
+      element: null
+    },
+    pause:{
+      selector: 'div.pause',
+      element: null
+    },
+    volumeIcon:{
+      selector: 'svg.volume',
+      element: null
+    },
+    volumeRange:{
+      selector: '.volume-bar__range',
+      element: null
+    },
+    playlist:{
+      selector: '.playlist',
+      element: null
+    },
+    animationBulbs:{
+      selector: '.song__sphere',
+      element: null,
+      isArray: true
+    },
+    time:{
+      selector: ".time",
+      element: null
+    },
+    date:{
+      selector: ".date",
+      element: null
+    },
+    greeting:{
+      selector: ".greeting",
+      element: null
+    },
+    greetsBlock: {
+      selector: ".greeting-container",
+      element: null
+    },
+    name:{
+      selector: ".name",
+      element: null
+    },
+    prev:{
+      selector: ".slide-prev",
+      element: null
+    },
+    next:{
+      selector: ".slide-next",
+      element: null
+    },
+    trackPlay: {
+      selector: ".track-play",
+      element: null,
+      isArray: true
+    },
+    background:{
+      selector: ".body",
+      element: null
+    },
+    errorBlock:{
+      selector: ".weather__error-block",
+      element: null
+    },
+    iconPath:{
+      selector: ".weather-icon",
+      element: null
+    },
+    temperature:{
+      selector: ".temperature__number",
+      element: null
+    },
+    description:{
+      selector:".weather-description",
+      element: null
+    } ,
+    windSpeed:{
+      selector: ".wind__speedNumber",
+      element: null
+    },
+    humidity:{
+      selector: ".humidity__number",
+      element: null
+    },
+    cityNameBlock:{
+      selector: ".city-name-block",
+      element: null
+    },
   },
   blocks: ["Player", "Weather", "Clocks", "Date", "Greets", "ToDo", "Quotes", "Settings", "Background"],
 
@@ -46,8 +128,32 @@ const appData = {
       humidity: ["main", "humidity"],
       windSpeed: ["wind", "speed"],
     },
-    APIKey: "",
+    APIKey: "1e86aeecc6661092d35f019637c03153",
     urlToIcon: "https://openweathermap.org/img/wn/",
+  },
+  clocks: {
+    dayMap: {
+      morning: {
+        start: 5,
+        end: 11,
+      },
+      afternoon: {
+        start: 12,
+        end: 17,
+      },
+      evening: {
+        start: 18,
+        end: 19,
+      },
+      night1: {
+        start: 20,
+        end: 23,
+      },
+      night2: {
+        start: 0,
+        end: 4,
+      },
+    }
   }
 
 
