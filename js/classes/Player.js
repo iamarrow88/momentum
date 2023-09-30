@@ -2,8 +2,8 @@ import Base from './base/Base.js';
 import sprite from "../../assets/svg/sprite.svg";
 
 export default class Player extends Base {
-  constructor(lang, name, city, playerOptions) {
-    super(lang, name, city);
+  constructor(lang, name, city, playerOptions, HTMLElements) {
+    super(lang, name, city, HTMLElements);
     this.tracksMap = playerOptions.tracksMap;
     this._volume = playerOptions.volume;
     this._prevPlayedTrackID = playerOptions.prevPlayedTrackID;
@@ -12,7 +12,6 @@ export default class Player extends Base {
     this.pathToSVG = playerOptions.pathToSVG;
     this.buttonsToToggle = playerOptions.buttonsToToggle;
     this._numberOfTracks = null;
-    this.HTMLElements = playerOptions.HTMLElements; // name: '.class',
   }
 
 
@@ -24,10 +23,11 @@ export default class Player extends Base {
 
   startPlayer() {
     this.setUp();
-    console.log(this);
     this.createPlayer();
     this.searchHTMLElements();
-    this.HTMLElements.playerBlock.addEventListener()
+
+    this.HTMLElements.background.element.addEventListener('click', this.allEventsListener);
+    //this.HTMLElements.playerBlock.addEventListener()
   }
   set setPreviousTrackID(currentTrackID) {
     let resultTrack;
@@ -100,33 +100,33 @@ export default class Player extends Base {
     return this._numberOfTracks;
   }
   createPlayer() {
-    const playerWrapper = this.HTMLElements['playerBlock'] = document.querySelector('.player');
+    const playerWrapper = this.HTMLElements.playerBlock.element = document.querySelector('.player');
 
     playerWrapper.insertAdjacentHTML('afterbegin', '<audio class="player__audio" id="player__audio" preload="auto" autoplay></audio>\n' +
         '<div class="player-controls">\n' +
         '        <div class="player-controls__playback">\n' +
-        '          <div class="play-prev player-icon svg-parent"data-button-name="play-prev">\n' +
-        '            <svg class="play-prev svg-icon"data-button-name="play-prev">\n' +
-        `              <use class="play-prev use-play-prev" data-button-name="play-prev" xlink:href="${sprite}#play-prev"></use>\n` +
+        '          <div class="player-icon svg-parent play-prev" data-button-name="play-prev">\n' +
+        '            <svg class="svg-icon play-prev" data-button-name="play-prev">\n' +
+        `              <use class="use-play-prev play-prev" data-button-name="play-prev" xlink:href="${sprite}#play-prev"></use>\n` +
         '            </svg>\n' +
         '          </div>\n' +
-        '          <div class="player-icon svg-parent play"data-button-name="play">\n' +
-        '            <svg class="svg-icon play"data-button-name="play">\n' +
+        '          <div class="player-icon svg-parent play" data-button-name="play">\n' +
+        '            <svg class="svg-icon play" data-button-name="play">\n' +
         `              <use class="use-play play" data-button-name="play" xlink:href="${sprite}#play"></use>\n` +
         '            </svg>\n' +
         '          </div>\n' +
-        '          <div class="play-next player-icon svg-parent"data-button-name="play-next">\n' +
-        '            <svg class="play-next svg-icon"data-button-name="play-next">\n' +
-        `              <use class="play-next use-play-next" data-button-name="play-next" xlink:href="${sprite}#play-next"></use>\n` +
+        '          <div class="player-icon svg-parent play-next" data-button-name="play-next">\n' +
+        '            <svg class="svg-icon play-next" data-button-name="play-next">\n' +
+        `              <use class="use-play-next play-next" data-button-name="play-next" xlink:href="${sprite}#play-next"></use>\n` +
         '            </svg>\n' +
         '          </div>\n' +
         '        </div>\n' +
-        '        <div class="volume player-controls__volume svg-parent"data-button-name="volume">\n' +
-        '          <svg class="volume svg-icon"data-button-name="volume">\n' +
-        `              <use class="volume use-volume" data-button-name="volume" xlink:href="${sprite}#volume"></use>\n` +
+        '        <div class="player-controls__volume svg-parent volume" data-button-name="volume">\n' +
+        '          <svg class="svg-icon volume" data-button-name="volume">\n' +
+        `              <use class="use-volume volume" data-button-name="volume" xlink:href="${sprite}#volume"></use>\n` +
         '          </svg>\n' +
         '<div class="volume-bar__wrapper">\n' +
-        '              <input type="range" min="0" max="100" step="1" value="0">' +
+        '              <input class="volume-bar__range" type="range" min="0" max="100" step="1" value="0">' +
         '</div>\n' +
         '            </div>' +
         '        </div>\n' +
@@ -140,31 +140,16 @@ export default class Player extends Base {
           '<div class="song__content">\n' +
           '<div class="song__sphere"></div>\n' +
           `<div class="song__title" data-songId="${i}">${this.tracksMap[i].author} - ${this.tracksMap[i].title}</div>\n` +
-          `<svg class="track${i}-play icon song-icon" data-songbtn="${i}"data-button-name="play-${i}" >\n` +
-          `<use class="track${i}-play use-track${i}-play" data-button-name="play-${i}" xlink:href="${sprite}#play"></use>\n` +
+          `<svg class="icon song-icon track${i}-play track-play" data-songbtn="${i}"data-button-name="play-${i}" >\n` +
+          `<use class="use-track${i}-play track${i}-play track-play" data-button-name="play-${i}" xlink:href="${sprite}#play"></use>\n` +
           `</svg>\n` +
           `</div>\n` +
           '</li>\n');
     }
   }
-  playAnimationListener(){
-    this.HTMLElements.animationBulbs.forEach(bulb => bulb.classList.remove('isPlaying'));
+  playAnimationListener(e){
+    this.HTMLElements.animationBulbs.element.forEach(bulb => bulb.classList.remove('isPlaying'));
     e.target.classList.toggle('isPlaying');
-    /*const markersPlayingAnimation = document.querySelectorAll('.song__sphere');
-    parentBlock.addEventListener('click', function (e) {
-      let elementClass;
-      let elementDataset = e.target.dataset; // содержит любой датасет, нужно выбирать необходимый
-      if ([...e.target.classList].includes('icon')) {
-        elementClass = e.target.firstElementChild.classList[0];
-      } else {
-        elementClass = e.target.classList[0];
-      }
-
-      if (elementClass === 'song__sphere') {
-        markersPlayingAnimation.forEach(bulb => bulb.classList.remove('isPlaying'));
-        e.target.classList.toggle('isPlaying');
-      }
-    });*/
   }
   playerToggleButtonListener(e){
     let elementDataset = e.target.dataset;
