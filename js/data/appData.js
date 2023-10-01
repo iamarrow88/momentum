@@ -153,7 +153,7 @@ const appData = {
         start: 0,
         end: 4,
       },
-    }
+    },
   }
 
 

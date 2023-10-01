@@ -8,7 +8,7 @@ export default class FinishApp extends Player{
     this.startPlayer();
   }
 
-  allEventsListener(e){
+/*  allEventsListener(e){
     let eTargetDataset = e.target.dataset; // содержит любой датасет, нужно выбирать необходимый
     let eTargetClassList = Array.from(e.target.classList);
     let eTargetClass;
@@ -21,5 +21,5 @@ export default class FinishApp extends Player{
     if (eTargetClass === 'song__sphere') {
       this.playAnimationListener();
     }
-  }
+  }*/
 }

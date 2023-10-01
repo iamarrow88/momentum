@@ -1,8 +1,8 @@
 import Base from './base/Base.js';
 import sprite from "../../assets/svg/sprite.svg";
 
-export default class Player extends Base {
-  constructor(lang, name, city, playerOptions, HTMLElements) {
+export default class Player extends Base{
+  constructor(lang, name, city, HTMLElements, playerOptions) {
     super(lang, name, city, HTMLElements);
     this.tracksMap = playerOptions.tracksMap;
     this._volume = playerOptions.volume;
@@ -19,21 +19,17 @@ export default class Player extends Base {
     this.setPreviousTrackID = this._currentTrackID;
     this.setNextTrackID = this._currentTrackID;
     this.setNumberOfTracks(this.tracksMap);
-    this.functionsDistribution[this.HTMLElements.animationBulbs.selector] = this.playAnimationListener;
   }
 
   startPlayer() {
     this.setUp();
     this.createPlayer();
     this.searchHTMLElements();
-
-    this.HTMLElements.background.element.addEventListener('click', this.allEventsListener);
-    //this.HTMLElements.playerBlock.addEventListener()
   }
   set setPreviousTrackID(currentTrackID) {
     let resultTrack;
     if (currentTrackID === null) {
-      this.fields.currentTrackID = 0;
+      this.currentTrackID = 0;
       localStorage.setItem('currentTrackID', '0');
       resultTrack = this._numberOfTracks - 1;
     } else {
@@ -54,9 +50,9 @@ export default class Player extends Base {
   set setNextTrackID(currentTrackID) {
     let resultTrack;
     if (currentTrackID === null) {
-      this.fields.currentTrackID = 0;
+      this._currentTrackID = 0;
       localStorage.setItem('currentTrackID', '0');
-      resultTrack = this.fields.currentTrackID + 1;
+      resultTrack = currentTrackID + 1;
     } else {
       const next = currentTrackID + 1;
       if (next > this._numberOfTracks - 1) {
@@ -81,7 +77,7 @@ export default class Player extends Base {
   }
 
   setNumberOfTracks(tracksMap) {
-    this._numberOfTracks = Object.keys(tracksMap).length;
+    this._numberOfTracks = tracksMap.length;
     return this._numberOfTracks;
   }
 

@@ -39,7 +39,8 @@ const toDoOptions = {
   tasksArray: []
 };
 
-const player = new Player(lang, name, city, playerOptions, appData.HTMLElements);
+const player = new Player(lang, name, city, appData.HTMLElements, playerOptions);
 player.startPlayer();
 const background = new ClocksBackground(lang, name, clocksOptions);
 background.startClocksBackground();
+
