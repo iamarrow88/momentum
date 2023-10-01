@@ -1,12 +1,11 @@
 import Base from "./base/Base.js";
 
-export default class ClocksBackground extends Base{
+export default class ClocksBackground extends Base {
   constructor(lang, name, clocksOptions) {
     super(lang, name);
     this._translation = clocksOptions.translation;
     this._locales = this.setLocales(this.lang);
     this._timeOfTheDay = '';
-    this._currentPictureNumber = "01";
     this._numberOfPictures = 20;
     this._dateOptions = clocksOptions.dateOptions;
     this._dayMap = clocksOptions.dayMap;
@@ -14,26 +13,28 @@ export default class ClocksBackground extends Base{
   }
   startClocksBackground() {
     this.getTimeAndDate(this.lang);
-    this.setDate(new Date(), this.lang, this.HTMLElements.date.element, this._locales, this._dateOptions);
+    this.setDate(new Date(), this.HTMLElements.date.element, this._locales, this._dateOptions);
     this.createGreetsBlock();
+    const addListenersToBackground = this.changeBackground.bind(this);
+    this.massAddEventListeners(this.HTMLElements.background.element, 'click', null, addListenersToBackground)
   }
-  getTimeAndDate(lang) {
+  getTimeAndDate(selectedLang) {
     const currentDate = new Date();
     this.HTMLElements.time.element.innerHTML = currentDate.toLocaleTimeString();
     if (currentDate.toLocaleTimeString() === "00:00:00") {
-      this.setDate(currentDate, this.lang, this.HTMLElements.date.element, this._locales, this._dateOptions);
+      this.setDate(currentDate, this.HTMLElements.date.element, this._locales, this._dateOptions);
     }
     const hours = currentDate.getHours();
     const newTimeOfTheDay = this.checkTimeOfTheDay(hours);
     if (this._timeOfTheDay !== newTimeOfTheDay) {
       this._timeOfTheDay = newTimeOfTheDay;
-      this.greet(this._timeOfTheDay, this.lang, this._translation, this.HTMLElements.greeting.element);
+      this.greet(this._timeOfTheDay, selectedLang, this._translation, this.HTMLElements.greeting.element);
     }
     setTimeout(() => {
-      this.getTimeAndDate(this.lang);
+      this.getTimeAndDate(selectedLang);
     }, 1000);
   }
-  setDate(date, lang, dateBlock, locales, dateOptions) {
+  setDate(date, dateBlock, locales, dateOptions) {
     dateBlock.textContent = date.toLocaleDateString(locales, dateOptions);
   }
   checkTimeOfTheDay(hours) {
@@ -139,5 +140,24 @@ export default class ClocksBackground extends Base{
     greetLine.textContent = this._translation[this.lang][`${this._timeOfTheDay}`];
     nameLine.textContent = this.name;
     if(this.name) greetLine.appendChild(nameLine);
+  }
+
+  changeBackground(thisObj, event){
+    console.log('here');
+    /*стрелочки по смене обоев и инпут (смена в=дива на инпут, сбор данных из инпута, смена инпута на дип обратно*/
+    let eTargetClassList = Array.from(event.target.classList);
+    const theLastClass = eTargetClassList.length - 1;
+    if(eTargetClassList[theLastClass] === 'slide-prev'){
+      console.log('slide-prev');
+      const pictureNumber = this.getNextPictureNumber('prev'. this._currentPictureNumber, this._numberOfPictures);
+      this.setBackgroundImage(this.HTMLElements.background.element, this._timeOfTheDay, pictureNumber);
+      //background.getNextPictureNumber(direction, currentPictureNumber, numberOfPictures)
+    } else if(eTargetClassList[theLastClass] === 'slide-next') {
+      console.log('slide-next');
+      const pictureNumber = this.getNextPictureNumber('next'. this._currentPictureNumber, this._numberOfPictures);
+      this.setBackgroundImage(this.HTMLElements.background.element, this._timeOfTheDay, pictureNumber);
+    } else if(eTargetClassList[0] === 'name'){
+      console.log('input');
+    }
   }
 }
