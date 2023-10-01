@@ -318,6 +318,9 @@ input:focus-visible::placeholder {
 .slide-next {
   top: calc(50% - 40px);
   right: 1rem;
+}
+
+svg.slide-next {
   transform: rotate(180deg);
 }
 

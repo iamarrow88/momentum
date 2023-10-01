@@ -69,7 +69,7 @@ export default class Base {
     return element;
   }
 
-  allEventsListener(e){
+  /*allEventsListener(e, newThis){
     let eTargetDataset = e.target.dataset; // содержит любой датасет, нужно выбирать необходимый
     let eTargetClassList = Array.from(e.target.classList);
     console.log(eTargetClassList);
@@ -77,12 +77,12 @@ export default class Base {
     if(eTargetClassList.includes('icon')) {
       eTargetClass = e.target.firstElementChild.classList[e.target.firstElementChild.classList.length - 1];
     } else {
-      eTargetClass = e.target.classList[e.target.classList - 1];
+      eTargetClass = e.target.classList[e.target.classList.length - 1];
     }
 
-    if (eTargetClass === this.HTMLElements.animationBulbs.selector) {
+    if (eTargetClass === Base.HTMLElements.animationBulbs.selector) {
       if(this.functionsDistribution[this.HTMLElements.animationBulbs.selector]) this.functionsDistribution[this.HTMLElements.animationBulbs.selector](e);
-      /*this.playAnimationListener();*/
+      /!*this.playAnimationListener();*!/
     }
-  }
+  }*/
 }
