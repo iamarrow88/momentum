@@ -1,13 +1,9 @@
-import translation from "../../data/translation/translation.js";
-
 export default class Base {
-  constructor(lang, name, city, HTMLElements, translation) {
+  constructor(lang, name, city,HTMLElements) {
     this.lang = lang;
     this.name = name;
     this.city = city;
     this.HTMLElements = HTMLElements;
-    this.translation = translation;
-    this.functionsDistribution = {}
   }
 
   changeSvg(svgUse, url) {
@@ -31,12 +27,25 @@ export default class Base {
     }
   }
 
-  massAddEventListeners(HTMLElement, trigger, handler) {
-    if (Array.isArray(HTMLElement)) {
-      HTMLElement.forEach((element, index) => element.addEventListener(trigger[index], handler[index]));
+  massAddEventListeners(HTMLElement, trigger, selector, handler) {
+    if(selector) {
+      if (Array.isArray(HTMLElement)) {
+        HTMLElement.forEach((element, index) => element.addEventListener(trigger[index], e => {
+          if (e.target.matches(selector)) handler[index](e);
+        }));
+      }
+      HTMLElement.addEventListener(trigger, e => {
+        if (e.target.matches(selector)) handler(e);
+      });
+    } else {
+      if (Array.isArray(HTMLElement)) {
+        HTMLElement.forEach((element, index) => element.addEventListener(trigger[index], e =>  handler[index](e)));
+      }
+      HTMLElement.addEventListener(trigger, e => handler(e));
     }
-    return HTMLElement.addEventListener(trigger, handler);
+
   }
+
   createDatasetName(dataAttribute){
     const datasetName = dataAttribute.split('-').slice(1);
     let result = datasetName[0];
