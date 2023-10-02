@@ -4,84 +4,52 @@ export default class ClocksBackground extends Base {
   constructor(lang, name, clocksOptions) {
     super(lang, name);
     this._translation = clocksOptions.translation;
+  constructor(lang, name, clocksOptions, translation, HTMLElements) {
+    super(lang, name, HTMLElements);
+    this._translation = translation;
     this._locales = this.setLocales(this.lang);
     this._timeOfTheDay = '';
     this._numberOfPictures = 20;
+    this._currentPictureNumber = null;
     this._dateOptions = clocksOptions.dateOptions;
     this._dayMap = clocksOptions.dayMap;
     this.HTMLElements = clocksOptions.HTMLElements;
+    this._timeOfADayBorders = clocksOptions.timeOfADayBorders;
   }
   startClocksBackground() {
     this.getTimeAndDate(this.lang);
     this.setDate(new Date(), this.HTMLElements.date.element, this._locales, this._dateOptions);
+    this.setTimeOfTheDay();
     this.createGreetsBlock();
     const addListenersToBackground = this.changeBackground.bind(this);
     this.massAddEventListeners(this.HTMLElements.background.element, 'click', null, addListenersToBackground)
+    this.setTimeAndDateOnPage(this.lang);
+    this.basicFunctions.insertDateToHTML(new Date(), this.HTMLElements.date.element, this._locales, this._dateOptions);
+    console.log('start clocks and background');
   }
   getTimeAndDate(selectedLang) {
+  setTimeAndDateOnPage(selectedLang) {
     const currentDate = new Date();
-    this.HTMLElements.time.element.innerHTML = currentDate.toLocaleTimeString();
+    this.basicFunctions.insertTimeToHTML(this.HTMLElements.time.element, currentDate)
     if (currentDate.toLocaleTimeString() === "00:00:00") {
-      this.setDate(currentDate, this.HTMLElements.date.element, this._locales, this._dateOptions);
+      this.basicFunctions.insertDateToHTML(currentDate, this.HTMLElements.date.element, this._locales, this._dateOptions);
     }
     const hours = currentDate.getHours();
-    const newTimeOfTheDay = this.checkTimeOfTheDay(hours);
+    const newTimeOfTheDay = this.basicFunctions.getTimeOfTheDayString(hours, this._timeOfADayBorders);
     if (this._timeOfTheDay !== newTimeOfTheDay) {
       this._timeOfTheDay = newTimeOfTheDay;
-      this.greet(this._timeOfTheDay, selectedLang, this._translation, this.HTMLElements.greeting.element);
+      this.basicFunctions.insertGreetToHTML(this._timeOfTheDay, selectedLang, this._translation, this.HTMLElements.greeting.element);
     }
     setTimeout(() => {
-      this.getTimeAndDate(selectedLang);
+      this.setTimeAndDateOnPage(selectedLang);
     }, 1000);
   }
-  setDate(date, dateBlock, locales, dateOptions) {
-    dateBlock.textContent = date.toLocaleDateString(locales, dateOptions);
-  }
-  checkTimeOfTheDay(hours) {
-    for (const time in this._dayMap) {
-      if (hours >= this._dayMap[time].start && hours <= this._dayMap[time].end) {
-        if (time === "night1" || time === "night2") {
-          return "night";
-        }
-        return time;
-      }
-    }
-  }
-  greet(timeOfTheDay, lang, translation, greetBlock) {
-    let result;
-    switch (timeOfTheDay) {
-      case "morning":
-        result = "morning";
-        break;
-      case "afternoon":
-        result = "afternoon";
-        break;
-      case "evening":
-        result = "evening";
-        break;
-      case "night":
-        result = "night";
-        break;
-    }
-    greetBlock.textContent = `${translation[lang][`${result}`]}, `;
-    const pictureNumber = this.getRandomNumber(this._numberOfPictures);
-    this.setBackgroundImage(this.HTMLElements.background.element, this._timeOfTheDay, pictureNumber);
-  }
-
-  setBackgroundImage(block, timeOfADay, pictureNumber) {
-    block.style.backgroundImage = `url(./assets/img/${timeOfADay}/${pictureNumber}.webp)`;
-    this._currentPictureNumber = pictureNumber;
+  setTimeOfTheDay(){
+    this._timeOfTheDay = this.basicFunctions.getTimeOfTheDayString(new Date().getHours(), this._timeOfADayBorders);
   }
   setLocales(lang) {
     return this._translation[lang].locales;
   }
-
-  getRandomNumber(n) {
-    let num = Math.floor(Math.random() * n + 1).toString();
-    if (num < 10) num = 0 + num;
-    return num;
-  }
-
   getNextPictureNumber(direction, currentPictureNumber, numberOfPictures) {
     // direction = 'next' | 'prev'
     const picturesSum = 20;
@@ -102,11 +70,9 @@ export default class ClocksBackground extends Base {
 
   createGreetsBlock(){
     this.HTMLElements.greetsBlock.element.innerHTML = '';
-    this._timeOfTheDay = this.checkTimeOfTheDay(new Date().getHours());
     let greetLine;
     let nameLine;
     if(this.name){
-      console.log(`name is ${this.name}`);
       greetLine = this.createElement(
           'div',
           'greeting',
@@ -118,7 +84,6 @@ export default class ClocksBackground extends Base {
           null,
           [{"data-translate": "[placeholder]customerName}"}]);
     } else {
-      console.log('no name');
       greetLine = this.createElement(
           'span',
           'greeting',

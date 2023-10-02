@@ -3,7 +3,7 @@ import sprite from "../../assets/svg/sprite.svg";
 
 export default class Player extends Base{
   constructor(lang, name, city, HTMLElements, playerOptions) {
-    super(lang, name, city, HTMLElements);
+    super(lang, name, HTMLElements, city);
     this.tracksMap = playerOptions.tracksMap;
     this._volume = playerOptions.volume;
     this._prevPlayedTrackID = playerOptions.prevPlayedTrackID;
@@ -19,6 +19,7 @@ export default class Player extends Base{
     this.setPreviousTrackID = this._currentTrackID;
     this.setNextTrackID = this._currentTrackID;
     this.setNumberOfTracks(this.tracksMap);
+    console.log('start player');
   }
 
   startPlayer() {
