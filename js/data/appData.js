@@ -111,17 +111,23 @@ const appData = {
       element: null
     },
   },
+  translation: translation,
   blocks: ["Player", "Weather", "Clocks", "Date", "Greets", "ToDo", "Quotes", "Settings", "Background"],
 
-  tracks: tracks,
-  SVGClassButtons: ["play", "pause", "play-prev", "play-next", "volume"],
-  svgPath: svgPath,
+  player: {
+    tracksMap: tracks, //[{string: number, string: string, string: string}]
+    volume: +localStorage.getItem("volume") || 30, // number
+    prevPlayedTrackID: +localStorage.getItem("prevPlayedTrackID") || null,  // number | null
+    nextPlayedTrackID: +localStorage.getItem("nextPlayedTrackID") || null,  // number | null
+    currentTrackID: +localStorage.getItem("currentTrackID") || 1,  // number
+    pathToSVGIcon: "assets/svg/sprite.svg#", //string
+    svgPathEndpoints: svgPath, // {string: string}
+    buttonsToToggle: { play: "pause", pause: "play", volume: "mute", mute: "volume" }, // {string: string}
+    SVGClassButtons: ["play", "pause", "play-prev", "play-next", "volume"], //[number]
 
-  dateOptions: {weekday: "long", year: "numeric", month: "long", day: "numeric"},
-  translation: {},
-
+  },
   weather: {
-    responseData: {
+    responseSchema: {
       iconPath: ["weather", "0", "icon"],
       description: ["weather", "0", "description"],
       temperature: ["main", "temp"],
@@ -132,7 +138,7 @@ const appData = {
     urlToIcon: "https://openweathermap.org/img/wn/",
   },
   clocks: {
-    dayMap: {
+    timeOfADayBorders: {
       morning: {
         start: 5,
         end: 11,
@@ -154,9 +160,15 @@ const appData = {
         end: 4,
       },
     },
+    dateOptions: {weekday: "long", year: "numeric", month: "long", day: "numeric"},
+  },
+  quotes: {
+    url: '',
+    APIKey: '',
+    quotesArray: []
+  },
+  toDo: {
+    tasksArray: [] // []
   }
-
-
 };
-appData.translation = translation;
 export default appData;

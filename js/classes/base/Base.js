@@ -1,20 +1,38 @@
 export default class Base {
-  constructor(lang, name, city,HTMLElements) {
+  constructor(lang, name, HTMLElements, city) {
     this.lang = lang;
     this.name = name;
     this.city = city;
     this.HTMLElements = HTMLElements;
   }
 
-  changeSvg(svgUse, url) {
+  setNewSVGPath(svgUse, url) {
     return svgUse.setAttribute("href", url);
   }
 
   changeElementSvg(element, newUrl, oldClass, newClass) {
-    this.changeSvg(element, newUrl);
+    this.setNewSVGPath(element, newUrl);
     element.classList.remove(oldClass);
     element.classList.add(newClass);
     return element;
+  }
+  insertDateToHTML(date, dateBlock, locales, dateOptions) {
+    dateBlock.textContent = date.toLocaleDateString(locales, dateOptions);
+  }
+
+  insertTimeToHTML(timeBlock, currentDate){
+    timeBlock.innerHTML = currentDate.toLocaleTimeString();
+  }
+
+  getTimeOfTheDayString(hours, timeOfADayBorders) {
+    for (const time in timeOfADayBorders) {
+      if (hours >= timeOfADayBorders[time].start && hours <= timeOfADayBorders[time].end) {
+        if (time === "night1" || time === "night2") {
+          return "night";
+        }
+        return time;
+      }
+    }
   }
 
   searchHTMLElements() {
@@ -27,7 +45,34 @@ export default class Base {
     }
   }
 
-  massAddEventListeners(HTMLElement, trigger, selector, handler) {
+  insertGreetToHTML(timeOfTheDay, lang, translation, greetBlock) {
+    let result;
+    switch (timeOfTheDay) {
+      case "morning":
+        result = "morning";
+        break;
+      case "afternoon":
+        result = "afternoon";
+        break;
+      case "evening":
+        result = "evening";
+        break;
+      case "night":
+        result = "night";
+        break;
+    }
+    greetBlock.innerHTML = `${translation[lang][result]} `;
+  }
+  getRandomNumber(n) {
+    let num = Math.floor(Math.random() * n + 1).toString();
+    if (num < 10) num = 0 + num;
+    return num;
+  }
+
+
+
+
+  /*massAddEventListeners(HTMLElement, trigger, selector, handler) {
     if(selector) {
       if (Array.isArray(HTMLElement)) {
         HTMLElement.forEach((element, index) => element.addEventListener(trigger[index], e => {
@@ -44,7 +89,7 @@ export default class Base {
       HTMLElement.addEventListener(trigger, e => handler(e));
     }
 
-  }
+  }*/
 
   createDatasetName(dataAttribute){
     const datasetName = dataAttribute.split('-').slice(1);
