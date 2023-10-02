@@ -2,7 +2,17 @@ import Player from './Player.js';
 import ClocksBackground from "./ClocksBackground.js";
 import Quotes from "./Quotes.js";
 import Base from "./base/Base.js";
-import Element from './Element.js';
+
+
+/* !TODO
+*    смена иконки в плеере при проигрывании,остановке музыки
+*    смена языка в приложении (рус, англ, бел)
+*    регулировка звука в плеере
+*    доделать тудушку
+*    передалать настройки (спрятать показать меню, плеер и тп
+*    сделать ловушку для цитат, если не подгружается новая (типа упс, не получили цитату, вот вам нашенская рандомная
+*    переписать все на классах
+*    подгрузка обоев из API */
 
 class App extends Base{
   constructor(lang, name, city, store, HTMLElements) {
