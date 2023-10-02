@@ -1,9 +1,6 @@
 import Base from "./base/Base.js";
 
 export default class ClocksBackground extends Base {
-  constructor(lang, name, clocksOptions) {
-    super(lang, name);
-    this._translation = clocksOptions.translation;
   constructor(lang, name, clocksOptions, translation, HTMLElements) {
     super(lang, name, HTMLElements);
     this._translation = translation;
@@ -12,22 +9,25 @@ export default class ClocksBackground extends Base {
     this._numberOfPictures = 20;
     this._currentPictureNumber = null;
     this._dateOptions = clocksOptions.dateOptions;
-    this._dayMap = clocksOptions.dayMap;
-    this.HTMLElements = clocksOptions.HTMLElements;
     this._timeOfADayBorders = clocksOptions.timeOfADayBorders;
+    this.basicFunctions = new Base(this.lang, this.name, this.city);
   }
   startClocksBackground() {
-    this.getTimeAndDate(this.lang);
-    this.setDate(new Date(), this.HTMLElements.date.element, this._locales, this._dateOptions);
     this.setTimeOfTheDay();
     this.createGreetsBlock();
-    const addListenersToBackground = this.changeBackground.bind(this);
-    this.massAddEventListeners(this.HTMLElements.background.element, 'click', null, addListenersToBackground)
     this.setTimeAndDateOnPage(this.lang);
     this.basicFunctions.insertDateToHTML(new Date(), this.HTMLElements.date.element, this._locales, this._dateOptions);
+    this.setBackgroundImage();
     console.log('start clocks and background');
   }
-  getTimeAndDate(selectedLang) {
+  setBackgroundImage(pictureNumber){
+    if(!pictureNumber){
+      pictureNumber = this.basicFunctions.getRandomNumber(this._numberOfPictures);
+    }
+    this._currentPictureNumber = pictureNumber;
+    const pathToBG = this.composeBGPicturePath(this._timeOfTheDay, pictureNumber);
+    this.setBackgroundImageSrc(this.HTMLElements.background.element, pathToBG);
+  }
   setTimeAndDateOnPage(selectedLang) {
     const currentDate = new Date();
     this.basicFunctions.insertTimeToHTML(this.HTMLElements.time.element, currentDate)
@@ -50,22 +50,12 @@ export default class ClocksBackground extends Base {
   setLocales(lang) {
     return this._translation[lang].locales;
   }
-  getNextPictureNumber(direction, currentPictureNumber, numberOfPictures) {
-    // direction = 'next' | 'prev'
-    const picturesSum = 20;
-    let next;
-    if (direction === "next") {
-      next = +currentPictureNumber + 1;
-      if(next > numberOfPictures) {
-        return "01";
-      }
+  set setCurrentPictureNumber(newNumber){
+    if(newNumber < this._numberOfPictures || newNumber >= 0) {
+      this._currentPictureNumber = newNumber;
     } else {
-      next = +currentPictureNumber - 1;
-      if(next < 1){
-        return numberOfPictures.toString();
-      }
+      throw new Error('Такого номера для фоновой картинки не существует. Установите другой номер');
     }
-    return next.toString();
   }
 
   createGreetsBlock(){
@@ -107,22 +97,53 @@ export default class ClocksBackground extends Base {
     if(this.name) greetLine.appendChild(nameLine);
   }
 
-  changeBackground(thisObj, event){
-    console.log('here');
+  composeBGPicturePath(timeOfADay, pictureNumber){
+    return `url(./assets/img/${timeOfADay}/${pictureNumber}.webp)`
+  }
+
+  setBackgroundImageSrc(block, path) {
+    block.style.backgroundImage = path;
+  }
+
+  getNextPictureNumber(direction, currentPictureNumber, allPicturesNumber) {
+    // direction = 'next' | 'prev'
+    let next;
+    if (direction === "next") {
+      next = +currentPictureNumber + 1;
+      if(next > allPicturesNumber) {
+        return "01";
+      }
+    } else {
+      next = +currentPictureNumber - 1;
+      if(next < 1){
+        return allPicturesNumber.toString();
+      }
+    }
+    if(next <= 9){
+      return '0' + next;
+    } else {
+      return next.toString();
+    }
+  }
+
+  changeBackground(event, newThis){
+    /*const basicFunctions = new Base();*/
     /*стрелочки по смене обоев и инпут (смена в=дива на инпут, сбор данных из инпута, смена инпута на дип обратно*/
     let eTargetClassList = Array.from(event.target.classList);
-    const theLastClass = eTargetClassList.length - 1;
-    if(eTargetClassList[theLastClass] === 'slide-prev'){
-      console.log('slide-prev');
-      const pictureNumber = this.getNextPictureNumber('prev'. this._currentPictureNumber, this._numberOfPictures);
-      this.setBackgroundImage(this.HTMLElements.background.element, this._timeOfTheDay, pictureNumber);
-      //background.getNextPictureNumber(direction, currentPictureNumber, numberOfPictures)
-    } else if(eTargetClassList[theLastClass] === 'slide-next') {
-      console.log('slide-next');
-      const pictureNumber = this.getNextPictureNumber('next'. this._currentPictureNumber, this._numberOfPictures);
-      this.setBackgroundImage(this.HTMLElements.background.element, this._timeOfTheDay, pictureNumber);
+    const theLastClassNumber = eTargetClassList.length - 1;
+    let direction;
+    if(eTargetClassList.includes('slider-icon')){
+      if (eTargetClassList[theLastClassNumber] === 'slide-next') {
+        direction = 'next';
+      } else if (eTargetClassList[theLastClassNumber] === 'slide-prev') {
+        direction = 'next';
+      }
+      const pictureNumber = newThis.getNextPictureNumber(direction, newThis._currentPictureNumber, newThis._numberOfPictures);
+      this.setBackgroundImage(pictureNumber);
     } else if(eTargetClassList[0] === 'name'){
       console.log('input');
+    } else {
+      console.log('no matches');
     }
   }
 }
