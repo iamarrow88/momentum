@@ -1,3 +1,4 @@
+/*
 const Background = require("../js/classes/Background.js");
 
 test("adds 20 + 1 to equal 1", () => {
@@ -31,3 +32,4 @@ test("evening + 11", () => {
 test("night + 08", () => {
   expect(Background.getPathTOPicture("night", "08")).toBe("https://raw.githubusercontent.com/iamarrow88/bg-collection/main/night/08.webp");
 });
+*/

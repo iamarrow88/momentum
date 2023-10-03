@@ -65,6 +65,26 @@ const appData = {
       selector: ".name",
       element: null
     },
+    background:{
+      selector: ".body",
+      element: null
+    },
+    prevBG:{
+      selector: ".prev-item",
+      element: null
+    },
+    mainBG:{
+      selector: ".main-item",
+      element: null
+    },
+    nextBG:{
+      selector: ".next-item",
+      element: null
+    },
+    carousel: {
+      selector: '.carousel',
+      element: null
+    },
     prev:{
       selector: ".slide-prev",
       element: null
@@ -77,10 +97,6 @@ const appData = {
       selector: ".track-play",
       element: null,
       isArray: true
-    },
-    background:{
-      selector: ".body",
-      element: null
     },
     errorBlock:{
       selector: ".weather__error-block",
@@ -145,10 +161,10 @@ const appData = {
       },
       afternoon: {
         start: 12,
-        end: 17,
+        end: 16,
       },
       evening: {
-        start: 18,
+        start: 17,
         end: 19,
       },
       night1: {

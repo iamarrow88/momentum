@@ -64,9 +64,10 @@ export default class Base {
     greetBlock.innerHTML = `${translation[lang][result]} `;
   }
   getRandomNumber(n) {
-    let num = Math.floor(Math.random() * n + 1).toString();
+    /*let num = Math.floor(Math.random() * n + 1).toString();
     if (num < 10) num = 0 + num;
-    return num;
+    return num;*/
+    return Math.floor(Math.random() * n + 1);
   }
 
 

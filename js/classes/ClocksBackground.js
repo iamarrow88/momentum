@@ -1,4 +1,5 @@
 import Base from "./base/Base.js";
+import * as path from "path";
 
 export default class ClocksBackground extends Base {
   constructor(lang, name, clocksOptions, translation, HTMLElements) {
@@ -11,23 +12,18 @@ export default class ClocksBackground extends Base {
     this._dateOptions = clocksOptions.dateOptions;
     this._timeOfADayBorders = clocksOptions.timeOfADayBorders;
     this.basicFunctions = new Base(this.lang, this.name, this.city);
+    this.backgroundCollectionElements = [];
   }
   startClocksBackground() {
     this.setTimeOfTheDay();
     this.createGreetsBlock();
     this.setTimeAndDateOnPage(this.lang);
     this.basicFunctions.insertDateToHTML(new Date(), this.HTMLElements.date.element, this._locales, this._dateOptions);
+    this.loadImages(this._numberOfPictures);
     this.setBackgroundImage();
     console.log('start clocks and background');
   }
-  setBackgroundImage(pictureNumber){
-    if(!pictureNumber){
-      pictureNumber = this.basicFunctions.getRandomNumber(this._numberOfPictures);
-    }
-    this._currentPictureNumber = pictureNumber;
-    const pathToBG = this.composeBGPicturePath(this._timeOfTheDay, pictureNumber);
-    this.setBackgroundImageSrc(this.HTMLElements.background.element, pathToBG);
-  }
+
   setTimeAndDateOnPage(selectedLang) {
     const currentDate = new Date();
     this.basicFunctions.insertTimeToHTML(this.HTMLElements.time.element, currentDate)
@@ -38,6 +34,8 @@ export default class ClocksBackground extends Base {
     const newTimeOfTheDay = this.basicFunctions.getTimeOfTheDayString(hours, this._timeOfADayBorders);
     if (this._timeOfTheDay !== newTimeOfTheDay) {
       this._timeOfTheDay = newTimeOfTheDay;
+      this.loadImages(this._numberOfPictures);
+      this.setBackgroundImage();
       this.basicFunctions.insertGreetToHTML(this._timeOfTheDay, selectedLang, this._translation, this.HTMLElements.greeting.element);
     }
     setTimeout(() => {
@@ -96,38 +94,50 @@ export default class ClocksBackground extends Base {
     nameLine.textContent = this.name;
     if(this.name) greetLine.appendChild(nameLine);
   }
+  loadImages(allPicturesNumber){
+    this.HTMLElements.carousel.element.innerHTML = '';
+    for(let i = 0; i < allPicturesNumber; i++){
+      const img = new Image();
+      img.src = `${this.composeBGPicturePath(this._timeOfTheDay, (i + 1) <= 9 ? '0' + (i + 1) : (i + 1).toString())}`;
+      img.dataset.backgroundId = i;
+      img.alt = 'background image';
+      img.classList.add('carousel__item');
+      this.backgroundCollectionElements.push(img);
+      this.HTMLElements.carousel.element.append(img);
+    }
+  }
 
   composeBGPicturePath(timeOfADay, pictureNumber){
-    return `url(./assets/img/${timeOfADay}/${pictureNumber}.webp)`
+    /*return `url(./assets/img/${timeOfADay}/${pictureNumber}.webp)`*/
+    return `https://raw.githubusercontent.com/iamarrow88/bg-collection/main/${timeOfADay}/${pictureNumber}.webp`
   }
 
-  setBackgroundImageSrc(block, path) {
-    block.style.backgroundImage = path;
-  }
-
-  getNextPictureNumber(direction, currentPictureNumber, allPicturesNumber) {
-    // direction = 'next' | 'prev'
-    let next;
+  getNextPictureNumber(direction, currentPictureNumber, allPicturesNumber){
+    let nextPictureID;
     if (direction === "next") {
-      next = +currentPictureNumber + 1;
-      if(next > allPicturesNumber) {
-        return "01";
+      nextPictureID = +currentPictureNumber + 1;
+      if(nextPictureID > allPicturesNumber) {
+        return 0;
       }
     } else {
-      next = +currentPictureNumber - 1;
-      if(next < 1){
-        return allPicturesNumber.toString();
+      nextPictureID = +currentPictureNumber - 1;
+      if(nextPictureID < 1){
+        return +allPicturesNumber;
       }
     }
-    if(next <= 9){
-      return '0' + next;
-    } else {
-      return next.toString();
+    return +nextPictureID;
+  }
+
+  setBackgroundImage(pictureNumber){
+    if(!pictureNumber){
+      pictureNumber = this.basicFunctions.getRandomNumber(this._numberOfPictures);
     }
+    this._currentPictureNumber = pictureNumber;
+    this.backgroundCollectionElements.forEach(block => block.classList.remove('visible'));
+    this.backgroundCollectionElements[pictureNumber].classList.add('visible');
   }
 
   changeBackground(event, newThis){
-    /*const basicFunctions = new Base();*/
     /*стрелочки по смене обоев и инпут (смена в=дива на инпут, сбор данных из инпута, смена инпута на дип обратно*/
     let eTargetClassList = Array.from(event.target.classList);
     const theLastClassNumber = eTargetClassList.length - 1;
@@ -136,7 +146,7 @@ export default class ClocksBackground extends Base {
       if (eTargetClassList[theLastClassNumber] === 'slide-next') {
         direction = 'next';
       } else if (eTargetClassList[theLastClassNumber] === 'slide-prev') {
-        direction = 'next';
+        direction = 'prev';
       }
       const pictureNumber = newThis.getNextPictureNumber(direction, newThis._currentPictureNumber, newThis._numberOfPictures);
       this.setBackgroundImage(pictureNumber);
