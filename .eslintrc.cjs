@@ -23,6 +23,8 @@ module.exports = {
   },
   ignorePatterns: ["*.test.js", "*.config.js"],
   rules: {
+    "no-underscore-dangle": ["off"],
+    "no-console": ["off"],
     semi: ["error", "always"],
     quotes: ["error", "double"]
   },
