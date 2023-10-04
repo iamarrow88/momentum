@@ -96,10 +96,57 @@ export default class ClocksBackground extends Base {
     greetLine.textContent = this._translation[this.lang][`${this._timeOfTheDay}`];
     nameLine.textContent = this.name;
     if(this.name) greetLine.appendChild(nameLine);
+
+  insertDateToHTML(date, dateBlock, locales, dateOptions) {
+    dateBlock.textContent = date.toLocaleDateString(locales, dateOptions);
   }
-  loadImages(allPicturesNumber){
-    this.HTMLElements.carousel.element.innerHTML = '';
-    for(let i = 0; i < allPicturesNumber; i++){
+
+  insertTimeToHTML(timeBlock, currentDate) {
+    timeBlock.innerHTML = currentDate.toLocaleTimeString();
+  }
+
+  getTimeOfTheDayString(hours, timeOfADayBorders) {
+    /*const keys = Object.keys(timeOfADayBorders);
+    for (let i = 0; i < keys.length; i + 1) {
+      if (hours >= timeOfADayBorders[keys[i]].start && hours <= timeOfADayBorders[keys[i]].end) {
+        if (keys[i] === "night1" || keys[i] === "night2") {
+          return "night";
+        }
+        return keys[i];
+      }
+    }*/
+    for (const time in timeOfADayBorders) {
+      if (hours >= timeOfADayBorders[time].start && hours <= timeOfADayBorders[time].end) {
+        if (time === "night1" || time === "night2") {
+          return "night";
+        }
+        return time;
+      }
+    }
+  }
+
+  insertGreetToHTML(timeOfTheDay, lang, translation, greetBlock) {
+    let result;
+    switch (timeOfTheDay) {
+      case "morning":
+        result = "morning";
+        break;
+      case "afternoon":
+        result = "afternoon";
+        break;
+      case "evening":
+        result = "evening";
+        break;
+      case "night":
+        result = "night";
+        break;
+    }
+    greetBlock.innerHTML = `${translation[lang][result]} `;
+  }
+
+  loadImages(allPicturesNumber) {
+    this.HTMLElements.carousel.element.innerHTML = "";
+    if (this._isAPISource) {
       let api;
       if (this._tag) {
         api = new UnsplashApi(`${this._tag}`);

@@ -16,24 +16,6 @@ export default class Base {
     element.classList.add(newClass);
     return element;
   }
-  insertDateToHTML(date, dateBlock, locales, dateOptions) {
-    dateBlock.textContent = date.toLocaleDateString(locales, dateOptions);
-  }
-
-  insertTimeToHTML(timeBlock, currentDate){
-    timeBlock.innerHTML = currentDate.toLocaleTimeString();
-  }
-
-  getTimeOfTheDayString(hours, timeOfADayBorders) {
-    for (const time in timeOfADayBorders) {
-      if (hours >= timeOfADayBorders[time].start && hours <= timeOfADayBorders[time].end) {
-        if (time === "night1" || time === "night2") {
-          return "night";
-        }
-        return time;
-      }
-    }
-  }
 
   searchHTMLElements() {
     for (const className in this.HTMLElements) {
@@ -45,55 +27,12 @@ export default class Base {
     }
   }
 
-  insertGreetToHTML(timeOfTheDay, lang, translation, greetBlock) {
-    let result;
-    switch (timeOfTheDay) {
-      case "morning":
-        result = "morning";
-        break;
-      case "afternoon":
-        result = "afternoon";
-        break;
-      case "evening":
-        result = "evening";
-        break;
-      case "night":
-        result = "night";
-        break;
-    }
-    greetBlock.innerHTML = `${translation[lang][result]} `;
-  }
   getRandomNumber(n) {
-    /*let num = Math.floor(Math.random() * n + 1).toString();
-    if (num < 10) num = 0 + num;
-    return num;*/
     return Math.floor(Math.random() * n + 1);
   }
 
-
-
-
-  /*massAddEventListeners(HTMLElement, trigger, selector, handler) {
-    if(selector) {
-      if (Array.isArray(HTMLElement)) {
-        HTMLElement.forEach((element, index) => element.addEventListener(trigger[index], e => {
-          if (e.target.matches(selector)) handler[index](e);
-        }));
-      }
-      HTMLElement.addEventListener(trigger, e => {
-        if (e.target.matches(selector)) handler(e);
-      });
-    } else {
-      if (Array.isArray(HTMLElement)) {
-        HTMLElement.forEach((element, index) => element.addEventListener(trigger[index], e =>  handler[index](e)));
-      }
-      HTMLElement.addEventListener(trigger, e => handler(e));
-    }
-
-  }*/
-
-  createDatasetName(dataAttribute){
-    const datasetName = dataAttribute.split('-').slice(1);
+  createDatasetName(dataAttribute) {
+    const datasetName = dataAttribute.split("-").slice(1);
     let result = datasetName[0];
     if(datasetName.length > 1){
       for(let i = 1; i < datasetName.length; i++){
@@ -123,21 +62,4 @@ export default class Base {
     }
     return element;
   }
-
-  /*allEventsListener(e, newThis){
-    let eTargetDataset = e.target.dataset; // содержит любой датасет, нужно выбирать необходимый
-    let eTargetClassList = Array.from(e.target.classList);
-    console.log(eTargetClassList);
-    let eTargetClass;
-    if(eTargetClassList.includes('icon')) {
-      eTargetClass = e.target.firstElementChild.classList[e.target.firstElementChild.classList.length - 1];
-    } else {
-      eTargetClass = e.target.classList[e.target.classList.length - 1];
-    }
-
-    if (eTargetClass === Base.HTMLElements.animationBulbs.selector) {
-      if(this.functionsDistribution[this.HTMLElements.animationBulbs.selector]) this.functionsDistribution[this.HTMLElements.animationBulbs.selector](e);
-      /!*this.playAnimationListener();*!/
-    }
-  }*/
 }
