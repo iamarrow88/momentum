@@ -186,5 +186,3 @@ const Player1 = {
     this.createPlayer();
   },
 };
-
-

@@ -1,10 +1,11 @@
 import Base from "./base/Base.js";
 
-export default class ToDo extends Base{
+export default class ToDo extends Base {
   constructor(lang, tasksArray) {
     super(lang);
     this.tasksArray = tasksArray;
   }
+
   startToDo() {
     console.log("ToD1o started");
   }

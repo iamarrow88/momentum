@@ -1,5 +1,4 @@
-import Base from "./base/Base.js";
-import * as path from "path";
+import Base from "./base/Base";
 import UnsplashApi from "./unsplashApi";
 
 export default class ClocksBackground extends Base {
@@ -7,95 +6,103 @@ export default class ClocksBackground extends Base {
     super(lang, name, HTMLElements);
     this._translation = translation;
     this._locales = this.setLocales(this.lang);
-    this._timeOfTheDay = '';
+    this._timeOfTheDay = "";
     this._tag = "";
     this._numberOfPictures = 20;
     this._currentPictureNumber = null;
     this._dateOptions = clocksOptions.dateOptions;
     this._isAPISource = clocksOptions.isAPISource;
     this._timeOfADayBorders = clocksOptions.timeOfADayBorders;
-    this.basicFunctions = new Base(this.lang, this.name, this.city);
     this.backgroundCollectionElements = [];
   }
+
   startClocksBackground() {
     this.setTimeOfTheDay();
     this.createGreetsBlock();
     this.setTimeAndDateOnPage(this.lang);
-    this.basicFunctions.insertDateToHTML(new Date(), this.HTMLElements.date.element, this._locales, this._dateOptions);
+    this.insertDateToHTML(new Date(), this.HTMLElements.date.element, this._locales, this._dateOptions);
     this.loadImages(this._numberOfPictures);
     this.setBackgroundImage();
-    console.log('start clocks and background');
+    console.log("start clocks and background");
   }
 
   setTimeAndDateOnPage(selectedLang) {
     const currentDate = new Date();
-    this.basicFunctions.insertTimeToHTML(this.HTMLElements.time.element, currentDate)
+    this.insertTimeToHTML(this.HTMLElements.time.element, currentDate);
     if (currentDate.toLocaleTimeString() === "00:00:00") {
-      this.basicFunctions.insertDateToHTML(currentDate, this.HTMLElements.date.element, this._locales, this._dateOptions);
+      this.insertDateToHTML(currentDate, this.HTMLElements.date.element, this._locales, this._dateOptions);
     }
     const hours = currentDate.getHours();
-    const newTimeOfTheDay = this.basicFunctions.getTimeOfTheDayString(hours, this._timeOfADayBorders);
+    const newTimeOfTheDay = this.getTimeOfTheDayString(hours, this._timeOfADayBorders);
     if (this._timeOfTheDay !== newTimeOfTheDay) {
       this._timeOfTheDay = newTimeOfTheDay;
       this.loadImages(this._numberOfPictures);
       this.setBackgroundImage();
-      this.basicFunctions.insertGreetToHTML(this._timeOfTheDay, selectedLang, this._translation, this.HTMLElements.greeting.element);
+      this.insertGreetToHTML(this._timeOfTheDay, selectedLang, this._translation, this.HTMLElements.greeting.element);
     }
     setTimeout(() => {
       this.setTimeAndDateOnPage(selectedLang);
     }, 1000);
   }
-  setTimeOfTheDay(){
-    this._timeOfTheDay = this.basicFunctions.getTimeOfTheDayString(new Date().getHours(), this._timeOfADayBorders);
+
+  setTimeOfTheDay() {
+    this._timeOfTheDay = this.getTimeOfTheDayString(new Date().getHours(), this._timeOfADayBorders);
   }
+
   setLocales(lang) {
     return this._translation[lang].locales;
   }
-  set setCurrentPictureNumber(newNumber){
-    if(newNumber < this._numberOfPictures || newNumber >= 0) {
+
+  set setCurrentPictureNumber(newNumber) {
+    if (newNumber < this._numberOfPictures || newNumber >= 0) {
       this._currentPictureNumber = newNumber;
     } else {
-      throw new Error('Такого номера для фоновой картинки не существует. Установите другой номер');
+      throw new Error("Такого номера для фоновой картинки не существует. Установите другой номер");
     }
   }
 
-  createGreetsBlock(){
-    this.HTMLElements.greetsBlock.element.innerHTML = '';
+  createGreetsBlock() {
+    this.HTMLElements.greetsBlock.element.innerHTML = "";
     let greetLine;
     let nameLine;
-    if(this.name){
+    if (this.name) {
       greetLine = this.createElement(
-          'div',
-          'greeting',
-          this.HTMLElements.greetsBlock.element,
-          [{"data-translate": "hello-name"}]);
+        "div",
+        "greeting",
+        this.HTMLElements.greetsBlock.element,
+        [{ "data-translate": "hello-name" }],
+      );
       nameLine = this.createElement(
-          'span',
-          'name',
-          null,
-          [{"data-translate": "[placeholder]customerName}"}]);
+        "span",
+        "name",
+        null,
+        [{ "data-translate": "[placeholder]customerName}" }]
+      );
     } else {
       greetLine = this.createElement(
-          'span',
-          'greeting',
-          this.HTMLElements.greetsBlock.element,
-          [{"data-translate": "hello-name"}]);
+        "span",
+        "greeting",
+        this.HTMLElements.greetsBlock.element,
+        [{ "data-translate": "hello-name" }]
+      );
       this.createElement(
-          'label',
-          null,
-          this.HTMLElements.greetsBlock.element,
-          [{'for': 'name'}]
-      )
+        "label",
+        null,
+        this.HTMLElements.greetsBlock.element,
+        [{ for: "name" }]
+      );
       nameLine = this.createElement(
-          'input',
-          'name',
-          this.HTMLElements.greetsBlock.element,
-          [{"data-translate": "[placeholder]customerName"}, {"type": "text"}, {"id": "name"}, {'placeholder': 'Enter your name'}]);
+        "input",
+        "name",
+        this.HTMLElements.greetsBlock.element,
+        [{ "data-translate": "[placeholder]customerName" }, { type: "text" }, { id: "name" }, { placeholder: "Enter your name" }]
+      );
     }
 
     greetLine.textContent = this._translation[this.lang][`${this._timeOfTheDay}`];
     nameLine.textContent = this.name;
-    if(this.name) greetLine.appendChild(nameLine);
+    if (this.name) greetLine.appendChild(nameLine);
+  }
 
   insertDateToHTML(date, dateBlock, locales, dateOptions) {
     dateBlock.textContent = date.toLocaleDateString(locales, dateOptions);
@@ -183,9 +190,8 @@ export default class ClocksBackground extends Base {
     }
   }
 
-  composeBGPicturePath(timeOfADay, pictureNumber){
-    /*return `url(./assets/img/${timeOfADay}/${pictureNumber}.webp)`*/
-    return `https://raw.githubusercontent.com/iamarrow88/bg-collection/main/${timeOfADay}/${pictureNumber}.webp`
+  composeBGPicturePath(timeOfADay, pictureNumber) {
+    return `https://raw.githubusercontent.com/iamarrow88/bg-collection/main/${timeOfADay}/${pictureNumber}.webp`;
   }
 
   getNextPictureNumber(direction, currentPictureNumber, allPicturesNumber) {
@@ -211,27 +217,27 @@ export default class ClocksBackground extends Base {
       }
     }
     this._currentPictureNumber = pictureNumber;
-    this.backgroundCollectionElements.forEach(block => block.classList.remove('visible'));
-    this.backgroundCollectionElements[pictureNumber].classList.add('visible');
+    this.backgroundCollectionElements.forEach((block) => block.classList.remove("visible"));
+    this.backgroundCollectionElements[pictureNumber].classList.add("visible");
   }
 
-  changeBackground(event, newThis){
-    /*стрелочки по смене обоев и инпут (смена в=дива на инпут, сбор данных из инпута, смена инпута на дип обратно*/
-    let eTargetClassList = Array.from(event.target.classList);
+  changeBackground(event, newThis) {
+    /* стрелочки по смене обоев и инпут (смена в=дива на инпут, сбор данных из инпута, смена инпута на дип обратно */
+    const eTargetClassList = Array.from(event.target.classList);
     const theLastClassNumber = eTargetClassList.length - 1;
     let direction;
-    if(eTargetClassList.includes('slider-icon')){
-      if (eTargetClassList[theLastClassNumber] === 'slide-next') {
-        direction = 'next';
-      } else if (eTargetClassList[theLastClassNumber] === 'slide-prev') {
-        direction = 'prev';
+    if (eTargetClassList.includes("slider-icon")) {
+      if (eTargetClassList[theLastClassNumber] === "slide-next") {
+        direction = "next";
+      } else if (eTargetClassList[theLastClassNumber] === "slide-prev") {
+        direction = "prev";
       }
       const pictureNumber = newThis.getNextPictureNumber(direction, newThis._currentPictureNumber, newThis._numberOfPictures);
       this.setBackgroundImage(pictureNumber);
-    } else if(eTargetClassList[0] === 'name'){
-      console.log('input');
+    } else if (eTargetClassList[0] === "name") {
+      console.log("input");
     } else {
-      console.log('no matches');
+      console.log("no matches");
     }
   }
 }

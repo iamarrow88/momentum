@@ -1,8 +1,7 @@
-import Player from './Player.js';
+import Player from "./Player.js";
 import ClocksBackground from "./ClocksBackground.js";
 import Quotes from "./Quotes.js";
 import Base from "./base/Base.js";
-
 
 /* !TODO
 *    смена иконки в плеере при проигрывании,остановке музыки
@@ -14,7 +13,7 @@ import Base from "./base/Base.js";
 *    переписать все на классах
 *    подгрузка обоев из UnsplashApi */
 
-class App extends Base{
+class App extends Base {
   constructor(lang, name, city, store, HTMLElements) {
     super(lang, name, HTMLElements, city);
     this.date = new Date();
@@ -38,7 +37,7 @@ class App extends Base{
   }
 
   set setName(newName) {
-      this.name = newName;
+    this.name = newName;
   }
 
   set setCity(newCity) {
@@ -52,11 +51,10 @@ class App extends Base{
   startApp() {
     this.background = new ClocksBackground(this.lang, this.name, this.appStore.clocks, this.appStore.translation, this.appStore.HTMLElements);
     this.background.startClocksBackground();
-    console.log('start App');
-    this.HTMLElements.background.element.addEventListener('click', (e) => {
+    console.log("start App");
+    this.HTMLElements.background.element.addEventListener("click", (e) => {
       this.background.changeBackground(e, this.background);
     });
-
   }
 }
 

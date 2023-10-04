@@ -1,9 +1,10 @@
 import Player from "../Player.js";
 
-export default class FinishApp extends Player{
+export default class FinishApp extends Player {
   constructor(lang, name, city, playerOptions) {
     super(lang, name, city, playerOptions);
   }
+
   start() {
     this.startPlayer();
   }
@@ -21,5 +22,5 @@ export default class FinishApp extends Player{
     if (eTargetClass === 'song__sphere') {
       this.playAnimationListener();
     }
-  }*/
+  } */
 }

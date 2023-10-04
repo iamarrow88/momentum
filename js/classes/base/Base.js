@@ -19,7 +19,7 @@ export default class Base {
 
   searchHTMLElements() {
     for (const className in this.HTMLElements) {
-      if(this.HTMLElements[className].isArray){
+      if (this.HTMLElements[className].isArray) {
         this.HTMLElements[className].element = document.querySelectorAll(this.HTMLElements[className].selector);
       } else {
         this.HTMLElements[className].element = document.querySelector(this.HTMLElements[className].selector);
@@ -34,11 +34,11 @@ export default class Base {
   createDatasetName(dataAttribute) {
     const datasetName = dataAttribute.split("-").slice(1);
     let result = datasetName[0];
-    if(datasetName.length > 1){
-      for(let i = 1; i < datasetName.length; i++){
-        let chunk = datasetName[i].split('');
+    if (datasetName.length > 1) {
+      for (let i = 1; i < datasetName.length; i++) {
+        let chunk = datasetName[i].split("");
         chunk[0] = chunk[0].toUpperCase();
-        chunk = chunk.join('');
+        chunk = chunk.join("");
         result += chunk;
       }
     }
@@ -47,18 +47,18 @@ export default class Base {
 
   createElement(tag, className, parentElement, attributes) {
     const element = document.createElement(tag);
-    if(className) element.classList.add(className);
-    if(parentElement) parentElement.append(element);
-    if(attributes){
-      attributes.forEach( attr => {
+    if (className) element.classList.add(className);
+    if (parentElement) parentElement.append(element);
+    if (attributes) {
+      attributes.forEach((attr) => {
         const key = Object.keys(attr)[0];
-        if(key.split('-').includes('data')){
+        if (key.split("-").includes("data")) {
           const datasetName = this.createDatasetName(key);
           element.dataset[datasetName] = attr[key];
         } else {
           element.setAttribute(key, attr[key]);
         }
-      })
+      });
     }
     return element;
   }

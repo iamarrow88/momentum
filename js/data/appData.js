@@ -5,141 +5,143 @@ import svgPath from "./svgPath.js";
 const appData = {
   HTMLElements: {
     playerBlock: {
-      selector: '.player',
-      element: null
-    },
-    audioTag:{
-      selector: '.player__audio',
-      element: null
-    },
-    playPrev:{
-      selector: 'div.play-prev',
-      element: null
-    },
-    playNext:{
-      selector: 'div.play-next',
-      element: null
-    },
-    play:{
-      selector: 'div.play',
-      element: null
-    },
-    pause:{
-      selector: 'div.pause',
-      element: null
-    },
-    volumeIcon:{
-      selector: 'svg.volume',
-      element: null
-    },
-    volumeRange:{
-      selector: '.volume-bar__range',
-      element: null
-    },
-    playlist:{
-      selector: '.playlist',
-      element: null
-    },
-    animationBulbs:{
-      selector: '.song__sphere',
+      selector: ".player",
       element: null,
-      isArray: true
     },
-    time:{
+    audioTag: {
+      selector: ".player__audio",
+      element: null,
+    },
+    playPrev: {
+      selector: "div.play-prev",
+      element: null,
+    },
+    playNext: {
+      selector: "div.play-next",
+      element: null,
+    },
+    play: {
+      selector: "div.play",
+      element: null,
+    },
+    pause: {
+      selector: "div.pause",
+      element: null,
+    },
+    volumeIcon: {
+      selector: "svg.volume",
+      element: null,
+    },
+    volumeRange: {
+      selector: ".volume-bar__range",
+      element: null,
+    },
+    playlist: {
+      selector: ".playlist",
+      element: null,
+    },
+    animationBulbs: {
+      selector: ".song__sphere",
+      element: null,
+      isArray: true,
+    },
+    time: {
       selector: ".time",
-      element: null
+      element: null,
     },
-    date:{
+    date: {
       selector: ".date",
-      element: null
+      element: null,
     },
-    greeting:{
+    greeting: {
       selector: ".greeting",
-      element: null
+      element: null,
     },
     greetsBlock: {
       selector: ".greeting-container",
-      element: null
+      element: null,
     },
-    name:{
+    name: {
       selector: ".name",
-      element: null
+      element: null,
     },
-    background:{
+    background: {
       selector: ".body",
-      element: null
+      element: null,
     },
-    prevBG:{
+    prevBG: {
       selector: ".prev-item",
-      element: null
+      element: null,
     },
-    mainBG:{
+    mainBG: {
       selector: ".main-item",
-      element: null
+      element: null,
     },
-    nextBG:{
+    nextBG: {
       selector: ".next-item",
-      element: null
+      element: null,
     },
     carousel: {
-      selector: '.carousel',
-      element: null
+      selector: ".carousel",
+      element: null,
     },
-    prev:{
+    prev: {
       selector: ".slide-prev",
-      element: null
+      element: null,
     },
-    next:{
+    next: {
       selector: ".slide-next",
-      element: null
+      element: null,
     },
     trackPlay: {
       selector: ".track-play",
       element: null,
-      isArray: true
+      isArray: true,
     },
-    errorBlock:{
+    errorBlock: {
       selector: ".weather__error-block",
-      element: null
+      element: null,
     },
-    iconPath:{
+    iconPath: {
       selector: ".weather-icon",
-      element: null
+      element: null,
     },
-    temperature:{
+    temperature: {
       selector: ".temperature__number",
-      element: null
+      element: null,
     },
-    description:{
-      selector:".weather-description",
-      element: null
-    } ,
-    windSpeed:{
+    description: {
+      selector: ".weather-description",
+      element: null,
+    },
+    windSpeed: {
       selector: ".wind__speedNumber",
-      element: null
+      element: null,
     },
-    humidity:{
+    humidity: {
       selector: ".humidity__number",
-      element: null
+      element: null,
     },
-    cityNameBlock:{
+    cityNameBlock: {
       selector: ".city-name-block",
-      element: null
+      element: null,
     },
   },
-  translation: translation,
+  translation,
   blocks: ["Player", "Weather", "Clocks", "Date", "Greets", "ToDo", "Quotes", "Settings", "Background"],
 
   player: {
-    tracksMap: tracks, //[{string: number, string: string, string: string}]
+    tracksMap: tracks, // [{string: number, string: string, string: string}]
     volume: +localStorage.getItem("volume") || 30, // number
-    prevPlayedTrackID: +localStorage.getItem("prevPlayedTrackID") || null,  // number | null
-    nextPlayedTrackID: +localStorage.getItem("nextPlayedTrackID") || null,  // number | null
-    currentTrackID: +localStorage.getItem("currentTrackID") || 1,  // number
-    pathToSVGIcon: "assets/svg/sprite.svg#", //string
+    prevPlayedTrackID: +localStorage.getItem("prevPlayedTrackID") || null, // number | null
+    nextPlayedTrackID: +localStorage.getItem("nextPlayedTrackID") || null, // number | null
+    currentTrackID: +localStorage.getItem("currentTrackID") || 1, // number
+    pathToSVGIcon: "assets/svg/sprite.svg#", // string
     svgPathEndpoints: svgPath, // {string: string}
-    buttonsToToggle: { play: "pause", pause: "play", volume: "mute", mute: "volume" }, // {string: string}
-    SVGClassButtons: ["play", "pause", "play-prev", "play-next", "volume"], //[number]
+    buttonsToToggle: {
+      play: "pause", pause: "play", volume: "mute", mute: "volume",
+    }, // {string: string}
+    SVGClassButtons: ["play", "pause", "play-prev", "play-next", "volume"], // [number]
 
   },
   weather: {
@@ -154,6 +156,7 @@ const appData = {
     urlToIcon: "https://openweathermap.org/img/wn/",
   },
   clocks: {
+    isAPISource: false,
     timeOfADayBorders: {
       morning: {
         start: 5,
@@ -176,15 +179,17 @@ const appData = {
         end: 4,
       },
     },
-    dateOptions: {weekday: "long", year: "numeric", month: "long", day: "numeric"},
+    dateOptions: {
+      weekday: "long", year: "numeric", month: "long", day: "numeric",
+    },
   },
   quotes: {
-    url: '',
-    APIKey: '',
-    quotesArray: []
+    url: "",
+    APIKey: "",
+    quotesArray: [],
   },
   toDo: {
-    tasksArray: [] // []
-  }
+    tasksArray: [], // []
+  },
 };
 export default appData;

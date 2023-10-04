@@ -8,9 +8,5 @@ const lang = localStorage.getItem("lang") || "en";
 const name = localStorage.getItem("name") || "";
 const city = localStorage.getItem("city") || "Minsk";
 
-
 const app = new App(lang, name, city, appData, appData.HTMLElements);
 app.startApp();
-
-
-

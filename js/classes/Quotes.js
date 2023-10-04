@@ -1,6 +1,6 @@
 import Base from "./base/Base.js";
 
-export default class Quotes extends Base{
+export default class Quotes extends Base {
   constructor(lang, options) {
     super(lang);
     this._url = options.url;
@@ -8,7 +8,7 @@ export default class Quotes extends Base{
     this.quotesStack = options.quotesArray;
   }
 
-  startQuotes(){
-    console.log('start quotes');
+  startQuotes() {
+    console.log("start quotes");
   }
 }
