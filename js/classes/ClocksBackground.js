@@ -1,5 +1,6 @@
 import Base from "./base/Base.js";
 import * as path from "path";
+import UnsplashApi from "./unsplashApi";
 
 export default class ClocksBackground extends Base {
   constructor(lang, name, clocksOptions, translation, HTMLElements) {
@@ -7,9 +8,11 @@ export default class ClocksBackground extends Base {
     this._translation = translation;
     this._locales = this.setLocales(this.lang);
     this._timeOfTheDay = '';
+    this._tag = "";
     this._numberOfPictures = 20;
     this._currentPictureNumber = null;
     this._dateOptions = clocksOptions.dateOptions;
+    this._isAPISource = clocksOptions.isAPISource;
     this._timeOfADayBorders = clocksOptions.timeOfADayBorders;
     this.basicFunctions = new Base(this.lang, this.name, this.city);
     this.backgroundCollectionElements = [];
@@ -97,12 +100,38 @@ export default class ClocksBackground extends Base {
   loadImages(allPicturesNumber){
     this.HTMLElements.carousel.element.innerHTML = '';
     for(let i = 0; i < allPicturesNumber; i++){
+      let api;
+      if (this._tag) {
+        api = new UnsplashApi(`${this._tag}`);
+      } else {
+        api = new UnsplashApi(`${this._timeOfTheDay}, nature`);
+      }
+
+      api.getPhotoByTag().then((result) => {
+        if (result.status === 200) {
+          console.log("data from unsplash api is received");
+          this.backgroundCollectionElements.forEach((img, i) => {
+            img.src = `${result.response.results[i].urls.raw}&fit=crop&w=${window.innerWidth}&h=${window.innerHeight}`;
+            img.classList.add("itWasAPI");
+          });
+        } else {
+          console.log("fail, data from unsplash is not received");
+          this._isAPISource = false;
+          this.loadImages(this._numberOfPictures);
+        }
+      });
+    }
+    for (let i = 0; i < allPicturesNumber; i++) {
       const img = new Image();
-      img.src = `${this.composeBGPicturePath(this._timeOfTheDay, (i + 1) <= 9 ? '0' + (i + 1) : (i + 1).toString())}`;
       img.dataset.backgroundId = i;
-      img.alt = 'background image';
-      img.classList.add('carousel__item');
+      img.alt = "background image";
+      img.classList.add("carousel__item");
+
+      if (!this._isAPISource) {
+        img.src = `${this.composeBGPicturePath(this._timeOfTheDay, (i + 1) <= 9 ? `0${i + 1}` : (i + 1).toString())}`;
+      }
       this.backgroundCollectionElements.push(img);
+
       this.HTMLElements.carousel.element.append(img);
     }
   }
@@ -112,25 +141,27 @@ export default class ClocksBackground extends Base {
     return `https://raw.githubusercontent.com/iamarrow88/bg-collection/main/${timeOfADay}/${pictureNumber}.webp`
   }
 
-  getNextPictureNumber(direction, currentPictureNumber, allPicturesNumber){
+  getNextPictureNumber(direction, currentPictureNumber, allPicturesNumber) {
     let nextPictureID;
     if (direction === "next") {
       nextPictureID = +currentPictureNumber + 1;
-      if(nextPictureID > allPicturesNumber) {
+      if (nextPictureID >= allPicturesNumber) {
         return 0;
       }
     } else {
       nextPictureID = +currentPictureNumber - 1;
-      if(nextPictureID < 1){
-        return +allPicturesNumber;
+      if (nextPictureID < 1) {
+        return +(allPicturesNumber - 1);
       }
     }
     return +nextPictureID;
   }
 
-  setBackgroundImage(pictureNumber){
-    if(!pictureNumber){
-      pictureNumber = this.basicFunctions.getRandomNumber(this._numberOfPictures);
+  setBackgroundImage(pictureNumber) {
+    if (!pictureNumber) {
+      if(pictureNumber !== 0){
+        pictureNumber = this.getRandomNumber(this._numberOfPictures);
+      }
     }
     this._currentPictureNumber = pictureNumber;
     this.backgroundCollectionElements.forEach(block => block.classList.remove('visible'));

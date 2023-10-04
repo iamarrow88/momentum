@@ -284,6 +284,8 @@ input:focus-visible::placeholder {
   left: 0;
   right: 0;
   z-index: -1;
+  height: 100vh;
+  width: 100vw;
 
   &__item {
     position: fixed;
@@ -292,6 +294,8 @@ input:focus-visible::placeholder {
     left: 0;
     right: 0;
     opacity: 0;
+    height: 100%;
+    width: 100%;
     transition: opacity 1s;
 
     &.visible {
