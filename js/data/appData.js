@@ -126,6 +126,10 @@ const appData = {
       selector: ".city-name-block",
       element: null,
     },
+    settingsBlock: {
+      selector: '.footer__settings',
+      element: null,
+    }
   },
   translation,
   blocks: ["Player", "Weather", "Clocks", "Date", "Greets", "ToDo", "Quotes", "Settings", "Background"],

@@ -19,9 +19,8 @@ class App extends Base {
     this.date = new Date();
     this.appStore = store;
     this.player = new Player(lang, name, city, store.HTMLElements, store.player);
+    this.background = new ClocksBackground(lang, name, store.clocks, store.translation, store.HTMLElements);
     this.quotes = new Quotes(lang, store.quotes);
-    this.player.startPlayer();
-    this.quotes.startQuotes();
   }
 
   set setLang(newLang) {
@@ -49,8 +48,11 @@ class App extends Base {
   }
 
   startApp() {
-    this.background = new ClocksBackground(this.lang, this.name, this.appStore.clocks, this.appStore.translation, this.appStore.HTMLElements);
+    this.player.startPlayer();
     this.background.startClocksBackground();
+
+    this.quotes.startQuotes();
+    console.log(this.player);
     console.log("start App");
     this.HTMLElements.background.element.addEventListener("click", (e) => {
       this.background.changeBackground(e, this.background);
