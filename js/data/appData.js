@@ -98,6 +98,10 @@ const appData = {
       element: null,
       isArray: true,
     },
+    weatherBlock: {
+      selector: ".weather",
+      element: null,
+    },
     errorBlock: {
       selector: ".weather__error-block",
       element: null,
@@ -124,6 +128,10 @@ const appData = {
     },
     cityNameBlock: {
       selector: ".city-name-block",
+      element: null,
+    },
+    cityNameDiv: {
+      selector: ".city-name-div",
       element: null,
     },
     settingsBlock: {

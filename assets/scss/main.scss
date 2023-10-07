@@ -243,6 +243,7 @@ input:focus-visible::placeholder {
 .city-name-block {
   position: relative;
   text-align: left;
+  font-size: 20px;
   &::after {
     position: absolute;
     bottom: 0;
@@ -253,6 +254,30 @@ input:focus-visible::placeholder {
     width: 100%;
     background-color: rebeccapurple;
   }
+}
+
+.city-name-div {
+  font-weight: bold;
+}
+.city-name-input {
+  padding: 10px;
+  background-color: rgba(255, 255, 255, .4);
+  width: 100%;
+  border: none;
+  color: #fff;
+  outline: 0;
+  -webkit-appearance: none;
+
+
+  &:focus {
+    outline: 0;
+    -webkit-appearance: none;
+  }
+}
+
+.city-name-input[placeholder] {
+  color: #fff;
+  font-size: 20px;
 }
 
 .temperature,

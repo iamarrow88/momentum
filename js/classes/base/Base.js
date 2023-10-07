@@ -45,6 +45,16 @@ export default class Base {
     return result;
   }
 
+  async getValue(url) {
+    const response = await fetch(`${url}`);
+    return {
+      isOk: response.ok,
+      json: await response.json(),
+    };
+  }
+
+  /*attributes: [{key: value}, {key: value}]*/
+
   createElement(tag, className, parentElement, attributes) {
     const element = document.createElement(tag);
     if (className) element.classList.add(className);

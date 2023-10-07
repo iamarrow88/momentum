@@ -1,4 +1,3 @@
-import asyncFunctions from "../actions/asyncFunctions.js";
 import basic from "../actions/commonFunctions.js";
 
 const Weather1 = {
@@ -41,7 +40,7 @@ const Weather1 = {
   setCityName() {
     this.fields.HTMLElements.cityNameBlock.innerHTML = this.fields.city;
   },
-  getWeather() { // найти содержимое ответа и вставить в хтмл элемент + city in input
+  /*getWeather() { // найти содержимое ответа и вставить в хтмл элемент + city in input
     asyncFunctions.getValue(this.url).then((response) => {
       if (response.isOk) {
         this.fields.HTMLElements.errorBlock = "";
@@ -71,7 +70,7 @@ const Weather1 = {
             + "Ошибка! Город не найден. Попробуйте другой город";
       }
     });
-  },
+  },*/
 };
 
 export default Weather1;

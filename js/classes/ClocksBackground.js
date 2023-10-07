@@ -219,6 +219,9 @@ export default class ClocksBackground extends Base {
     }
     this._currentPictureNumber = pictureNumber;
     this.backgroundCollectionElements.forEach((block) => block.classList.remove("visible"));
+    if(!this.backgroundCollectionElements[pictureNumber]) {
+      pictureNumber = 0;
+    }
     this.backgroundCollectionElements[pictureNumber].classList.add("visible");
   }
 
@@ -255,7 +258,7 @@ export default class ClocksBackground extends Base {
       newThis.setBackgroundImage();
       this.HTMLElements.settingsBlock.element.classList.toggle('visible')
     } else {
-        console.log("no matches");/*api*/
+        /*console.log("no matches");*//*api*/
     }
   }
 }
