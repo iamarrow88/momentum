@@ -45,7 +45,8 @@ export default class Base {
     return result;
   }
 
-  async getValue(url) {
+  async getData(url) {
+    console.log(url);
     const response = await fetch(`${url}`);
     return {
       isOk: response.ok,

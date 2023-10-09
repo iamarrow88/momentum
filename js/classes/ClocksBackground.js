@@ -25,7 +25,6 @@ export default class ClocksBackground extends Base {
     this.createImages(this._numberOfPictures);
     this.loadImages(this._numberOfPictures);
     this.setBackgroundImage();
-    console.log("start clocks and background");
   }
 
   setTimeAndDateOnPage(selectedLang) {
@@ -153,7 +152,6 @@ export default class ClocksBackground extends Base {
       this.backgroundCollectionElements.push(img);
       this._createImgsIndicator = 1;
     }
-    console.log('done');
   }
 
   loadImages() {
@@ -168,14 +166,12 @@ export default class ClocksBackground extends Base {
 
       api.getPhotoByTag().then((result) => {
         if (result.status === 200) {
-          console.log("data from unsplash api is received");
           this.backgroundCollectionElements.forEach((img, i) => {
             img.src = `${result.response.results[i].urls.raw}&fit=crop&w=${window.innerWidth}&h=${window.innerHeight}`;
             img.classList.add("itWasAPI");
             this.HTMLElements.carousel.element.append(img);
           });
         } else {
-          console.log("fail, data from unsplash is not received");
           this._isAPISource = false;
           this.loadImages(this._numberOfPictures);
         }
@@ -239,26 +235,21 @@ export default class ClocksBackground extends Base {
       const pictureNumber = newThis.getNextPictureNumber(direction, newThis._currentPictureNumber, newThis._numberOfPictures);
       this.setBackgroundImage(pictureNumber);
     } else if (eTargetClassList[0] === "name") {
-      console.log("input");
     } else if(eTargetClassList.includes('settings-icon')) {
-      console.log('settings-icon');
       this.HTMLElements.settingsBlock.element.classList.toggle('visible')
     } else if(eTargetClassList.includes('api')) {
-      console.log('api');
       localStorage.setItem('isSourceAPI', true);
       newThis._isAPISource = true;
       newThis.loadImages(this._numberOfPictures);
       newThis.setBackgroundImage();
       this.HTMLElements.settingsBlock.element.classList.toggle('visible')
     } else if(eTargetClassList.includes('github')) {
-      console.log('github');
       localStorage.setItem('isSourceAPI', false);
       newThis._isAPISource = false;
       newThis.loadImages(newThis._numberOfPictures);
       newThis.setBackgroundImage();
       this.HTMLElements.settingsBlock.element.classList.toggle('visible')
     } else {
-        /*console.log("no matches");*//*api*/
     }
   }
 }

@@ -9,6 +9,5 @@ export default class Quotes extends Base {
   }
 
   startQuotes() {
-    console.log("start quotes");
   }
 }

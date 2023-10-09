@@ -110,6 +110,10 @@ const appData = {
       selector: ".weather-icon",
       element: null,
     },
+    temperatureBlock: {
+      selector: ".temperature",
+      element: null,
+    },
     temperature: {
       selector: ".temperature__number",
       element: null,
@@ -118,8 +122,16 @@ const appData = {
       selector: ".weather-description",
       element: null,
     },
+    windBlock: {
+      selector: ".wind",
+      element: null,
+    },
     windSpeed: {
       selector: ".wind__speedNumber",
+      element: null,
+    },
+    humidityBlock: {
+      selector: ".humidity",
       element: null,
     },
     humidity: {
@@ -166,6 +178,7 @@ const appData = {
     },
     APIKey: "1e86aeecc6661092d35f019637c03153",
     urlToIcon: "https://openweathermap.org/img/wn/",
+    blocksToHide: ['iconPath', 'temperatureBlock', 'description', 'windBlock', 'humidityBlock']
   },
   clocks: {
     isAPISource: false,

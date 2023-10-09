@@ -119,6 +119,7 @@ const allAboutThisPage = {
 
 /* --------------------- GET DATE NAD TIME, SET NAME IN THE GREETINGS BLOCK  ------------------------------*/
 
+/*
 function changeDate(date, lang) {
   const { locales } = allAboutThisPage.greetingTranslation[lang];
   DATE.textContent = date.toLocaleDateString(locales, DATE_OPTIONS);
@@ -134,9 +135,10 @@ function getDate(lang) {
     getDate(lang);
   }, 1000);
 }
+*/
 
 /* ------- GREETINGS  -----------*/
-function greet(time) {
+/*function greet(time) {
   const lang = allAboutThisPage.selectedLang;
   const hours = time.getHours();
   if (hours > 5 && hours <= 11) {
@@ -170,15 +172,16 @@ function greet(time) {
   } else if (lang !== allAboutThisPage.selectedLang) {
     GREETING.textContent = `${allAboutThisPage.greetingTranslation[lang].night}, `;
   }
-}
+}*/
 
 /*  -----SET INFO IN THE LOCALSTORAGE  -----------------------*/
+/*
 function bringName() {
   localStorage.setItem("userName", `${USER_NAME.value}`);
 }
 
 USER_NAME.addEventListener("change", bringName);
-/* --------  CAROUSEL  -----------------------*/
+/!* --------  CAROUSEL  -----------------------*!/
 
 function getRandomNUm(n) {
   let num = Math.floor(Math.random() * n + 1).toString();
@@ -207,6 +210,7 @@ NEXT_SLIDE.addEventListener("click", () => {
     ? 0 + currentPicture.toString() : currentPicture.toString();
   getImage(allAboutThisPage.timeOfADay, currentPicture);
 });
+*/
 
 /* ------ AUDIOPLAYER  -----------------------*/
 

@@ -7,6 +7,5 @@ export default class ToDo extends Base {
   }
 
   startToDo() {
-    console.log("ToD1o started");
   }
 }

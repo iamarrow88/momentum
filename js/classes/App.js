@@ -3,6 +3,7 @@ import ClocksBackground from "./ClocksBackground.js";
 import Quotes from "./Quotes.js";
 import Base from "./base/Base.js";
 import Weather from "./Weather.js";
+import ToDo from "./ToDo.js";
 
 /* !TODO
 *    смена иконки в плеере при проигрывании,остановке музыки
@@ -23,6 +24,7 @@ class App extends Base {
     this.background = new ClocksBackground(lang, name, store.clocks, store.translation, store.HTMLElements);
     this.quotes = new Quotes(lang, store.quotes);
     this.weather = new Weather(lang, city, HTMLElements, this.appStore.weather);
+    this.toDo = new ToDo(lang, store.toDo);
   }
 
   set setLang(newLang) {
@@ -51,20 +53,22 @@ class App extends Base {
 
   startApp() {
     this.searchHTMLElements.apply(this.appStore);
-    console.log(this.appStore.HTMLElements);
     this.player.startPlayer();
     this.background.startClocksBackground();
     this.weather.startWeather();
     this.quotes.startQuotes();
-    console.log("start App");
+    this.toDo.startToDo();
     this.HTMLElements.background.element.addEventListener("click", (e) => {
       this.background.changeBackground(e, this.background);
       this.weather.weatherHandling(e, this.weather);
 
     });
     this.HTMLElements.background.element.addEventListener('change', (e) => {
-      this.weather.inputListener(e, this.weather);
-    })
+      this.weather.inputChangeHandler(e, this.weather);
+    });
+    this.HTMLElements.background.element.addEventListener('keypress', (e) => {
+      this.weather.inputChangeHandler(e, this.weather);
+    });
   }
 }
 

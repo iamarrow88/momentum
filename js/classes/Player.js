@@ -18,7 +18,6 @@ export default class Player extends Base {
     this.setPreviousTrackID = this._currentTrackID;
     this.setNextTrackID = this._currentTrackID;
     this.setNumberOfTracks(this.tracksMap);
-    console.log("start player");
   }
 
   startPlayer() {

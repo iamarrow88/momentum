@@ -11,17 +11,17 @@ export default class Weather extends Base{
     this._urlToIcon = weatherOptions.urlToIcon;
     this._responseSchema = weatherOptions.responseSchema;
     this._iconTemplate = '';
-
+    this._blocksToHide = weatherOptions.blocksToHide;
   }
 
   startWeather() {
     this.setUrl();
     this.insertCityNameToHTML();
     this.getWeather();
-    console.log('weather started');
   }
 
   setUrl() {
+    console.log(this.city);
     this._url = `https://api.openweathermap.org/data/2.5/weather?q=${this.city}&APPID=${this._APIKey}&lang=${this.lang}&units=metric`;
     return this._url;
   }
@@ -30,37 +30,67 @@ export default class Weather extends Base{
     this.HTMLElements.cityNameDiv.element.innerHTML = this.city;
   }
 
+  createInput(){
+    if(!this.HTMLElements.cityInput){
+      this.HTMLElements.cityInput = {};
+      this.HTMLElements.cityInput.element = this.createElement('input', 'city-name-input', null, [{'type': 'text'}, {'placeholder': 'Enter the city'}, {'value': `${this.city}`}, {'data-translate': '[placeholder]weather-city-input'}]);
+      this.HTMLElements.cityInput.selector = '.city-name-input';
+    }
+  }
+
+  clearCityBlock(){
+    this.HTMLElements.cityNameBlock.element.innerHTML = '';
+  }
+
+  displayCityNameInput(){
+    this.createInput();
+    this.clearCityBlock();
+    this.HTMLElements.cityNameBlock.element.appendChild(this.HTMLElements.cityInput.element);
+  }
+
+  refreshThisCity(input){
+    if(input.value !== this.city) {
+      localStorage.setItem('city', `${input.value}`);
+      this.city = input.value;
+      return true;
+    }
+  }
+
+  insertDiv(){
+    const input = document.querySelector('.city-name-input');
+    if(input) {
+      this.refreshThisCity(input);
+      this.getWeather();
+      this.HTMLElements.cityNameBlock.element.innerHTML = '';
+      this.HTMLElements.cityNameDiv.element.innerHTML = this.city;
+      this.HTMLElements.cityNameBlock.element.appendChild(this.HTMLElements.cityNameDiv.element);
+    }
+  }
 
   weatherHandling(event, currentThis){
     const eTargetClassList = [...event.target.classList];
     if(eTargetClassList.includes('city-name-div')) {
-      console.log('city-name-div');
-      if(!currentThis.HTMLElements.cityInput){
-        currentThis.HTMLElements.cityInput = {};
-        currentThis.HTMLElements.cityInput.element = currentThis.createElement('input', 'city-name-input', null, [{'type': 'text'}, {'placeholder': 'Enter the city'}, {'value': `${currentThis.city}`}, {'data-translate': '[placeholder]weather-city-input'}]);
-        currentThis.HTMLElements.cityInput.selector = '.city-name-input';
-      }
-      currentThis.HTMLElements.cityNameBlock.element.innerHTML = '';
-      currentThis.HTMLElements.cityNameBlock.element.appendChild(currentThis.HTMLElements.cityInput.element)
+      currentThis.displayCityNameInput();
+
     } else if(!eTargetClassList.includes('city-name-input')){
-      console.log('else');
-      if(document.querySelector('.city-name-input')) {
-        currentThis.HTMLElements.cityNameBlock.element.innerHTML = '';
-        currentThis.HTMLElements.cityNameDiv.element.innerHTML = localStorage.getItem('city') || 'Minsk';
-        currentThis.HTMLElements.cityNameBlock.element.appendChild(currentThis.HTMLElements.cityNameDiv.element);
-      }
+      currentThis.insertDiv(currentThis);
     }
   }
 
   getWeather() {
-    this.getValue(this._url).then((response) => {
+    console.log(this._url);
+    this.getData(this._url).then((response) => {
       if (response.isOk) {
         this.HTMLElements.errorBlock = "";
+        this._blocksToHide.forEach(block => {
+          if([...this.HTMLElements[block].element.classList].includes('invisible')) {
+            this.HTMLElements[block].element.classList.remove('invisible');
+          }
+        });
         for(const schemaChunk in this._responseSchema){
           const element = document.querySelector(`${this.HTMLElements[schemaChunk].selector}`);
           if(schemaChunk === 'iconPath') {
             this._iconTemplate = `${this._urlToIcon + response.json[this._responseSchema[schemaChunk][0]][this._responseSchema[schemaChunk][1]][this._responseSchema[schemaChunk][2]]}.png`;
-            console.log(this._iconTemplate);
             element.src = this._iconTemplate;
             element.alt = response.json.weather[0].description;
           } else if(schemaChunk === "temperature" || schemaChunk === "windSpeed" || schemaChunk === "humidity") {
@@ -70,15 +100,26 @@ export default class Weather extends Base{
           }
         }
       } else {
-        this.HTMLElements.errorBlock = "Error! this city was not found. Try another. \n"
+        this.HTMLElements.errorBlock.element.innerHTML = "Error! this city was not found. Try another. \n"
             + "Ошибка! Город не найден. Попробуйте другой город";
+        this._blocksToHide.forEach(block => this.HTMLElements[block].element.classList.add('invisible'));
       }
     });
   }
 
-  inputListener(event, currentThis){
-    console.log(currentThis.HTMLElements.cityInput.element.value);
-    currentThis.city = currentThis.HTMLElements.cityInput.element.value;
+  refreshWeatherData(){
+    this.setUrl();
     this.getWeather();
+    this.insertDiv();
   }
+
+  inputChangeHandler(event, currentThis) {
+    console.log('here');
+    if(event.key === 'Enter' && [...event.target.classList].includes('city-name-input') ||
+    event.type === 'change' && [...event.target.classList].includes('city-name-input')) {
+      if(currentThis.refreshThisCity(document.querySelector('.city-name-input'))) {
+        this.refreshWeatherData();
+      }
+    }
+  };
 }
