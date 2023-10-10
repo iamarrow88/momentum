@@ -81,7 +81,7 @@ export default class Weather extends Base{
     console.log(this._url);
     this.getData(this._url).then((response) => {
       if (response.isOk) {
-        this.HTMLElements.errorBlock = "";
+        this.HTMLElements.errorBlock.element.innerHTML = "";
         this._blocksToHide.forEach(block => {
           if([...this.HTMLElements[block].element.classList].includes('invisible')) {
             this.HTMLElements[block].element.classList.remove('invisible');
