@@ -56,6 +56,7 @@ class App extends Base {
     this.player.startPlayer();
     this.background.startClocksBackground();
     this.weather.startWeather();
+    this.weather.checkLastUpdate(5, 1);
     this.quotes.startQuotes();
     this.toDo.startToDo();
     this.HTMLElements.background.element.addEventListener("click", (e) => {

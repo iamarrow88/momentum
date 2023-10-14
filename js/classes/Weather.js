@@ -12,6 +12,7 @@ export default class Weather extends Base{
     this._responseSchema = weatherOptions.responseSchema;
     this._iconTemplate = '';
     this._blocksToHide = weatherOptions.blocksToHide;
+    this._lastUpdateTime = new Date().getTime();
   }
 
   startWeather() {
@@ -99,6 +100,7 @@ export default class Weather extends Base{
             element.textContent = response.json[this._responseSchema[schemaChunk][0]][this._responseSchema[schemaChunk][1]][this._responseSchema[schemaChunk][2]];
           }
         }
+        this._lastUpdateTime = new Date().getTime();
       } else {
         this.HTMLElements.errorBlock.element.innerHTML = "Error! this city was not found. Try another. \n"
             + "Ошибка! Город не найден. Попробуйте другой город";
@@ -106,6 +108,20 @@ export default class Weather extends Base{
       }
     });
   }
+
+  checkLastUpdate(updatePerMinutesNumber = 10, checkFrequencyMinutesNumber = 1){
+    const msPerMinute = 60000;
+    const timeDelta = (msPerMinute * updatePerMinutesNumber) * 0.99;
+    if(new Date().getTime() - this._lastUpdateTime >=timeDelta) {
+      console.log('update weather');
+      this.getWeather();
+      this._lastUpdateTime = new Date().getTime();
+    }
+    setTimeout(()=> {
+      this.checkLastUpdate(updatePerMinutesNumber, checkFrequencyMinutesNumber);
+    }, checkFrequencyMinutesNumber * msPerMinute)
+  }
+
 
   refreshWeatherData(){
     this.setUrl();
