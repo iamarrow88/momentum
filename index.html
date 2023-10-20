@@ -15,10 +15,6 @@
       </div>
 
       <div class="weather">
-        <!--<label for="city-input"></label>
-        <input id="city-input" class="city"
-               data-translate="[placeholder]weather-city-input"
-               type="text">-->
         <div class="city-name-block">
           <div class="city-name-div"></div>
         </div>
@@ -73,33 +69,39 @@
       <div class="greeting-container">
         <span class="greeting" data-translate="hello-name">Привет, </span>
         <label for="name"></label>
-        <input id="name" type="text" class="name" data-translate="[placeholder]customerName">
+        <input id="name" type="text" class="name__input" data-translate="[placeholder]customerName">
       </div>
 
       <div class="content-block">
         <div class="motivation-block">
           <div class="to-do">
+<!--
             <img src="./assets/svg/sprite.svg" alt="">
-            <label for="todo__input"></label>
-            <input id="todo__input" type="text" class="to-do__input"
-                   data-translate="[placeholder]todo-input">
-            <button class="to-do__btn" data-translate="todo-hide-completed">
-              Hide completed tasks
-            </button>
+-->
+            <div class="to-do__header">
+              <label for="todo__input" data-translate="todo-input-label">Добавьте задачу &#8628;</label>
+              <input id="todo__input" type="text" class="to-do__input"
+                     data-translate="[placeholder]todo-input">
+            </div>
+
             <form class="to-do__task-list">
               <div class="task__item">
                 <input type="checkbox" class="to-do__task" id="task0"/>
-                <label for="task0" data-task="task0">Какие-то</label>
+                <label for="task0" data-task="0">Какие-то</label>
               </div>
               <div class="task__item">
                 <input type="checkbox" class="to-do__task" id="task1"/>
-                <label for="task1" data-task="task1">разные</label>
+                <label for="task1" data-task="1">разные</label>
               </div>
               <div class="task__item">
                 <input type="checkbox" class="to-do__task" id="task2"/>
-                <label for="task2" data-task="task2">дела</label>
+                <label for="task2" data-task="2">дела</label>
               </div>
             </form>
+
+            <button class="to-do__btn" data-translate="todo-hide-completed">
+              Hide completed tasks
+            </button>
           </div>
         </div>
 
@@ -108,9 +110,9 @@
             <div class="quote__quote">Ща спою!</div>
             <div class="quote__author">Волк</div>
           </div>
-          <div class="quote__change-btn svg-parent">
-            <svg class="svg-icon">
-              <use xlink:href="assets/svg/sprite.svg#reload"></use>
+          <div class="quote__change-btn svg-parent change-btn">
+            <svg class="svg-icon change-btn">
+              <use class="change-btn" xlink:href="assets/svg/sprite.svg#reload"></use>
             </svg>
           </div>
         </div>
