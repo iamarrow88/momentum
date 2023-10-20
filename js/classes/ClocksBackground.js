@@ -1,5 +1,6 @@
 import Base from "./base/Base";
 import UnsplashApi from "./unsplashApi";
+import getInputValue from "../services/getInputValue.js";
 
 export default class ClocksBackground extends Base {
   constructor(lang, name, clocksOptions, translation, HTMLElements) {
@@ -75,7 +76,7 @@ export default class ClocksBackground extends Base {
       );
       nameLine = this.createElement(
         "span",
-        "name",
+        "name__div",
         null,
         [{ "data-translate": "[placeholder]customerName}" }]
       );
@@ -94,7 +95,7 @@ export default class ClocksBackground extends Base {
       );
       nameLine = this.createElement(
         "input",
-        "name",
+        "name__input",
         this.HTMLElements.greetsBlock.element,
         [{ "data-translate": "[placeholder]customerName" }, { type: "text" }, { id: "name" }, { placeholder: "Enter your name" }]
       );
@@ -168,7 +169,7 @@ export default class ClocksBackground extends Base {
         if (result.status === 200) {
           this.backgroundCollectionElements.forEach((img, i) => {
             img.src = `${result.response.results[i].urls.raw}&fit=crop&w=${window.innerWidth}&h=${window.innerHeight}`;
-            img.classList.add("itWasAPI");
+            img.classList.add("API-image");
             this.HTMLElements.carousel.element.append(img);
           });
         } else {
@@ -179,8 +180,8 @@ export default class ClocksBackground extends Base {
     } else {
       for (let i = 0; i < this._numberOfPictures; i++) {
         this.backgroundCollectionElements[i].src = `${this.composeBGPicturePath(this._timeOfTheDay, (i + 1) <= 9 ? `0${i + 1}` : (i + 1).toString())}`;
-        if([...this.backgroundCollectionElements[i].classList].includes('itWasAPI')) {
-          this.backgroundCollectionElements[i].classList.remove("itWasAPI");
+        if([...this.backgroundCollectionElements[i].classList].includes('API-image')) {
+          this.backgroundCollectionElements[i].classList.remove("API-image");
         }
         this.HTMLElements.carousel.element.append(this.backgroundCollectionElements[i]);
       }
@@ -221,8 +222,7 @@ export default class ClocksBackground extends Base {
     this.backgroundCollectionElements[pictureNumber].classList.add("visible");
   }
 
-  changeBackground(event, newThis) {
-    /* стрелочки по смене обоев и инпут (смена в=дива на инпут, сбор данных из инпута, смена инпута на дип обратно */
+  changeBackground(event) {
     const eTargetClassList = Array.from(event.target.classList);
     const theLastClassNumber = eTargetClassList.length - 1;
     let direction;
@@ -232,24 +232,83 @@ export default class ClocksBackground extends Base {
       } else if (eTargetClassList[theLastClassNumber] === "slide-prev") {
         direction = "prev";
       }
-      const pictureNumber = newThis.getNextPictureNumber(direction, newThis._currentPictureNumber, newThis._numberOfPictures);
+      const pictureNumber = this.getNextPictureNumber(direction, this._currentPictureNumber, this._numberOfPictures);
       this.setBackgroundImage(pictureNumber);
     } else if (eTargetClassList[0] === "name") {
     } else if(eTargetClassList.includes('settings-icon')) {
       this.HTMLElements.settingsBlock.element.classList.toggle('visible')
     } else if(eTargetClassList.includes('api')) {
       localStorage.setItem('isSourceAPI', true);
-      newThis._isAPISource = true;
-      newThis.loadImages(this._numberOfPictures);
-      newThis.setBackgroundImage();
+      this._isAPISource = true;
+      this.loadImages(this._numberOfPictures);
+      this.setBackgroundImage();
       this.HTMLElements.settingsBlock.element.classList.toggle('visible')
     } else if(eTargetClassList.includes('github')) {
       localStorage.setItem('isSourceAPI', false);
-      newThis._isAPISource = false;
-      newThis.loadImages(newThis._numberOfPictures);
-      newThis.setBackgroundImage();
+      this._isAPISource = false;
+      this.loadImages(this._numberOfPictures);
+      this.setBackgroundImage();
       this.HTMLElements.settingsBlock.element.classList.toggle('visible')
     } else {
     }
+  }
+
+  setCustomerName(newName){
+    this.name = newName;
+    return this.name;
+  }
+
+  refreshLocalStorageName(newName){
+    localStorage.setItem('name', newName);
+    return true;
+  }
+
+  deleteLocalStorageName(){
+    localStorage.removeItem('name');
+    return true;
+  }
+
+  isItDivCheck(){
+    if(document.querySelector('.name__input')){
+      console.log('input');
+      return false;
+    } else if(document.querySelector('.name__div')){
+      console.log('div');
+      return true;
+    }
+  }
+
+  createNameBox(name){
+    if(this.isItDivCheck()){
+      if(!this.HTMLElements.nameInput.element){
+        this.HTMLElements.nameDiv.element = this.createElement('input', 'name__input', null, [{'id': 'name'}, {'type': 'text'}, {}]);
+        this.HTMLElements.nameDiv.selector = '.name__input';
+      }
+    } else {
+      if(!this.HTMLElements.nameDiv.element){
+        this.HTMLElements.nameDiv.element = this.createElement('span', 'name__div', null, null);
+        this.HTMLElements.nameDiv.selector = '.name__div';
+      }
+    }
+
+    this.HTMLElements.nameDiv.element.innerHTML = name;
+    return this.HTMLElements.nameDiv.element;
+  }
+
+  addNewElementToParent(child, parent){
+    parent.appendChild(child);
+    return true;
+  }
+
+  backgroundClicksHandler(e){
+    if(this.isItDivCheck()){
+
+    } else {
+
+    }
+    const name = getInputValue(e.target);
+    this.setCustomerName(name);
+    this.refreshLocalStorageName(name);
+    this.addNewElementToParent(this.createNameBox(name), document.querySelector(this.HTMLElements.greeting.selector));
   }
 }
