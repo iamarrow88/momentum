@@ -3,7 +3,7 @@ import tracks from "./tracks.js";
 import svgPath from "./svgPath.js";
 import quotes from "./quotes.js";
 
-const appData = {
+const initialData = {
   HTMLElements: {
     playerBlock: {
       selector: ".player",
@@ -60,6 +60,10 @@ const appData = {
     },
     greetsBlock: {
       selector: ".greeting-container",
+      element: null,
+    },
+    nameBox: {
+      selector: ".name__box",
       element: null,
     },
     nameDiv: {
@@ -250,4 +254,4 @@ const appData = {
     ], // []
   },
 };
-export default appData;
+export default initialData;

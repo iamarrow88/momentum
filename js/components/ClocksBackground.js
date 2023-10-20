@@ -65,11 +65,17 @@ export default class ClocksBackground extends Base {
 
   createGreetsBlock() {
     this.HTMLElements.greetsBlock.element.innerHTML = "";
-    let greetLine;
+    let greetLine; //span class greeting
+    this.HTMLElements.nameBox.element = this.createElement(
+        "div",
+        "name__box",
+        null,
+        [],
+    );
     let nameLine;
     if (this.name) {
       greetLine = this.createElement(
-        "div",
+        "span",
         "greeting",
         this.HTMLElements.greetsBlock.element,
         [{ "data-translate": "hello-name" }],
@@ -77,7 +83,7 @@ export default class ClocksBackground extends Base {
       nameLine = this.createElement(
         "span",
         "name__div",
-        null,
+        this.HTMLElements.nameBox.element,
         [{ "data-translate": "[placeholder]customerName}" }]
       );
     } else {
@@ -96,14 +102,14 @@ export default class ClocksBackground extends Base {
       nameLine = this.createElement(
         "input",
         "name__input",
-        this.HTMLElements.greetsBlock.element,
+        this.HTMLElements.nameBox.element,
         [{ "data-translate": "[placeholder]customerName" }, { type: "text" }, { id: "name" }, { placeholder: "Enter your name" }]
       );
     }
 
     greetLine.textContent = this._translation[this.lang][`${this._timeOfTheDay}`];
     nameLine.textContent = this.name;
-    if (this.name) greetLine.appendChild(nameLine);
+    this.HTMLElements.greetsBlock.element.appendChild(this.HTMLElements.nameBox.element);
   }
 
   insertDateToHTML(date, dateBlock, locales, dateOptions) {
@@ -269,30 +275,44 @@ export default class ClocksBackground extends Base {
   }
 
   isItDivCheck(){
+    let res;
     if(document.querySelector('.name__input')){
       console.log('input');
-      return false;
+      res = false;
     } else if(document.querySelector('.name__div')){
       console.log('div');
-      return true;
+      res = true;
+    } else {
+      console.log('another');
+      res = true;
     }
+
+    this.HTMLElements.nameBox.element = document.querySelector('.name__box').innerHTML = '';
+    return res;
   }
 
   createNameBox(name){
+    let box;
     if(this.isItDivCheck()){
-      if(!this.HTMLElements.nameInput.element){
-        this.HTMLElements.nameDiv.element = this.createElement('input', 'name__input', null, [{'id': 'name'}, {'type': 'text'}, {}]);
-        this.HTMLElements.nameDiv.selector = '.name__input';
+      if(!this.HTMLElements.nameInput || !this.HTMLElements.nameInput.element){
+        this.HTMLElements.nameInput.element = this.createElement('input', 'name__input', null, [{'id': 'name'}, {'type': 'text'}, {}]);
+        this.HTMLElements.nameInput.selector = '.name__input';
       }
-    } else {
-      if(!this.HTMLElements.nameDiv.element){
+      box = this.HTMLElements.nameInput.element;
+      box.value = this.name;
+
+    } /*else {
+      if(!this.HTMLElements.nameDiv || !this.HTMLElements.nameDiv.element){
         this.HTMLElements.nameDiv.element = this.createElement('span', 'name__div', null, null);
         this.HTMLElements.nameDiv.selector = '.name__div';
       }
+      box = this.HTMLElements.nameDiv.element;
+      box.innerHTML = this.name;
     }
 
-    this.HTMLElements.nameDiv.element.innerHTML = name;
-    return this.HTMLElements.nameDiv.element;
+    this.HTMLElements.nameBox.element.appendChild(box);*/
+
+    return box;
   }
 
   addNewElementToParent(child, parent){
@@ -301,14 +321,16 @@ export default class ClocksBackground extends Base {
   }
 
   backgroundClicksHandler(e){
-    if(this.isItDivCheck()){
+    if(e.target.nodeName === 'INPUT'){
+      this.name = getInputValue(e.target);
 
     } else {
+      console.log('here');
+      this.addNewElementToParent(this.createNameBox(this.name), document.querySelector(this.HTMLElements.greeting.selector));
 
+      this.setCustomerName(this.name);
+      this.refreshLocalStorageName(this.name);
     }
-    const name = getInputValue(e.target);
-    this.setCustomerName(name);
-    this.refreshLocalStorageName(name);
-    this.addNewElementToParent(this.createNameBox(name), document.querySelector(this.HTMLElements.greeting.selector));
+
   }
 }

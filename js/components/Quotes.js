@@ -13,8 +13,7 @@ export default class Quotes extends Base {
   }
 
   startQuotes() {
-    this.checkSource();
-    this.getActualQuotesArray();
+    this.quotesHandler();
   }
 
   checkSource(){
@@ -78,7 +77,7 @@ export default class Quotes extends Base {
     this.setQuotesCounterValue(this.quotesCounter + 1);
   }
 
-  quotesHandler(e){
+  quotesHandler(){
     this.checkSource();
     this.getActualQuotesArray();
     this.animationStart();

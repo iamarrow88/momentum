@@ -1,5 +1,5 @@
 import basic from "../actions/commonFunctions.js";
-import appData from "../data/appData.js";
+import initialData from "../data/initialData.js";
 
 const ClocksBackground1 = {
   fields: {
@@ -60,7 +60,7 @@ const ClocksBackground1 = {
     const newTimeOfTheDay = this.checkTimeOfTheDay(hours);
     if (this.fields.timeOfTheDay !== newTimeOfTheDay) {
       this.fields.timeOfTheDay = newTimeOfTheDay;
-      this.greet(this.fields.timeOfTheDay, this.fields.lang, appData, this.fields.HTMLElements.greeting);
+      this.greet(this.fields.timeOfTheDay, this.fields.lang, initialData, this.fields.HTMLElements.greeting);
     }
     setTimeout(() => {
       this.getTimeAndDate(ClocksBackground1.fields.lang);
