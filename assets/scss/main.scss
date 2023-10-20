@@ -91,7 +91,7 @@ input:focus-visible::placeholder {
   .svg-icon {
     width: 100%;
     height: 100%;
-    fill: aqua;
+    fill: white;
   }
 }
 
@@ -105,7 +105,7 @@ input:focus-visible::placeholder {
 .song__title,
 .city-name-block,
 .to-do__btn,
-.name {
+.name__div {
   cursor: pointer;
 }
 
@@ -155,7 +155,7 @@ input:focus-visible::placeholder {
       .svg-icon {
         height: 2rem;
         width: 2rem;
-        stroke: aqua;
+        /*stroke: aqua;*/
       }
     }
   }
@@ -406,6 +406,35 @@ svg.slide-next {
 
 .motivation-block {
   width: 45%;
+}
+
+.to-do {
+  &__header {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: center;
+    align-items: flex-start;
+    font-size: 18px;
+  }
+
+  &__task-label {
+    margin-left: 5px;
+  }
+
+  &__btn {
+    padding: 5px;
+    border-radius: 4px;
+  }
+}
+
+.crossed-out {
+  text-decoration: lightcyan line-through;
+}
+
+.invisible {
+  display: none;
 }
 
 .quote {
