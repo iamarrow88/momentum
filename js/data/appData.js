@@ -1,6 +1,7 @@
 import translation from "./translation/translation.js";
 import tracks from "./tracks.js";
 import svgPath from "./svgPath.js";
+import quotes from "./quotes.js";
 
 const appData = {
   HTMLElements: {
@@ -154,6 +155,14 @@ const appData = {
       selector: ".to-do__task-list",
       element: null,
     },
+    quote: {
+      selector: '.quote__quote',
+      element: null,
+    },
+    quoteAuthor: {
+      selector: '.quote__author',
+      element: null,
+    },
     settingsBlock: {
       selector: '.footer__settings',
       element: null,
@@ -217,9 +226,9 @@ const appData = {
     },
   },
   quotes: {
-    url: "",
+    url: "https://type.fit/api/quotes",
     APIKey: "",
-    quotesArray: [],
+    quotesArray: quotes,
   },
   toDo: {
     tasksArray: [

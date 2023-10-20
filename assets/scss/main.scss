@@ -440,6 +440,10 @@ svg.slide-next {
 .quote {
   width: 35%;
 
+  &__author {
+    font-size: 12px;
+  }
+
   &__change-btn {
     height: 2rem;
     width: 2rem;

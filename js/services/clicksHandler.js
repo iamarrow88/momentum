@@ -27,6 +27,7 @@ export default function clicksHandler(e, options) {
     options.todo.toDoHandler(e);
   } else if([...e.target.classList].includes('change-btn')) {
     console.log('refresh quotes');
+    options.quotes.quotesHandler(e);
   } else if([...e.target.classList].includes('settings-icon')) {
     console.log('open|close settings');
   } else {

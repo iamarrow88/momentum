@@ -31,7 +31,7 @@ class App extends Base {
     this.appStore = store;
     this.player = new Player(lang, name, city, store.HTMLElements, store.player);
     this.background = new ClocksBackground(lang, name, store.clocks, store.translation, store.HTMLElements);
-    this.quotes = new Quotes(lang, store.quotes);
+    this.quotes = new Quotes(lang, store.quotes, HTMLElements);
     this.weather = new Weather(lang, city, HTMLElements, this.appStore.weather);
     this.toDo = new ToDo(lang, store.toDo.tasksArray, HTMLElements);
     this.settings = new Settings(lang);
