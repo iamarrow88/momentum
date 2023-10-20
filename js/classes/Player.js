@@ -139,7 +139,7 @@ export default class Player extends Base {
           + "<div class=\"song__sphere\"></div>\n"
           + `<div class="song__title" data-songId="${i}">${this.tracksMap[i].author} - ${this.tracksMap[i].title}</div>\n`
           + `<svg class="icon song-icon track${i}-play track-play" data-songbtn="${i}"data-button-name="play-${i}" >\n`
-          + `<use class="use-track${i}-play track${i}-play track-play" data-button-name="play-${i}" xlink:href="${sprite}#play"></use>\n`
+          + `<use class="use-track${i}-play track${i}-play track-play" data-songbtn="${i}" data-button-name="play-${i}" xlink:href="${sprite}#play"></use>\n`
           + "</svg>\n"
           + "</div>\n"
           + "</li>\n");
@@ -179,5 +179,24 @@ export default class Player extends Base {
       e.target.classList.remove('svg-use-mute');
       e.target.classList.add('svg-use-volume');
     } */
+  }
+
+  playerClicksHandler(event, playerObject){
+    const elementDataset = event.target.dataset;
+    const elementClassList = Array.from(event.target.classList);
+
+    if(elementClassList.includes('play')) {
+      console.log('play');
+    } else if(elementClassList.includes('play-prev')) {
+      console.log('play-prev');
+    } else if(elementClassList.includes('play-next')) {
+      console.log('play-next');
+    } else if(elementClassList.includes('volume')) {
+      console.log('volume');
+    } else if(elementClassList.includes('song__title')) {
+      console.log(event.target.innerHTML, 'song id is ' + elementDataset.songid);
+    } else if(elementClassList.includes('track-play')) {
+      console.log('song id is ' + elementDataset.songbtn);
+    }
   }
 }
