@@ -61,8 +61,12 @@ const appData = {
       selector: ".greeting-container",
       element: null,
     },
-    name: {
-      selector: ".name",
+    nameDiv: {
+      selector: ".name__div",
+      element: null,
+    },
+    nameInput: {
+      selector: ".name__input",
       element: null,
     },
     background: {
@@ -146,6 +150,10 @@ const appData = {
       selector: ".city-name-div",
       element: null,
     },
+    tasksList: {
+      selector: ".to-do__task-list",
+      element: null,
+    },
     settingsBlock: {
       selector: '.footer__settings',
       element: null,
@@ -214,7 +222,23 @@ const appData = {
     quotesArray: [],
   },
   toDo: {
-    tasksArray: [], // []
+    tasksArray: [
+      {
+        taskValue: 'Something',
+        done: false,
+        id: 0
+      },
+      {
+        taskValue: 'To',
+        done: false,
+        id: 1
+      },
+      {
+        taskValue: 'Do',
+        done: false,
+        id: 2
+      }
+    ], // []
   },
 };
 export default appData;
