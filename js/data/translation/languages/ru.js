@@ -10,6 +10,7 @@ const ru = {
   humidity: "Влажность: ",
   "hello-name": "Привет, ",
   "[placeholder]customerName": "Введите Ваше имя",
+  "todo-input-label": "Добавьте задачу &#8628;",
   "[placeholder]todo-input": "Чем займемся сегодня?",
   "todo-hide-completed": "Спрятать выполненные задачи",
   "settings-change-lang": "Сменить язык",

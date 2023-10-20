@@ -10,6 +10,7 @@ const en = {
   humidity: "Humidity: ",
   "hello-name": "Hello, ",
   "[placeholder]customerName": "Enter your name",
+  "todo-input-label": "Type your task &#8628;",
   "[placeholder]todo-input": "What would you like to do today?",
   "todo-hide-completed": "Hide completed tasks",
   "settings-change-lang": "Change language",
