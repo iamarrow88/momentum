@@ -47,7 +47,6 @@ export default class ToDo extends Base {
         label.classList.add('crossed-out');
       }
       label.innerHTML = `${taskData.taskValue}`;
-
       return true;
     } else {
       return false;
@@ -58,7 +57,7 @@ export default class ToDo extends Base {
     document.querySelector('.to-do__input').value = '';
   }
 
-  checkIsCheckboxChecked(checkbox){
+  isCheckboxChecked(checkbox){
     return checkbox.checked;
   }
 
@@ -78,7 +77,7 @@ export default class ToDo extends Base {
 
   addDoneStyle(checkboxElement){
     let done;
-    if(this.checkIsCheckboxChecked(checkboxElement)){
+    if(this.isCheckboxChecked(checkboxElement)){
       checkboxElement.nextElementSibling.classList.add('crossed-out');
       done = true;
     } else {
