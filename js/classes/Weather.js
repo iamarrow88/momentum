@@ -1,4 +1,3 @@
-import basic from "../actions/commonFunctions.js";
 import Base from "./base/Base.js";
 
 export default class Weather extends Base{
@@ -22,7 +21,6 @@ export default class Weather extends Base{
   }
 
   setUrl() {
-    console.log(this.city);
     this._url = `https://api.openweathermap.org/data/2.5/weather?q=${this.city}&APPID=${this._APIKey}&lang=${this.lang}&units=metric`;
     return this._url;
   }
@@ -34,7 +32,7 @@ export default class Weather extends Base{
   createInput(){
     if(!this.HTMLElements.cityInput){
       this.HTMLElements.cityInput = {};
-      this.HTMLElements.cityInput.element = this.createElement('input', 'city-name-input', null, [{'type': 'text'}, {'placeholder': 'Enter the city'}, {'value': `${this.city}`}, {'data-translate': '[placeholder]weather-city-input'}]);
+      this.HTMLElements.cityInput.element = this.createElement('input', 'city-name-input', null, [{'type': 'text'}, {'placeholder': 'Enter the city'}, {'value': `${this.city}`}, {'data-translate': '[placeholder]weather-city-input'}, {"onfocus":"this.value=''"}]);
       this.HTMLElements.cityInput.selector = '.city-name-input';
     }
   }
@@ -68,13 +66,13 @@ export default class Weather extends Base{
     }
   }
 
-  weatherHandling(event, currentThis){
+  weatherHandling(event){
     const eTargetClassList = [...event.target.classList];
     if(eTargetClassList.includes('city-name-div')) {
-      currentThis.displayCityNameInput();
+      this.displayCityNameInput();
 
     } else if(!eTargetClassList.includes('city-name-input')){
-      currentThis.insertDiv(currentThis);
+      this.insertDiv();
     }
   }
 
@@ -122,20 +120,9 @@ export default class Weather extends Base{
     }, checkFrequencyMinutesNumber * msPerMinute)
   }
 
-
   refreshWeatherData(){
     this.setUrl();
     this.getWeather();
     this.insertDiv();
   }
-
-  inputChangeHandler(event, currentThis) {
-    console.log('here');
-    if(event.key === 'Enter' && [...event.target.classList].includes('city-name-input') ||
-    event.type === 'change' && [...event.target.classList].includes('city-name-input')) {
-      if(currentThis.refreshThisCity(document.querySelector('.city-name-input'))) {
-        this.refreshWeatherData();
-      }
-    }
-  };
 }
