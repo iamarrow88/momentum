@@ -14,7 +14,7 @@ export default function inputChangeHandler(e, options) {
     }
   } else if(e.key === 'Enter' && [...e.target.classList].includes('name__input') ||
       e.type === 'change' && [...e.target.classList].includes('name__input')) {
-    options.name.backgroundClicksHandler(e);
+    options.name.nameHandler(e);
   } else if(e.key === 'Enter' && [...e.target.classList].includes('to-do__input') ||
       e.type === 'change' && [...e.target.classList].includes('to-do__input')){
     console.log('to do keyboard');

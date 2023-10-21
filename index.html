@@ -68,8 +68,10 @@
       <div class="date">Сегодня 16 или 15</div>
       <div class="greeting-container">
         <span class="greeting" data-translate="hello-name">Привет, </span>
-        <label for="name"></label>
-        <input id="name" type="text" class="name__input" data-translate="[placeholder]customerName">
+        <div class="name__box">
+          <label for="name"></label>
+          <input id="name" type="text" class="name__input" data-translate="[placeholder]customerName" onfocus="this.value=''">
+        </div>
       </div>
 
       <div class="content-block">

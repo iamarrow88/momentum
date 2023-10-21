@@ -1,5 +1,6 @@
 /**
-* @param {string|HTMLElement} inputElement can be selector, class or HTML element; returns input value or null*/
+* @param {string|HTMLElement} inputElement can be selector, class or HTML element; returns input value or null
+ * */
 
 export default function getInputValue(inputElement){
   if(inputElement instanceof HTMLElement && inputElement.nodeName === 'INPUT') {

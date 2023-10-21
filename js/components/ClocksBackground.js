@@ -290,8 +290,10 @@ export default class ClocksBackground extends Base {
     this.HTMLElements.nameBox.element = document.querySelector('.name__box').innerHTML = '';
     return res;
   }
-
-  createNameBox(name){
+  /**
+   * @param проверяет ;
+   * */
+  /*createNameBox(){
     let box;
     if(this.isItDivCheck()){
       if(!this.HTMLElements.nameInput || !this.HTMLElements.nameInput.element){
@@ -301,7 +303,7 @@ export default class ClocksBackground extends Base {
       box = this.HTMLElements.nameInput.element;
       box.value = this.name;
 
-    } /*else {
+    } else {
       if(!this.HTMLElements.nameDiv || !this.HTMLElements.nameDiv.element){
         this.HTMLElements.nameDiv.element = this.createElement('span', 'name__div', null, null);
         this.HTMLElements.nameDiv.selector = '.name__div';
@@ -309,28 +311,52 @@ export default class ClocksBackground extends Base {
       box = this.HTMLElements.nameDiv.element;
       box.innerHTML = this.name;
     }
-
-    this.HTMLElements.nameBox.element.appendChild(box);*/
+    this.HTMLElements.nameBox.element.innerHTML = '';
+    this.HTMLElements.nameBox.element.appendChild(box);
 
     return box;
-  }
-
+  }*/
+  /**
+   * @param {HTMLElement} child can be only HTML element;
+   * @param {HTMLElement} parent can be only HTML element; always returns true
+   * */
   addNewElementToParent(child, parent){
     parent.appendChild(child);
     return true;
   }
 
-  backgroundClicksHandler(e){
-    if(e.target.nodeName === 'INPUT'){
-      this.name = getInputValue(e.target);
+  nameHandler(e){
+    console.log(e.target.nodeName !== 'INPUT');
+    console.log(e.type === 'change');
+    if(e.target.nodeName !== 'INPUT' || e.type === 'change'){
 
-    } else {
-      console.log('here');
-      this.addNewElementToParent(this.createNameBox(this.name), document.querySelector(this.HTMLElements.greeting.selector));
+      const value = getInputValue(document.querySelector('.name__input'));
+      if(value) {
+        this.setCustomerName(value);
+        console.log(this.name);
+        this.setCustomerName(this.name);
+        this.refreshLocalStorageName(this.name);
+        document.querySelector('.name__box').innerHTML = '';
 
-      this.setCustomerName(this.name);
-      this.refreshLocalStorageName(this.name);
+        if(!this.HTMLElements.nameDiv || !this.HTMLElements.nameDiv.element){
+          this.HTMLElements.nameDiv.element = this.createElement('span', 'name__div', null, null);
+          this.HTMLElements.nameDiv.selector = '.name__div';
+        }
+        this.HTMLElements.nameDiv.element.innerHTML = this.name;
+
+        this.HTMLElements.nameBox.element.appendChild(this.HTMLElements.nameDiv.element);
+      } else {
+        if([...e.target.classList].includes('name__div')) {
+          e.target.innerHTML = '';
+          if(!this.HTMLElements.nameInput || !this.HTMLElements.nameInput.element){
+            this.HTMLElements.nameInput.element = this.createElement('input', 'name__input', null, [{'placeholder': `Enter your name`}, {'data-translate': '[placeholder]customerName'}, {'type': 'text'}, {'id': 'name'}, {"onfocus":"this.value=''"}]);
+            this.HTMLElements.nameInput.selector = '.name__input';
+          }
+          this.HTMLElements.nameInput.element.value = this.name;
+          e.target.appendChild(this.HTMLElements.nameInput.element);
+        }
+      }
+
     }
-
   }
 }

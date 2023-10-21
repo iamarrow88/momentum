@@ -1,3 +1,5 @@
+import getInputValue from "./getInputValue.js";
+
 export default function clicksHandler(e, options) {
 
   /*const options = {
@@ -8,7 +10,6 @@ export default function clicksHandler(e, options) {
       quotes: quotes,
       settings: settings,
    }*/
-
   if(e.target.closest('.player')){
     console.log('player handling');
     options.player.playerClicksHandler(e, options.player);
@@ -19,6 +20,7 @@ export default function clicksHandler(e, options) {
   } else if([...e.target.classList].includes('name__div') ||
       [...e.target.classList].includes('name__input')) {
     console.log('background handling');
+    options.background.nameHandler(e);
   } else if([...e.target.classList].includes('slide-next') ||
       [...e.target.classList].includes('slide-prev')) {
     console.log('slider clicks');
@@ -32,6 +34,17 @@ export default function clicksHandler(e, options) {
     console.log('open|close settings');
   } else {
     console.log('another element');
-    /*get all inputs values and if there are some changes - refresh required blocks*/
+    /*get all inputs values and if there are some changes - refresh required blocks
+    *
+    * weather
+    * name
+    * todo
+    *  */
+    const name = getInputValue('.name__input');
+    console.log(name);
+    options.background.nameHandler(e);
+
   }
+
+
 }
