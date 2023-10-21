@@ -24,7 +24,7 @@ export default function clicksHandler(e, options) {
   } else if([...e.target.classList].includes('slide-next') ||
       [...e.target.classList].includes('slide-prev')) {
     console.log('slider clicks');
-    options.background.changeBackground(e)
+    options.background.changeBackground(e);
   } else if(e.target.closest('.to-do')) {
     options.todo.toDoHandler(e);
   } else if([...e.target.classList].includes('change-btn')) {
@@ -32,6 +32,7 @@ export default function clicksHandler(e, options) {
     options.quotes.quotesHandler(e);
   } else if([...e.target.classList].includes('settings-icon')) {
     console.log('open|close settings');
+    options.background.changeBackground(e);
   } else {
     console.log('another element');
     /*get all inputs values and if there are some changes - refresh required blocks
