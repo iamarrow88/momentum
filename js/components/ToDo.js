@@ -1,25 +1,44 @@
 import Base from "./base/Base.js";
 import getInputValue from "../services/getInputValue.js";
 
+/* TODO добавить возможность удаления тасков:
+* 1. определить целевой таск
+* 2. найти его в массиве тасков прилжоения
+* 3. удалить его из массива
+* 4. удалить данные о нем из локал сторадж
+* 5. отсортировать полученный массив приложения, присвоить его в массив тасков приложения
+* 6. удалить старые таски из дом
+* 7. отрисовать новый список тасков
+*
+* TODO:
+*  добавить возможность сохранять настройку скрыты сделанные таски или нет*/
+
 export default class ToDo extends Base {
   constructor(lang, tasksArray, HTMLElements) {
     super(lang);
     this.tasksArray = tasksArray;
-    this.idCounter = this.tasksArray.length;
+    this.idCounter = null;
     this.HTMLElements = HTMLElements;
-    this.tasksArray.forEach(task => this.setTaskToLocalStorage(task));
-    this.getTasksFromLocalStorage();
-    console.log(this.tasksArray);
   }
 
   startToDo() {
+    this.tasksArray.forEach(task => this.setTaskToLocalStorage(task));
+    this.getTasksFromLocalStorage();
+    this.tasksArray = this.sortTasks(this.tasksArray);
+    this.idCounter = this.tasksArray.length;
     this.drawTasksList();
+
+    /*
+    * 1. сбор тасков из локал сторадж +
+    * 2. сортировка полученного массива и присваивание в массив тасков приложения +
+    * 3. отрисовка каждого таска в дом +
+   */
   }
 
   drawTasksList(){
     document.querySelector('.to-do__task-list').innerHTML = '';
     this.tasksArray.forEach(task => {
-      this.createTaskLine(task);
+      this.drawTaskLine(task);
     })
   }
 
@@ -46,14 +65,14 @@ export default class ToDo extends Base {
       }
   }
 
-  createTaskLine(taskData){
+  drawTaskLine(taskData){
     if(taskData){
       const div = this.createElement('div', 'task__item', this.HTMLElements.tasksList.element, null);
       const checkbox = this.createElement('input', 'to-do__task', div,
           [{'id': `task${taskData.id}`}, {'type': 'checkbox'}]);
       const label = this.createElement('label', 'to-do__task-label', div,
           [{'id': `task${taskData.id}`}, {'for': `task${taskData.id}`}, {'data-task': `${taskData.id}`}]);
-      if(taskData.done){
+      if(taskData.done === 'true' || taskData.done === true){
         checkbox.checked = true;
         label.classList.add('crossed-out');
       }
@@ -76,7 +95,7 @@ export default class ToDo extends Base {
     let done = [];
     let undone = [];
     taskArray.forEach(task => {
-      if(task.done) {
+      if(task.done === 'true' || task.done === true) {
         done.push(task);
       } else {
         undone.push(task);
@@ -106,14 +125,38 @@ export default class ToDo extends Base {
   }
 
   toDoHandler(e) {
+    /*
+    * 1. проверка цели события
+   */
     if([...e.target.classList].includes('to-do__input') && e.type === 'change') {
-      console.log('change');
-      const taskData = this.createNewTaskData(getInputValue(e.target));
-      if(taskData) this.addTaskToArray(taskData);
-      if(this.createTaskLine(taskData)) this.cleanInput();
-      this.setTaskToLocalStorage(taskData);
+      /* здесь добавляется таск в список
+    * 1. сбор данных из инпута +
+    * 2. очищение инпута +
+    * 3. создание тела таска +
+    * 4. отправка данных таска в локал сторадж
+    * 6. добавление тела таска в массив тасков приложения
+    * 7. сортировка нового массива
+    * 8. удаление старых данных из дом
+    * 9. отрисовка нового стсортировонного списка тасков
+   */
       console.log('add task');
+      const taskData = this.createNewTaskData(getInputValue(e.target));
+      if(taskData) {
+        this.addTaskToArray(taskData);
+        this.setTaskToLocalStorage(taskData);
+        this.tasksArray = this.sortTasks(this.tasksArray);
+        this.drawTasksList();
+        /*if (this.createTaskLine(taskData))*/ this.cleanInput();
+        console.log('add task');
+        /*не сортирует список после добавления задачи с наличием уже сделанных
+        при нажатии энтер,клик задачи задваиваются
+        они не попадаютв локал сторадж)
+        * */
+      }
     } else if([...e.target.classList].includes('to-do__btn')) {
+      /* здесь прячутся/показываются сделанные такси
+    * 1. каждый из массива тасков приложения проверяется на сделанность и добавляяется соответствующий стиль (прячется)/наоборот
+   */
       console.log('hide completed tasks');
       const taskElements = document.querySelectorAll('.task__item');
 
@@ -123,6 +166,13 @@ export default class ToDo extends Base {
         }
       })
     } else if([...e.target.classList].includes('to-do__task')) {
+      /* Здесь целевой таск отмечается сделанным или несделанным
+    * 1. определяем id выбранного таска
+    * 2. находим его в массиве тасков приложения
+    * 3. отмечаем в данных таска, что он сделан/несделан
+    * 4. добавляем соответствующий стиль
+    * 5. обновляем данные в локал сторадж
+   */
       console.log('check|uncheck task');
       this.addDoneStyle(e.target);
       this.setDoneTaskData(e.target);
@@ -134,9 +184,15 @@ export default class ToDo extends Base {
 
   setTaskToLocalStorage(task){
     const template = `task-${task.id}`;
+
     Object.keys(task).forEach(taskField => {
-      localStorage.setItem(`${template}-${taskField}`, `${task[taskField]}`);
+      if(!localStorage.getItem(`${template}-${taskField}`) && taskField !== 'id'){
+        console.log('no field');
+        localStorage.setItem(`${template}-${taskField}`, `${task[taskField]}`);
+      }
     })
+    console.log(this.tasksArray);
+    console.log(localStorage);
   }
 
   deleteTaskFromLocalStorage(){
@@ -144,26 +200,36 @@ export default class ToDo extends Base {
   }
 
   getTasksFromLocalStorage(){
-    console.log(localStorage);
+    let objectsStorage = {}
     Object.keys(localStorage).forEach(key => {
       const splittedKey = key.split('-');
-      console.log(splittedKey);
-      let obj = {};
+
       if(splittedKey.includes('task')){
-        const id = splittedKey[1];
+        const id = +splittedKey[1];
         const field = splittedKey[2];
-        if(field === 'taskValue') {
-          obj = {
-            taskValue: localStorage.getItem(`${key}`),
-            id: `${id}`,
-          }
-        } else if(field === 'done'){
-          obj = {
-            done: localStorage.getItem(`${key}`),
-          }
+        if(!objectsStorage[id]) {
+          objectsStorage[id] = {
+            'id': id,
+            'taskValue': '',
+            'done': false,
+          };
         }
-        if(Object.keys(obj).length === 3) this.tasksArray.push(obj);
+
+        if(field === 'taskValue') {
+          objectsStorage[id].taskValue = localStorage.getItem(`${key}`);
+        } else if(field === 'done'){
+          objectsStorage[id].done = localStorage.getItem(`${key}`);
+        }
+        console.log(splittedKey[id]);
       }
     })
+
+    console.log(objectsStorage);
+    this.tasksArray = [];
+    Object.keys(objectsStorage).forEach(task => {
+      console.log(objectsStorage[task]);
+      this.tasksArray.push(objectsStorage[task]);
+    })
+    return this.tasksArray;
   }
 }
