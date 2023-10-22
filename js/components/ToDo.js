@@ -58,7 +58,6 @@ export default class ToDo extends Base {
   addTaskToArray(newTask){
       if(newTask){
         this.tasksArray.push(newTask)
-        console.log('task added to array');
         return this.tasksArray;
       } else {
         return false;
@@ -139,7 +138,6 @@ export default class ToDo extends Base {
     * 8. удаление старых данных из дом
     * 9. отрисовка нового стсортировонного списка тасков
    */
-      console.log('add task');
       const taskData = this.createNewTaskData(getInputValue(e.target));
       if(taskData) {
         this.addTaskToArray(taskData);
@@ -147,7 +145,6 @@ export default class ToDo extends Base {
         this.tasksArray = this.sortTasks(this.tasksArray);
         this.drawTasksList();
         /*if (this.createTaskLine(taskData))*/ this.cleanInput();
-        console.log('add task');
         /*не сортирует список после добавления задачи с наличием уже сделанных
         при нажатии энтер,клик задачи задваиваются
         они не попадаютв локал сторадж)
@@ -157,7 +154,6 @@ export default class ToDo extends Base {
       /* здесь прячутся/показываются сделанные такси
     * 1. каждый из массива тасков приложения проверяется на сделанность и добавляяется соответствующий стиль (прячется)/наоборот
    */
-      console.log('hide completed tasks');
       const taskElements = document.querySelectorAll('.task__item');
 
       taskElements.forEach(task => {
@@ -173,7 +169,6 @@ export default class ToDo extends Base {
     * 4. добавляем соответствующий стиль
     * 5. обновляем данные в локал сторадж
    */
-      console.log('check|uncheck task');
       this.addDoneStyle(e.target);
       this.setDoneTaskData(e.target);
       this.tasksArray = this.sortTasks(this.tasksArray);
@@ -187,12 +182,9 @@ export default class ToDo extends Base {
 
     Object.keys(task).forEach(taskField => {
       if(!localStorage.getItem(`${template}-${taskField}`) && taskField !== 'id'){
-        console.log('no field');
         localStorage.setItem(`${template}-${taskField}`, `${task[taskField]}`);
       }
     })
-    console.log(this.tasksArray);
-    console.log(localStorage);
   }
 
   deleteTaskFromLocalStorage(){
@@ -220,14 +212,11 @@ export default class ToDo extends Base {
         } else if(field === 'done'){
           objectsStorage[id].done = localStorage.getItem(`${key}`);
         }
-        console.log(splittedKey[id]);
       }
     })
 
-    console.log(objectsStorage);
     this.tasksArray = [];
     Object.keys(objectsStorage).forEach(task => {
-      console.log(objectsStorage[task]);
       this.tasksArray.push(objectsStorage[task]);
     })
     return this.tasksArray;
