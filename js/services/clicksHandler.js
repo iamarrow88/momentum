@@ -15,37 +15,23 @@ export default function clicksHandler(e, options) {
     options.player.playerClicksHandler(e, options.player);
   } else if([...e.target.classList].includes('city-name-input') ||
       [...e.target.classList].includes('city-name-div')) {
-    console.log('weather handling', e.target.value);
+    console.log('weather handling');
     options.weather.weatherHandling(e);
   } else if([...e.target.classList].includes('name__div') ||
       [...e.target.classList].includes('name__input')) {
     console.log('background handling');
     options.background.nameHandler(e);
   } else if([...e.target.classList].includes('slide-next') ||
-      [...e.target.classList].includes('slide-prev')) {
-    console.log('slider clicks');
+      [...e.target.classList].includes('slide-prev') ||
+      [...e.target.classList].includes('settings-icon')) {
+    console.log('slider or settings clicks');
     options.background.changeBackground(e);
   } else if(e.target.closest('.to-do')) {
     options.todo.toDoHandler(e);
   } else if([...e.target.classList].includes('change-btn')) {
     console.log('refresh quotes');
     options.quotes.quotesHandler(e);
-  } else if([...e.target.classList].includes('settings-icon')) {
-    console.log('open|close settings');
-    options.background.changeBackground(e);
   } else {
     console.log('another element');
-    /*get all inputs values and if there are some changes - refresh required blocks
-    *
-    * weather
-    * name
-    * todo
-    *  */
-    const name = getInputValue('.name__input');
-    console.log(name);
-    options.background.nameHandler(e);
-
   }
-
-
 }
