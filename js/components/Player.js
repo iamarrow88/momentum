@@ -5,24 +5,108 @@ export default class Player extends Base {
   constructor(lang, name, city, HTMLElements, playerOptions) {
     super(lang, name, HTMLElements, city);
     this.tracksMap = playerOptions.tracksMap;
-    this._volume = playerOptions.volume;
-    this._prevPlayedTrackID = playerOptions.prevPlayedTrackID;
-    this._nextPlayedTrackID = playerOptions.nextPlayedTrackID;
+    this._volumeLevel = playerOptions.volume;
+    this._prevPlayedTrackID = null;
+    this._nextPlayedTrackID = null;
     this._currentTrackID = playerOptions.currentTrackID;
-    this.pathToSVG = playerOptions.pathToSVG;
+    this.pathToSVG = playerOptions.pathToSVGIcon;
     this.buttonsToToggle = playerOptions.buttonsToToggle;
     this._numberOfTracks = null;
+    this._isPlaying = false;
+    this._srcPath = playerOptions.src;
+  }
+
+  playerClicksHandler(event, playerObject){
+    const elementDataset = event.target.dataset;
+    const elementClassList = Array.from(event.target.classList);
+
+    if(elementDataset.buttonName === 'play') {
+      console.log('play');
+      this.setPlayPause(this._currentTrackID, event);
+      /*
+      * 1. записать в приложение статус плей/пауза
+      * 2. сменить главную иконку и иконку напротив выбранной песни (зависит от статуса проигрывания, не тоггл)
+      * 3. проверить трек, если он был переключен, то записать в приложение новый трек и в локал сторажд тоже
+      * 4. остановить/запустить воспроизведение
+      * 5. если воспроизведение началось, проверить, есть ли прогресс бар. если его нет, то создать
+      * 6. если воспроизведение началось, запустить анимацию шарика, если пауза - остановить
+      *
+      *
+      * В локал сторадж
+      * 1. текущий трек
+      * 2. следующий трек
+      * 3. предыдущий трек
+      * 4. уровень звука
+      * 5. вкл/выкл звук
+      * */
+    } else if(elementDataset.buttonName === ('play-prev')) {
+      console.log('play-prev');
+      /*
+      * 1. установить выбранным треком предыдущий
+      * 2. запустить console.log('play');*/
+    } else if(elementDataset.buttonName === 'play-next') {
+      console.log('play-next');
+      /*
+      * 1. установить выбранным треком следующий
+      * 2. запустить console.log('play');*/
+    } else if(elementDataset.buttonName === 'volume') {
+      console.log('volume');
+      /*
+      * 1. тоггл вкл/выкл звук в приложении
+      * 2. сменить иконку
+      * 3. убрать/включить звук
+      * 4. записать статус в локал сторажд
+      * */
+    } else if(elementClassList.includes('song__title')) {
+      console.log(event.target.innerHTML, 'song id is ' + elementDataset.songid);
+      /*
+      * 1. установить текущим треком выбранный
+      * 2. запустить console.log('play');*/
+    } else if(elementDataset.buttonName === 'track-play') {
+      console.log('song id is ' + elementDataset.songbtn);
+      /*
+      * 1. установить текущим треком выбранный
+      * 2. запустить console.log('play');*/
+    }
+    /* есть еще changeHandler(e, { player: this.player })*/
   }
 
   setUp() {
+    this.setNumberOfTracks(this.tracksMap);
     this.setPreviousTrackID = this._currentTrackID;
     this.setNextTrackID = this._currentTrackID;
-    this.setNumberOfTracks(this.tracksMap);
+
+
+
+    /* TODO
+    *   1.+ играть/пауза (с запоминанием в локал сторадж номера трека, плей изначально всегда фолс)
+    * 2. переключение на следующий/предыдущий треки (обновить текущий трек в приложении и локал сторадж
+    * 2Ф. если текущий трек закончился - начать играть следующий
+    * 3. звук вкл/выкл
+    * 4.+ отслеживание уровня громкости, если звук вкл, если выкл, то просто отслеживать и запоминать уровень громкости (в приложение и в локал сторадж) HTMLMediaElement.volume
+    * 5. отображение прогресс бара, если трек выбран
+    * 6. возможность переключения прогресса воспроизведения трека
+    * 7. возможность переключения треков как по клику на соотв иконку плей, так и по самому треку
+    * 8. смена иконок при плей/пауза, вкл/выкл звку и тп
+    * 9. анимация шариков при проигрывании песни
+    * 10. * сделать случайный режим
+    * 11. * повторять выбранный трек по кругу - HTMLMediaElement.loop
+    *
+    *
+    * в локал сторадж:
+    * 1. плей/пауза
+    * 2. номер трека
+    * 3. уровень звука
+    * 4. вкл/выкл звук*/
   }
 
   startPlayer() {
     this.setUp();
-    this.createPlayer();
+    /*this.createPlayer();*/
+    this.checkAudioTag();
+    this.setSrcToAudioTag(this.getCurrentTrackID());
+    console.log(this);
+    /*1. если текущего трека в локал сторадж нет, установить первый трек в качестве выбранного в приложении, в локал сторадж и в src*/
     this.searchHTMLElements();
   }
 
@@ -43,7 +127,6 @@ export default class Player extends Base {
       }
     }
     this._prevPlayedTrackID = resultTrack;
-    localStorage.setItem("prevPlayedTrackID", resultTrack);
     return resultTrack;
   }
 
@@ -64,7 +147,6 @@ export default class Player extends Base {
       }
     }
     this._nextPlayedTrackID = resultTrack;
-    localStorage.setItem("nextPlayedTrack", resultTrack);
     return resultTrack;
   }
 
@@ -97,7 +179,20 @@ export default class Player extends Base {
     return this._numberOfTracks;
   }
 
-  createPlayer() {
+  checkAudioTag(){
+    if(!this.HTMLElements.audioTag || !this.HTMLElements.audioTag.element) {
+      this.HTMLElements.audioTag = {
+        element: document.querySelector('.player__audio'),
+        selector: ".player__audio",
+      }
+    }
+  }
+
+  setSrcToAudioTag(trackID){
+    this.HTMLElements.audioTag.element.src = this._srcPath[0] + trackID + this._srcPath[1];
+  }
+
+  /*createPlayer() {
     const playerWrapper = this.HTMLElements.playerBlock.element = document.querySelector(".player");
 
     playerWrapper.insertAdjacentHTML("afterbegin", "<audio class=\"player__audio\" id=\"player__audio\" preload=\"auto\" autoplay></audio>\n"
@@ -135,7 +230,7 @@ export default class Player extends Base {
 
     for (let i = 0; i < this._numberOfTracks; i++) {
       playListWrapper.insertAdjacentHTML("beforeend", "<li class=\"song\">\n"
-          + "<div class=\"song__content\">\n"
+          + `<div class=\"song__content\" data-songId=\"${i}\">\n`
           + "<div class=\"song__sphere\"></div>\n"
           + `<div class="song__title" data-songId="${i}">${this.tracksMap[i].author} - ${this.tracksMap[i].title}</div>\n`
           + `<svg class="icon song-icon track${i}-play track-play" data-songbtn="${i}"data-button-name="play-${i}" >\n`
@@ -144,59 +239,72 @@ export default class Player extends Base {
           + "</div>\n"
           + "</li>\n");
     }
+  }*/
+
+  playAndStopAnimationListener() {
+    this.HTMLElements.animationBulbs.element.forEach((bulb) => {
+      bulb.classList.remove("isPlaying");
+      console.log(bulb);
+      if(this._isPlaying){
+        console.log('playing');
+      }
+    });
+    /*e.target.classList.toggle("isPlaying");*/
   }
 
-  playAnimationListener(e) {
-    this.HTMLElements.animationBulbs.element.forEach((bulb) => bulb.classList.remove("isPlaying"));
-    e.target.classList.toggle("isPlaying");
+  playerToggleButtonListener(trackId, selector, isDataset) {
+    let buttonsToChange = [];
+    const playOrPause = this._isPlaying ? 'pause' : 'play';
+
+    const dataset = `data-songid="${trackId}"`;
+    const songLine = document.querySelector(`.song__content[${dataset}]`);
+    const button = songLine.querySelector('use.track-play');
+    buttonsToChange.push(button);
+    const playButton = document.querySelector(`use.${this.buttonsToToggle[playOrPause]}`);
+    buttonsToChange.push(playButton);
+
+
+    buttonsToChange.forEach(button =>     this.changeElementSvg(button, this.pathToSVG + playOrPause, this.buttonsToToggle[playOrPause], playOrPause));
   }
 
-  playerToggleButtonListener(e) {
-    const elementDataset = e.target.dataset;
-    if (this.buttonsToToggle.includes(elementDataset.buttonName)) {
-      this.changeElementSvg(document.querySelector(`use[data-button-name=${elementDataset.buttonName}]`), this.pathToSVG + this.buttonsToToggle[elementDataset.buttonName], `use-${elementDataset.buttonName}`, `use-${this.buttonsToToggle[elementClass]}`);
-      const allElementsWithThisData = document.querySelectorAll(`[data-button-name=${elementDataset.buttonName}]`);
-      allElementsWithThisData.forEach((element) => {
-        element.dataset.buttonName = this.buttonsToToggle[elementDataset.buttonName];
-      });
+  setPlayPause(selectedTrackId, event){
+    this.checkAudioTag();
+    if(this._isPlaying === false){
+      this.HTMLElements.audioTag.element.play();
+      this._isPlaying = true;
+      this.playerToggleButtonListener(this.getCurrentTrackID());
+      /*сменить иконку на плей*/
+      /*проверить наличие прогресс бара. если его нет, то нужно создать и вставить на страницу*/
+      /*запустить анимацию шариков*/
+    } else {
+      this.HTMLElements.audioTag.element.pause();
+      this._isPlaying = false;
+      this.playerToggleButtonListener(this.getCurrentTrackID());
+      /*сменить иконку на пауза*/
+      /*остановить анимацию шариков*/
     }
+    this.playAndStopAnimationListener(this._isPlaying);
+    if(this._currentTrackID !== selectedTrackId){
+      this._currentTrackID = selectedTrackId;
+      this.setLocalStorageProperty('currentTrackID', this._currentTrackID);
+      this.setLocalStorageProperty('nextTrackID', this.setNextTrackID = this._currentTrackID + 1);
+      this.setLocalStorageProperty('prevTrackID', this.setPreviousTrackID = this._currentTrackID - 1);
 
-    /* console.log(e.target.classList); */
-    /* if([...e.target.classList.includes('svg-use-play')]) {
-      changeSvg(e.target, 'assets/svg/sprite.svg#pause');
-      e.target.classList.remove('svg-use-play');
-      e.target.classList.add('svg-use-pause');
-    } else if([...e.target.classList].includes('svg-use-pause')) {
-      changeSvg(e.target, 'assets/svg/sprite.svg#play');
-      e.target.classList.remove('svg-use-pause');
-      e.target.classList.add('svg-use-play');
-    } else if([...e.target.classList].includes('svg-use-volume')) {
-      changeSvg(e.target, 'assets/svg/sprite.svg#mute');
-      e.target.classList.remove('svg-use-volume');
-      e.target.classList.add('svg-use-mute');
-    } else if([...e.target.classList].includes('svg-use-mute')) {
-      changeSvg(e.target, 'assets/svg/sprite.svg#volume');
-      e.target.classList.remove('svg-use-mute');
-      e.target.classList.add('svg-use-volume');
-    } */
-  }
-
-  playerClicksHandler(event, playerObject){
-    const elementDataset = event.target.dataset;
-    const elementClassList = Array.from(event.target.classList);
-
-    if(elementClassList.includes('play')) {
-      console.log('play');
-    } else if(elementClassList.includes('play-prev')) {
-      console.log('play-prev');
-    } else if(elementClassList.includes('play-next')) {
-      console.log('play-next');
-    } else if(elementClassList.includes('volume')) {
-      console.log('volume');
-    } else if(elementClassList.includes('song__title')) {
-      console.log(event.target.innerHTML, 'song id is ' + elementDataset.songid);
-    } else if(elementClassList.includes('track-play')) {
-      console.log('song id is ' + elementDataset.songbtn);
+      /* + установить текущий трек в локал сторадж (сразу скопом с вледующим и предыдущим?)*/
+      /* + найти и установить новые предыдущий и следующий треки*/
+      /* + записать новый след и пред треки в локал сторадж*/
     }
   }
+
+  setLocalStorageProperty(key, value){
+    localStorage.setItem(key, value);
+  }
+
+  setVolumeChanges(newVolumeNumber){
+    this.checkAudioTag();
+    this.HTMLElements.audioTag.element.volume = newVolumeNumber;
+    this.setLocalStorageProperty('volume', newVolumeNumber);
+  }
+
+
 }

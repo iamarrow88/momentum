@@ -7,7 +7,7 @@ export default class Base {
   }
 
   setNewSVGPath(svgUse, url) {
-    return svgUse.setAttribute("href", url);
+    return svgUse.setAttribute("xlink:href", url);
   }
 
   changeElementSvg(element, newUrl, oldClass, newClass) {
