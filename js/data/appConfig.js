@@ -3,38 +3,38 @@ import tracks from "./tracks.js";
 import svgPath from "./svgPath.js";
 import quotes from "./quotes.js";
 
-const initialData = {
+const appConfig = {
   HTMLElements: {
     playerBlock: {
       selector: ".player",
       element: null,
     },
     audioTag: {
-      selector: ".player__audio",
+      selector: "#player__audio",
       element: null,
     },
     playPrev: {
-      selector: "div.play-prev",
+      selector: "div[data-button-name='play-prev']",
       element: null,
     },
     playNext: {
-      selector: "div.play-next",
+      selector: "div[data-button-name='play-next']",
       element: null,
     },
     play: {
-      selector: "div.play",
+      selector: "div[data-button-name='play']",
       element: null,
     },
     pause: {
-      selector: "div.pause",
+      selector: "div[data-button-name='pause']",
       element: null,
     },
     volumeIcon: {
-      selector: "svg.volume",
+      selector: "div[data-button-name='volume']",
       element: null,
     },
     volumeRange: {
-      selector: ".volume-bar__range",
+      selector: "[data-button-name='range']",
       element: null,
     },
     playlist: {
@@ -177,6 +177,7 @@ const initialData = {
 
   player: {
     tracksMap: tracks, // [{string: number, string: string, string: string}]
+    src: ["./assets/mp3/",".mp3"],
     volume: +localStorage.getItem("volume") || 30, // number
     prevPlayedTrackID: +localStorage.getItem("prevPlayedTrackID") || null, // number | null
     nextPlayedTrackID: +localStorage.getItem("nextPlayedTrackID") || null, // number | null
@@ -254,4 +255,4 @@ const initialData = {
     ], // []
   },
 };
-export default initialData;
+export default appConfig;
