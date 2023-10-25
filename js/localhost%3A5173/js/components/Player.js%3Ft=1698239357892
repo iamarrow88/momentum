@@ -1,5 +1,5 @@
-import Base from "./base/Base.js";
-import sprite from "../../assets/svg/sprite.svg";
+import Base from "/js/components/base/Base.js";
+import sprite from "/assets/svg/sprite.svg?import";
 
 export default class Player extends Base {
   constructor(lang, name, city, HTMLElements, playerOptions) {
@@ -12,11 +12,9 @@ export default class Player extends Base {
     this.buttonsToToggle = playerOptions.buttonsToToggle;
     this._numberOfTracks = null;
     this._srcPath = playerOptions.src;
-    this.tracksMap = playerOptions.tracksMap;
+    this.tracksMap = [];
     this._isProgressBarShown = false;
     this._refreshProgressBarProcessID = null;
-    this._isPlaying = false;
-    this._songButtons = [];
   }
 
   playerClicksHandler(event, playerObject){
@@ -42,42 +40,14 @@ export default class Player extends Base {
       * */
     } else if(elementDataset.buttonName === ('play-prev')) {
       console.log('play-prev');
-      this._currentTrackID = this.findPrevTrackID(this._currentTrackID);
-      this._prevPlayedTrackID = this.findPrevTrackID(this._currentTrackID);
-      this._nextPlayedTrackID = this.findNextTrackID(this._currentTrackID);
-      this.setSrcToAudioTag(this._currentTrackID);
-      console.log(this.HTMLElements.audioTag.element.paused);
-      if(!this._isPlaying) {
-        this.HTMLElements.audioTag.element.pause();
-      } else {
-        this.setPlayPause(this.getCurrentTrackID());
-      }
-
-
-      console.log(this.getPrevPlayedTrackID(), this.getCurrentTrackID(), this.getNextPlayedTrackID());
       /*
-      0. произвести расчет и установить текущий, предыдущий и следующие треки
       * 1. установить выбранным треком предыдущий
       * 2. запустить console.log('play');*/
     } else if(elementDataset.buttonName === 'play-next') {
-      this._prevPlayedTrackID = this._currentTrackID;
-      this._currentTrackID = this.findNextTrackID(this._currentTrackID);
-      this._nextPlayedTrackID = this.findNextTrackID(this._currentTrackID);
-      this.setSrcToAudioTag(this._currentTrackID);
-      if(!this._isPlaying) {
-        this.HTMLElements.audioTag.element.pause();
-      } else {
-        this.setPlayPause(this.getCurrentTrackID());
-      }
-/* !TODO проверить правильность работы прогресс бара - возможно, есть косяк (останавливается посередине, неверно определяет длительность
-*    песни*/
-
-      console.log(this.getPrevPlayedTrackID(), this.getCurrentTrackID(), this.getNextPlayedTrackID());
-
-
+      console.log('play-next');
       /*
-            * 1. установить выбранным треком следующий
-            * 2. запустить console.log('play');*/
+      * 1. установить выбранным треком следующий
+      * 2. запустить console.log('play');*/
     } else if(elementDataset.buttonName === 'volume') {
       console.log('volume');
       /*
@@ -130,64 +100,59 @@ export default class Player extends Base {
   }
 
   startPlayer() {
-    /*const tracksPromise = this.getDataNoCors('http://localhost:3000/tracks');
+    const tracksPromise = this.getDataNoCors('http://localhost:3000/tracks');
 
     tracksPromise.then(tracks => {
       this.tracksMap = tracks;
       this.setUp();
-      /!*this.createPlayer();*!/
+      /*this.createPlayer();*/
       this.checkAudioTag();
       this.setSrcToAudioTag(this.getCurrentTrackID());
       this.HTMLElements.audioTag.element.pause();
-      /!*1. если текущего трека в локал сторадж нет, установить первый трек в качестве выбранного в приложении, в локал сторадж и в src*!/
+      /*1. если текущего трека в локал сторадж нет, установить первый трек в качестве выбранного в приложении, в локал сторадж и в src*/
       this.searchHTMLElements();
-    });*/
-    this.setUp();
-    /*this.createPlayer();*/
-    this.checkAudioTag();
-    this.setSrcToAudioTag(this.getCurrentTrackID());
-    this.HTMLElements.audioTag.element.pause();
-    /*1. если текущего трека в локал сторадж нет, установить первый трек в качестве выбранного в приложении,
-        в локал сторадж и в src*/
-    this.searchHTMLElements();
+    });
 
   }
 
-  findPrevTrackID(currentTrackID){
+  set setPreviousTrackID(currentTrackID) {
     let resultTrack;
-    const prev = currentTrackID - 1;
-    if (prev < 0) {
-      resultTrack = this._numberOfTracks - 1;
-    } else if (prev > this._numberOfTracks - 1) {
-      resultTrack = 0;
-    } else {
-      resultTrack = prev;
-    }
-    return +resultTrack;
-  }
-
-
-  set setPreviousTrackID(trackID) {
-    this._prevPlayedTrackID = +trackID;
-    return this._prevPlayedTrackID;
-  }
-
-  findNextTrackID(currentTrackID) {
-    let resultTrack;
-    const next = currentTrackID + 1;
-    if (next > this._numberOfTracks - 1) {
-      resultTrack = 0;
-    } else if (next < 0) {
+    if (currentTrackID === null) {
+      this.currentTrackID = 0;
+      localStorage.setItem("currentTrackID", "0");
       resultTrack = this._numberOfTracks - 1;
     } else {
-      resultTrack = next;
+      const prev = currentTrackID - 1;
+      if (prev < 0) {
+        resultTrack = this._numberOfTracks - 1;
+      } else if (prev > this._numberOfTracks - 1) {
+        resultTrack = 0;
+      } else {
+        resultTrack = prev;
+      }
     }
-    return +resultTrack;
+    this._prevPlayedTrackID = resultTrack;
+    return resultTrack;
   }
 
-  set setNextTrackID(trackID) {
-    this._nextPlayedTrackID = +trackID;
-    return this._nextPlayedTrackID;
+  set setNextTrackID(currentTrackID) {
+    let resultTrack;
+    if (currentTrackID === null) {
+      this._currentTrackID = 0;
+      localStorage.setItem("currentTrackID", "0");
+      resultTrack = currentTrackID + 1;
+    } else {
+      const next = currentTrackID + 1;
+      if (next > this._numberOfTracks - 1) {
+        resultTrack = 0;
+      } else if (next < 0) {
+        resultTrack = this._numberOfTracks - 1;
+      } else {
+        resultTrack = next;
+      }
+    }
+    this._nextPlayedTrackID = resultTrack;
+    return resultTrack;
   }
 
   set setCurrentTrackID(newTrackID) {
@@ -293,12 +258,6 @@ export default class Player extends Base {
   }
 
   playerToggleButtonListener(trackId) {
-    this._songButtons = document.querySelectorAll('.song__content .use-icon');
-    this._songButtons.forEach(button => {
-      if([...button.classList].includes('pause')){
-        this.changeElementSvg(button, this.pathToSVG + 'play', this.buttonsToToggle['play'], 'play');
-      }
-    })
     /*сменить вид нужно на двух кнопкахЖ play и play для определенного трека. для поиска используем dataset. первая кнопка имеет
     * dataset data-button-name="playManagement"
     * вторая - data-button-name="play-${currentTrackID}"*/
@@ -320,22 +279,15 @@ export default class Player extends Base {
     const progressBar = document.querySelector('.progress__bar');
     this._refreshProgressBarProcessID = setTimeout(()=> {
       const currentTime = this.HTMLElements.audioTag.element.currentTime;
-
-      if(duration) {
-        if(currentTime <= duration) {
-          const factSongDuration = Math.round((currentTime * 100) / duration);
-          const songTail = 100 - factSongDuration;
-          progressBar.style['grid-template-columns'] = `${factSongDuration}% ${songTail}%`;
-          this.updateProgressBar(duration);
-          if((currentTime === duration)) {
-            this.playerToggleButtonListener(this.getCurrentTrackID());
-            clearTimeout(this._refreshProgressBarProcessID);
-          }
-        } else {
-          this.playerToggleButtonListener(this.getCurrentTrackID());
-          clearTimeout(this._refreshProgressBarProcessID);
-        }
-
+      console.log(currentTime);
+      if(duration && currentTime <= duration) {
+        const factSongDuration = Math.round((currentTime * 100) / duration);
+        const songTail = 100 - factSongDuration;
+        progressBar.style['grid-template-columns'] = `${factSongDuration}% ${songTail}%`;
+        this.updateProgressBar(duration);
+      } else {
+        this.playerToggleButtonListener(this.getCurrentTrackID());
+        clearTimeout(this._refreshProgressBarProcessID);
       }
 
     }, 1000)
@@ -343,7 +295,6 @@ export default class Player extends Base {
 
   setPlayPause(selectedTrackId, event){
     if(this.HTMLElements.audioTag.element.paused){
-      this._isPlaying = true;
       this.HTMLElements.audioTag.element.play();
       this.playerToggleButtonListener(selectedTrackId);
       this._isProgressBarShown = true;
@@ -354,7 +305,6 @@ export default class Player extends Base {
       /* + проверить наличие прогресс бара. если его нет, то нужно создать и вставить на страницу*/
       /* + апустить анимацию шариков*/
     } else {
-      this._isPlaying = false;
       this.HTMLElements.audioTag.element.pause();
       this.playerToggleButtonListener(selectedTrackId);
       this.updateProgressBar();

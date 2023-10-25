@@ -97,7 +97,6 @@ class App extends Base {
       options.name.nameHandler(e);
     });
 
-
   }
 }
 

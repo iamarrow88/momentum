@@ -50,8 +50,20 @@ export default class Base {
     const response = await fetch(`${url}`);
     return {
       isOk: response.ok,
-      json: await response.json(),
+      json: await response.json()
     };
+  }
+
+  async getDataNoCors(url) {
+    console.log(url);
+    const response = await fetch(`${url}`);
+
+    if(response.ok) {
+      return response.json();
+    } else {
+
+      throw new Error('Ошибка, данные не получены   ' + `${response.status}`)
+    }
   }
 
   /*attributes: [{key: value}, {key: value}]*/
