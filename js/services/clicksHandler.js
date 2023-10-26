@@ -11,15 +11,12 @@ export default function clicksHandler(e, options) {
       settings: settings,
    }*/
   if(e.target.closest('.player')){
-    console.log('player handling');
     options.player.playerClicksHandler(e, options.player);
   } else if([...e.target.classList].includes('city-name-input') ||
       [...e.target.classList].includes('city-name-div')) {
-    console.log('weather handling');
     options.weather.weatherHandling(e);
   } else if([...e.target.classList].includes('name__div') ||
       [...e.target.classList].includes('name__input')) {
-    console.log('background handling');
     options.background.nameHandler(e);
   } else if([...e.target.classList].includes('slide-next') ||
       [...e.target.classList].includes('slide-prev') ||
@@ -29,7 +26,6 @@ export default function clicksHandler(e, options) {
   } else if(e.target.closest('.to-do')) {
     options.todo.toDoHandler(e);
   } else if([...e.target.classList].includes('change-btn')) {
-    console.log('refresh quotes');
     options.quotes.quotesHandler(e);
   } else {
     console.log('another element');

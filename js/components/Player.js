@@ -5,6 +5,7 @@ export default class Player extends Base {
   constructor(lang, name, city, HTMLElements, playerOptions) {
     super(lang, name, HTMLElements, city);
     this._volumeLevel = playerOptions.volume;
+    this._isMuted = false;
     this._prevPlayedTrackID = null;
     this._nextPlayedTrackID = null;
     this._currentTrackID = playerOptions.currentTrackID;
@@ -23,7 +24,7 @@ export default class Player extends Base {
     const elementDataset = event.target.dataset;
     const elementClassList = Array.from(event.target.classList);
     if(elementDataset.buttonName === 'playManagement') {
-      this.setPlayPause(this._currentTrackID, event);
+      this.setPlayPause(this._currentTrackID, !this._isPlaying);
       /*
       * 1. + записать в приложение статус плей/пауза
       * 2. + сменить главную иконку и иконку напротив выбранной песни (зависит от статуса проигрывания, не тоггл)
@@ -40,21 +41,19 @@ export default class Player extends Base {
       * 4. уровень звука
       * 5. вкл/выкл звук
       * */
+
+
+      /* ! TODO class="volume-bar__wrapper" синхронизировать его показания с volume от audio tag*/
     } else if(elementDataset.buttonName === ('play-prev')) {
-      console.log('play-prev');
       this._currentTrackID = this.findPrevTrackID(this._currentTrackID);
       this._prevPlayedTrackID = this.findPrevTrackID(this._currentTrackID);
       this._nextPlayedTrackID = this.findNextTrackID(this._currentTrackID);
       this.setSrcToAudioTag(this._currentTrackID);
-      console.log(this.HTMLElements.audioTag.element.paused);
       if(!this._isPlaying) {
         this.HTMLElements.audioTag.element.pause();
       } else {
-        this.setPlayPause(this.getCurrentTrackID());
+        this.setPlayPause(this.getCurrentTrackID(), this._isPlaying);
       }
-
-
-      console.log(this.getPrevPlayedTrackID(), this.getCurrentTrackID(), this.getNextPlayedTrackID());
       /*
       0. произвести расчет и установить текущий, предыдущий и следующие треки
       * 1. установить выбранным треком предыдущий
@@ -67,32 +66,41 @@ export default class Player extends Base {
       if(!this._isPlaying) {
         this.HTMLElements.audioTag.element.pause();
       } else {
-        this.setPlayPause(this.getCurrentTrackID());
+        this.setPlayPause(this.getCurrentTrackID(), this._isPlaying);
       }
 /* !TODO проверить правильность работы прогресс бара - возможно, есть косяк (останавливается посередине, неверно определяет длительность
 *    песни*/
-
-      console.log(this.getPrevPlayedTrackID(), this.getCurrentTrackID(), this.getNextPlayedTrackID());
-
 
       /*
             * 1. установить выбранным треком следующий
             * 2. запустить console.log('play');*/
     } else if(elementDataset.buttonName === 'volume') {
-      console.log('volume');
+      this._isMuted = !this._isMuted;
+      if(this._isMuted) {
+        this.setVolume(0);
+      } else {
+        this.setVolume(this._volumeLevel);
+      }
+
       /*
       * 1. тоггл вкл/выкл звук в приложении
       * 2. сменить иконку
       * 3. убрать/включить звук
       * 4. записать статус в локал сторажд
       * */
-    } else if(elementClassList.includes('song__title')) {
-      console.log(event.target.innerHTML, 'song id is ' + elementDataset.songid);
+    } else if(event.target.closest('.song__content')) {
+
+      this.setCurrentTrackID = +elementDataset.songid;
+      this.setPreviousTrackID = this.findPrevTrackID(this.getCurrentTrackID());
+      this.setNextTrackID = this.findNextTrackID(this.getCurrentTrackID());
+      this._isPlaying = true;
+      this.setPlayPause(this.getCurrentTrackID(), this._isPlaying);
+
+
       /*
       * 1. установить текущим треком выбранный
       * 2. запустить console.log('play');*/
     } else if(elementDataset.buttonName === 'track-play') {
-      console.log('song id is ' + elementDataset.songbtn);
       /*
       * 1. установить текущим треком выбранный
       * 2. запустить console.log('play');*/
@@ -104,7 +112,6 @@ export default class Player extends Base {
     this.setNumberOfTracks(this.tracksMap);
     this.setPreviousTrackID = this._currentTrackID;
     this.setNextTrackID = this._currentTrackID;
-
 
 
     /* TODO
@@ -145,12 +152,38 @@ export default class Player extends Base {
     this.setUp();
     /*this.createPlayer();*/
     this.checkAudioTag();
+    this.HTMLElements.audioTag.element.addEventListener('ended', (e) => {
+      this.endTrackListener();
+    })
     this.setSrcToAudioTag(this.getCurrentTrackID());
+    this.setVolume(this._volumeLevel);
     this.HTMLElements.audioTag.element.pause();
     /*1. если текущего трека в локал сторадж нет, установить первый трек в качестве выбранного в приложении,
         в локал сторадж и в src*/
     this.searchHTMLElements();
 
+  }
+
+  changeHandler(e, options){
+    if([...e.target.classList].includes('volume-bar__range')) {
+      this._volumeLevel = e.target.value;
+      this.setVolume(this._volumeLevel);
+      /*
+      * 1. если звук включен, уменьшить/уввеличить звук
+      * 2. записать новое значение в приложение
+      * 3. записать новое значение в локал сторадж
+      * */
+    }
+  }
+
+  endTrackListener(){
+    this.setCurrentTrackID = this.findNextTrackID(this._currentTrackID);
+    this._isPlaying = true;
+    this.setPlayPause(this.getCurrentTrackID(), this._isPlaying);
+  }
+
+  setVolume(newVolumeValue){
+    this.HTMLElements.audioTag.element.volume = newVolumeValue / 100;
   }
 
   findPrevTrackID(currentTrackID){
@@ -284,9 +317,7 @@ export default class Player extends Base {
   playAndStopAnimationListener() {
     this.HTMLElements.animationBulbs.element.forEach((bulb) => {
       bulb.classList.remove("isPlaying");
-      console.log(bulb.dataset.songid);
       if(!this.HTMLElements.audioTag.element.paused && +bulb.dataset.songid === this.getCurrentTrackID()){
-        console.log('playing');
         bulb.classList.add("isPlaying");
       }
     });
@@ -305,7 +336,7 @@ export default class Player extends Base {
     let buttonsToChangeDatasets = [];
     const newIconVision = this.HTMLElements.audioTag.element.paused ? 'play' : 'pause';
 
-    const songDataset = `data-button-name="play-${trackId}"`; //dataset конкретной песни
+    const songDataset = `data-songid="${trackId}"`; //dataset конкретной песни
     const buttonDataset = `data-button-name="playManagement"`; // datasset общая кнопка play
 
     const songButton = document.querySelector(`.use-icon[${songDataset}]`);
@@ -341,18 +372,29 @@ export default class Player extends Base {
     }, 1000)
   }
 
-  setPlayPause(selectedTrackId, event){
-    if(this.HTMLElements.audioTag.element.paused){
+  setPlayPause(selectedTrackId, shouldStartPlay){
+    this.setSrcToAudioTag(selectedTrackId);
+
+    if(shouldStartPlay){
       this._isPlaying = true;
       this.HTMLElements.audioTag.element.play();
       this.playerToggleButtonListener(selectedTrackId);
       this._isProgressBarShown = true;
       this.showProgressBar();
-      const trackDuration = this.HTMLElements.audioTag.element.duration;
-      this.updateProgressBar(trackDuration);
+      let trackDuration;
+      this.updateProgressBar(0);
+      this.HTMLElements.audioTag.element.addEventListener('loadedmetadata', () => {
+        if(this._refreshProgressBarProcessID){
+          clearTimeout(this._refreshProgressBarProcessID);
+        }
+        trackDuration = this.HTMLElements.audioTag.element.duration;
+        this.updateProgressBar(trackDuration);
+      })
+
       /* + сменить иконку на плей*/
       /* + проверить наличие прогресс бара. если его нет, то нужно создать и вставить на страницу*/
       /* + апустить анимацию шариков*/
+
     } else {
       this._isPlaying = false;
       this.HTMLElements.audioTag.element.pause();

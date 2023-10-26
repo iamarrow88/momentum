@@ -30,7 +30,7 @@ const appConfig = {
       element: null,
     },
     volumeIcon: {
-      selector: "div[data-button-name='volume']",
+      selector: ".player-controls__volume .use-icon",
       element: null,
     },
     volumeRange: {

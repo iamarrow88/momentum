@@ -77,7 +77,6 @@ export default class Weather extends Base{
   }
 
   getWeather() {
-    console.log(this._url);
     this.getData(this._url).then((response) => {
       if (response.isOk) {
         this.HTMLElements.errorBlock.element.innerHTML = "";
@@ -111,7 +110,6 @@ export default class Weather extends Base{
     const msPerMinute = 60000;
     const timeDelta = (msPerMinute * updatePerMinutesNumber) * 0.99;
     if(new Date().getTime() - this._lastUpdateTime >=timeDelta) {
-      console.log('update weather');
       this.getWeather();
       this._lastUpdateTime = new Date().getTime();
     }

@@ -46,7 +46,6 @@ export default class Base {
   }
 
   async getData(url) {
-    console.log(url);
     const response = await fetch(`${url}`);
     return {
       isOk: response.ok,
@@ -55,7 +54,6 @@ export default class Base {
   }
 
   async getDataNoCors(url) {
-    console.log(url);
     const response = await fetch(`${url}`);
 
     if(response.ok) {

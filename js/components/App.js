@@ -8,8 +8,8 @@ import ToDo from "./ToDo.js";
 import inputChangeHandler from '../services/inputChangeHandler.js'
 import clicksHandler from "../services/clicksHandler.js";
 import Settings from "./Settings.js";
-import changeHandler from "../services/changeHandler.js";
-import getInputValue from "../services/getInputValue.js";
+/*import changeHandler from "../services/changeHandler.js";
+import getInputValue from "../services/getInputValue.js";*/
 
 /* !TODO
 *    смена иконки в плеере при проигрывании,остановке музыки
@@ -83,7 +83,7 @@ class App extends Base {
     });
 
     this.HTMLElements.background.element.addEventListener("input", (e) => {
-      changeHandler(e, { player: this.player })
+      this.player.changeHandler(e, /*{ player: this.player }*/)
     })
 
     const options = {

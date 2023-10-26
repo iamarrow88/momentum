@@ -277,13 +277,10 @@ export default class ClocksBackground extends Base {
   isItDivCheck(){
     let res;
     if(document.querySelector('.name__input')){
-      console.log('input');
       res = false;
     } else if(document.querySelector('.name__div')){
-      console.log('div');
       res = true;
     } else {
-      console.log('another');
       res = true;
     }
 
@@ -326,14 +323,11 @@ export default class ClocksBackground extends Base {
   }
 
   nameHandler(e){
-    console.log(e.target.nodeName !== 'INPUT');
-    console.log(e.type === 'change');
     if(e.target.nodeName !== 'INPUT' || e.type === 'change'){
 
       const value = getInputValue(document.querySelector('.name__input'));
       if(value) {
         this.setCustomerName(value);
-        console.log(this.name);
         this.setCustomerName(this.name);
         this.refreshLocalStorageName(this.name);
         document.querySelector('.name__box').innerHTML = '';
