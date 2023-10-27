@@ -18,6 +18,7 @@ export default class Player extends Base {
     this._refreshProgressBarProcessID = null;
     this._isPlaying = false;
     this._songButtons = [];
+    this._isFirstClick = true;
   }
 
   playerClicksHandler(event, playerObject){
@@ -31,7 +32,7 @@ export default class Player extends Base {
       * 3. проверить трек, если он был переключен, то записать в приложение новый трек и в локал сторажд тоже
       * 4. + остановить/запустить воспроизведение
       * 5. если воспроизведение началось, проверить, есть ли прогресс бар. если его нет, то создать
-      * 6. если воспроизведение началось, запустить анимацию шарика, если пауза - остановить
+      * 6. + если воспроизведение началось, запустить анимацию шарика, если пауза - остановить
       *
       *
       * В локал сторадж
@@ -78,8 +79,12 @@ export default class Player extends Base {
       this._isMuted = !this._isMuted;
       if(this._isMuted) {
         this.setVolume(0);
+        this.changeElementSvg(this.HTMLElements.volumeIcon.element, this.pathToSVG + 'mute', 'unmute', 'mute')
+
       } else {
         this.setVolume(this._volumeLevel);
+        this.changeElementSvg(this.HTMLElements.volumeIcon.element, this.pathToSVG + 'sound-speaker', 'mute', 'unmute')
+
       }
 
       /*
@@ -93,7 +98,15 @@ export default class Player extends Base {
       this.setCurrentTrackID = +elementDataset.songid;
       this.setPreviousTrackID = this.findPrevTrackID(this.getCurrentTrackID());
       this.setNextTrackID = this.findNextTrackID(this.getCurrentTrackID());
-      this._isPlaying = true;
+      console.log('this._isFirstClick ' + this._isFirstClick);
+      if(this._isFirstClick){
+        this._isFirstClick = !this._isFirstClick;
+        this._isPlaying = true;
+      }
+      if(this._isPlaying && this.getCurrentTrackID() !== +elementDataset.songid){
+        this._isPlaying = false;
+      }
+
       this.setPlayPause(this.getCurrentTrackID(), this._isPlaying);
 
 
@@ -109,10 +122,20 @@ export default class Player extends Base {
   }
 
   setUp() {
+    this.searchHTMLElements();
     this.setNumberOfTracks(this.tracksMap);
     this.setPreviousTrackID = this._currentTrackID;
     this.setNextTrackID = this._currentTrackID;
-
+    this.HTMLElements.volumeRange = {
+      selector: ".volume-bar__range",
+      element: document.querySelector(`${this.HTMLElements.volumeRange.selector}`),
+    };
+    this.HTMLElements.volumeRange.element.value = this._volumeLevel;
+    if(+this._volumeLevel !== 0){
+      this.changeElementSvg(this.HTMLElements.volumeIcon.element, this.pathToSVG + 'sound-speaker', 'mute', 'unmute');
+    } else {
+      this.changeElementSvg(this.HTMLElements.volumeIcon.element, this.pathToSVG + 'mute', 'unmute', 'mute');
+    }
 
     /* TODO
     *   1.+ играть/пауза (с запоминанием в локал сторадж номера трека, плей изначально всегда фолс)
@@ -166,7 +189,15 @@ export default class Player extends Base {
 
   changeHandler(e, options){
     if([...e.target.classList].includes('volume-bar__range')) {
-      this._volumeLevel = e.target.value;
+      this._volumeLevel = +e.target.value;
+      if(this._volumeLevel === 0){
+        this._isMuted = true;
+        this.changeElementSvg(this.HTMLElements.volumeIcon.element, this.pathToSVG + 'mute', 'unmute', 'mute')
+      } else {
+        this._isMuted = false;
+        this.changeElementSvg(this.HTMLElements.volumeIcon.element, this.pathToSVG + 'sound-speaker', 'mute', 'unmute')
+
+      }
       this.setVolume(this._volumeLevel);
       /*
       * 1. если звук включен, уменьшить/уввеличить звук
@@ -374,7 +405,9 @@ export default class Player extends Base {
 
   setPlayPause(selectedTrackId, shouldStartPlay){
     this.setSrcToAudioTag(selectedTrackId);
-
+    if(this._refreshProgressBarProcessID){
+      clearTimeout(this._refreshProgressBarProcessID);
+    }
     if(shouldStartPlay){
       this._isPlaying = true;
       this.HTMLElements.audioTag.element.play();
