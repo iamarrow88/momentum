@@ -188,7 +188,7 @@ const appConfig = {
   player: {
     tracksMap: tracks, // [{string: number, string: string, string: string}]
     /*src: ["./assets/mp3/", ".mp3"],*/
-    src: ["/src/public/sounds/", ".mp3"],
+    src: ["/sounds/", ".mp3"],
     volume: +localStorage.getItem("volume") || 30, // number
     prevPlayedTrackID: +localStorage.getItem("prevPlayedTrackID") || null, // number | null
     nextPlayedTrackID: +localStorage.getItem("nextPlayedTrackID") || null, // number | null
