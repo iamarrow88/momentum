@@ -14,11 +14,11 @@ export default class Player extends Base {
     this._numberOfTracks = null;
     this._srcPath = playerOptions.src;
     this.tracksMap = playerOptions.tracksMap;
-    this._isProgressBarShown = false;
     this._refreshProgressBarProcessID = null;
     this._isPlaying = false;
     this._songButtons = [];
     this._isFirstClick = true;
+    this._savedPlayedTrackID = null;
   }
 
   playerClicksHandler(event, playerObject){
@@ -92,6 +92,7 @@ export default class Player extends Base {
       * 2. сменить иконку
       * 3. убрать/включить звук
       * 4. записать статус в локал сторажд
+      * если id трека меняется, то нужно его записывать в прев id
       * */
     } else if(event.target.closest('.song__content')) {
 
@@ -119,6 +120,83 @@ export default class Player extends Base {
       * 2. запустить console.log('play');*/
     }
     /* есть еще changeHandler(e, { player: this.player })*/
+  }
+
+  shouldPlay(buttonName){
+    if(this._savedPlayedTrackID !== this._currentTrackID){
+      if(this._isPlaying) {
+        switch (buttonName) {
+          case 'playManagement': {
+            console.log('поставить на паузу');
+            break;
+          }
+
+          case 'play-prev': {
+            console.log('пусть играет дальше');
+            break;
+          }
+
+          case 'play-next': {
+            console.log('пусть играет дальше');
+            break;
+          }
+
+          case 'song__content': {
+            console.log('пусть играет дальше');
+            break;
+          }
+        }
+      } else {
+        switch (buttonName) {
+          case 'playManagement': {
+            console.log('запустить, чтобы играло');
+            break;
+          }
+
+          case 'play-prev': {
+            console.log('пусть остается в паузе');
+            break;
+          }
+
+          case 'play-next': {
+            console.log('пусть остается в паузе');
+            break;
+          }
+
+          case 'song__content': {
+            console.log('запустить, чтобы играло');
+            break;
+          }
+        }
+      }
+    } else {
+      if(this._isPlaying) {
+        switch (buttonName) {
+          case 'playManagement': {
+            console.log('поставить на паузу');
+            break;
+          }
+
+          case 'song__content': {
+            console.log('поставить на паузу');
+            break;
+          }
+        }
+      } else {
+        switch (buttonName) {
+          case 'playManagement': {
+            console.log('запустить, чтобы играло');
+            break;
+          }
+
+          case 'song__content': {
+            console.log('запустить, чтобы играло');
+            break;
+          }
+        }
+      }
+    }
+
   }
 
   setUp() {

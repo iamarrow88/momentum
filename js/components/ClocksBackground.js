@@ -5,6 +5,8 @@ import getInputValue from "../services/getInputValue.js";
 export default class ClocksBackground extends Base {
   constructor(lang, name, clocksOptions, translation, HTMLElements) {
     super(lang, name, HTMLElements);
+    this._savedLang = '';
+    this._savedLang = '';
     this._translation = translation;
     this._locales = this.setLocales(this.lang);
     this._timeOfTheDay = "";
@@ -84,7 +86,7 @@ export default class ClocksBackground extends Base {
         "span",
         "name__div",
         this.HTMLElements.nameBox.element,
-        [{ "data-translate": "[placeholder]customerName}" }]
+        []
       );
     } else {
       greetLine = this.createElement(
@@ -103,12 +105,12 @@ export default class ClocksBackground extends Base {
         "input",
         "name__input",
         this.HTMLElements.nameBox.element,
-        [{ "data-translate": "[placeholder]customerName" }, { type: "text" }, { id: "name" }, { placeholder: "Enter your name" }]
+        [ { type: "text" }, { id: "name" }, { placeholder: "Enter your name" }]
       );
     }
-
     greetLine.textContent = this._translation[this.lang][`${this._timeOfTheDay}`];
     nameLine.textContent = this.name;
+    this.HTMLElements.nameBox.element.innerHTML += '!';
     this.HTMLElements.greetsBlock.element.appendChild(this.HTMLElements.nameBox.element);
   }
 
@@ -242,20 +244,19 @@ export default class ClocksBackground extends Base {
       this.setBackgroundImage(pictureNumber);
     } else if (eTargetClassList[0] === "name") {
     } else if(eTargetClassList.includes('settings-icon')) {
-      this.HTMLElements.settingsBlock.element.classList.toggle('visible')
+      this.HTMLElements.settingsBlock.element.classList.toggle('visible');;
     } else if(eTargetClassList.includes('api')) {
       localStorage.setItem('isSourceAPI', true);
       this._isAPISource = true;
       this.loadImages(this._numberOfPictures);
       this.setBackgroundImage();
-      this.HTMLElements.settingsBlock.element.classList.toggle('visible')
+      this.HTMLElements.settingsBlock.element.classList.toggle('visible');
     } else if(eTargetClassList.includes('github')) {
       localStorage.setItem('isSourceAPI', false);
       this._isAPISource = false;
       this.loadImages(this._numberOfPictures);
       this.setBackgroundImage();
-      this.HTMLElements.settingsBlock.element.classList.toggle('visible')
-    } else {
+      this.HTMLElements.settingsBlock.element.classList.toggle('visible');
     }
   }
 

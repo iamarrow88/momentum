@@ -12,18 +12,20 @@ import Settings from "./Settings.js";
 import getInputValue from "../services/getInputValue.js";*/
 
 /* !TODO
-*    смена иконки в плеере при проигрывании,остановке музыки
-*    смена языка в приложении (рус, англ, бел)
-*    регулировка звука в плеере
-*    доделать тудушку
+*    +смена иконки в плеере при проигрывании,остановке музыки
+*    +смена языка в приложении (рус, англ, бел)
+*    +регулировка звука в плеере
+*    доделать тудушку (удаление задачи)
 *    передалать настройки (спрятать показать меню, плеер и тп
 *    сделать ловушку для цитат, если не подгружается новая (типа упс, не получили цитату, вот вам нашенская рандомная
-*    переписать все на классах
-*    подгрузка обоев из UnsplashApi
+*    + переписать все на классах
+*    + подгрузка обоев из UnsplashApi
 *    сделать подложку под блоки (вкл/выкл)
 *    сделать сортировку тасков по id?
 *
 *    сделать отдельный модуль с функциями удаления, досбалвения и пр из локал сторадж
+* выбор цвета для шрифта на странице
+* возможность отключать/отображать подложку для блоков
 * */
 
 
@@ -37,7 +39,7 @@ class App extends Base {
     this.quotes = new Quotes(lang, store.quotes, HTMLElements);
     this.weather = new Weather(lang, city, HTMLElements, this.appStore.weather);
     this.toDo = new ToDo(lang, store.toDo.tasksArray, HTMLElements);
-    this.settings = new Settings(lang);
+    this.settings = new Settings(lang, store.translation);
   }
 
   set setLang(newLang) {
@@ -72,6 +74,7 @@ class App extends Base {
     this.weather.checkLastUpdate(5, 1);
     this.quotes.startQuotes();
     this.toDo.startToDo();
+    this.settings.startSettings();
     const clickOptions = {
       player: this.player,
       background: this.background,
@@ -98,6 +101,13 @@ class App extends Base {
       inputChangeHandler(e, options);
       options.name.nameHandler(e);
     });
+
+    console.log(this);
+    console.log(this.player);
+    this.lang = 'ru';
+    console.log(this);
+
+    console.log(this.player);
 
   }
 }
