@@ -1,5 +1,6 @@
 import getInputValue from "./getInputValue.js";
 import localStorageService from "./localStorageService.js";
+import stylesActions from "./stylesActions.js";
 
 export default function clicksHandler(e, options) {
   /*const options = {
@@ -10,6 +11,18 @@ export default function clicksHandler(e, options) {
       quotes: quotes,
       settings: settings,
    }*/
+
+  const showBlock = stylesActions.changeStyle.bind({
+    "classToRemove": "invisible-block",
+    "newClass": "visible-block"
+  });
+
+  const hideBlock = stylesActions.changeStyle.bind({
+    "classToRemove": "visible-block",
+    "newClass": "invisible-block"
+  });
+
+
   if (e.target.closest(".player")) {
     options.player.playerClicksHandler(e, options.player);
   } else if (
@@ -54,6 +67,11 @@ export default function clicksHandler(e, options) {
           localStorageService.setItemToLocalStorage("lang", "en"),
         );
         break;
+      case "settings-edit-data-btn":
+        console.log("редактировать данные пользователя и добавить их в локал сторадж");
+
+        /*обновить страницу*/
+        break;
       case "settings-remove-data-btn":
         console.log("удалить все данные пользователя из локал сторадж");
         localStorageService.clearLocalStorage();
@@ -61,51 +79,73 @@ export default function clicksHandler(e, options) {
         break;
       case "settings-hide-player-on":
         console.log("спрятать плейер");
+        hideBlock('.player');
         break;
       case "settings-hide-player-off":
         console.log("показать плейер");
+        showBlock('.player');
         break;
       case "settings-hide-weather-on":
         console.log("спрятать погоду");
+        hideBlock('.weather');
         break;
       case "settings-hide-weather-off":
         console.log("показать блок с погодой");
+        showBlock('.weather');
         break;
       case "settings-hide-clocks-on":
         console.log("спрятать блок с часами");
+        hideBlock('.time');
         break;
       case "settings-hide-clocks-off":
         console.log("показать блок с часами");
+        showBlock('.time');
         break;
       case "settings-hide-date-on":
         console.log("спрятать блок с датой");
+        hideBlock('.date');
         break;
       case "settings-hide-date-off":
         console.log("показать блок с датой");
+        showBlock('.date');
         break;
       case "settings-hide-greetings-on":
         console.log("спрятать блок с приветствием");
+        hideBlock('.greeting-container');
         break;
       case "settings-hide-greetings-off":
         console.log("показать блок с приветствием");
+        showBlock('.greeting-container');
         break;
-      case 'settings-hide-todo-on':
-        console.log('спрятать блок со списком дел');
+      case "settings-hide-todo-on":
+        console.log("спрятать блок со списком дел");
+        hideBlock('.motivation-block');
         break;
       case "settings-hide-todo-off":
         console.log("показать блок со списком дел");
+        showBlock('.motivation-block');
         break;
       case "settings-hide-quotes-on":
         console.log("спрятать блок с цитатами");
+        hideBlock('.quote');
         break;
       case "settings-hide-quotes-off":
         console.log("показать блок с цитатами");
+        showBlock('.quote');
         break;
       case "settings-hide-background-api":
         console.log("выбрать источником обоев API");
+        localStorage.setItem("isSourceAPI", true);
+        options.background._isAPISource = true;
+        options.background.loadImages(options.background._numberOfPictures);
+        options.background.setBackgroundImage();
         break;
       case "settings-hide-background-github":
         console.log("выбрать источником обоев github");
+        localStorage.setItem("isSourceAPI", false);
+        options.background._isAPISource = false;
+        options.background.loadImages(options.background._numberOfPictures);
+        options.background.setBackgroundImage();
         break;
     }
   }
