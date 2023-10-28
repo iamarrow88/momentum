@@ -17,6 +17,7 @@ const en = {
   "settings-change-lang-ru": "RU",
   "settings-change-lang-en": "EN",
   "settings-remove-data": "User data",
+  "settings-edit-data-btn": "Edit",
   "settings-remove-data-btn": "Remove",
   "settings-hide-player": "Hide player",
   "settings-hide-player-on": "ON",

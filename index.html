@@ -164,9 +164,6 @@
       <div class="content-block">
         <div class="motivation-block">
           <div class="to-do">
-<!--
-            <img src="./assets/svg/sprite.svg" alt="">
--->
             <div class="to-do__header">
               <label for="todo__input" data-translate="todo-input-label">Добавьте задачу &#8628;</label>
               <input id="todo__input" type="text" class="to-do__input"
@@ -229,8 +226,12 @@
             <div class="settings-block__item">
               <div class="hide-block-name hide-block-name__player"
                    data-translate="settings-remove-data">User data</div>
-              <button class="item__delete"
-                      data-translate="settings-remove-data-btn">Remove</button>
+              <div class="switcher">
+                <button class="item__delete"
+                        data-translate="settings-edit-data-btn">Edit</button>
+                <button class="item__delete"
+                        data-translate="settings-remove-data-btn">Remove</button>
+              </div>
             </div>
             <ul class="settings-block__list hide-block">
               <li class="hide-block__item item__player">

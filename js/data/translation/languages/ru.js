@@ -17,6 +17,7 @@ const ru = {
   "settings-change-lang-ru": "РУС",
   "settings-change-lang-en": "АНГЛ",
   "settings-remove-data": "Данные пользователя",
+  "settings-edit-data-btn": "Редактировать",
   "settings-remove-data-btn": "Удалить",
   "settings-hide-player": "Отображение плеера",
   "settings-hide-player-on": "ДА",
