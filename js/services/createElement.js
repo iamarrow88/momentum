@@ -1,10 +1,15 @@
 /*params:
-* tag: string
-* className: staring
-* parentElement: HTMLElement
-* attributes: array of objects*/
+ * tag: string
+ * className: staring
+ * parentElement: HTMLElement
+ * attributes: array of objects*/
 
-export default function createElement(tag, className, parentElement, attributes) {
+export default function createElement(
+  tag,
+  className,
+  parentElement,
+  attributes,
+) {
   const element = document.createElement(tag);
   if (className) element.classList.add(className);
   if (parentElement) parentElement.append(element);

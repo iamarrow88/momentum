@@ -10,6 +10,10 @@ export default class UnsplashApi {
   }
 
   async getPhotoByTag() {
-    return await this.unsplashAPI.search.getPhotos({ query: this.tag, perPage: 20, orientation: "landscape" });
+    return await this.unsplashAPI.search.getPhotos({
+      query: this.tag,
+      perPage: 20,
+      orientation: "landscape",
+    });
   }
 }

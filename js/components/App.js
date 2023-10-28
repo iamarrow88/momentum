@@ -5,37 +5,29 @@ import Base from "./base/Base.js";
 import Weather from "./Weather.js";
 import ToDo from "./ToDo.js";
 
-import inputChangeHandler from '../services/inputChangeHandler.js'
+import inputChangeHandler from "../services/inputChangeHandler.js";
 import clicksHandler from "../services/clicksHandler.js";
 import Settings from "./Settings.js";
-/*import changeHandler from "../services/changeHandler.js";
-import getInputValue from "../services/getInputValue.js";*/
-
-/* !TODO
-*    +смена иконки в плеере при проигрывании,остановке музыки
-*    +смена языка в приложении (рус, англ, бел)
-*    +регулировка звука в плеере
-*    доделать тудушку (удаление задачи)
-*    передалать настройки (спрятать показать меню, плеер и тп
-*    сделать ловушку для цитат, если не подгружается новая (типа упс, не получили цитату, вот вам нашенская рандомная
-*    + переписать все на классах
-*    + подгрузка обоев из UnsplashApi
-*    сделать подложку под блоки (вкл/выкл)
-*    сделать сортировку тасков по id?
-*
-*    сделать отдельный модуль с функциями удаления, досбалвения и пр из локал сторадж
-* выбор цвета для шрифта на странице
-* возможность отключать/отображать подложку для блоков
-* */
-
 
 class App extends Base {
   constructor(lang, name, city, store, HTMLElements) {
     super(lang, name, HTMLElements, city);
     this.date = new Date();
     this.appStore = store;
-    this.player = new Player(lang, name, city, store.HTMLElements, store.player);
-    this.background = new ClocksBackground(lang, name, store.clocks, store.translation, store.HTMLElements);
+    this.player = new Player(
+      lang,
+      name,
+      city,
+      store.HTMLElements,
+      store.player,
+    );
+    this.background = new ClocksBackground(
+      lang,
+      name,
+      store.clocks,
+      store.translation,
+      store.HTMLElements,
+    );
     this.quotes = new Quotes(lang, store.quotes, HTMLElements);
     this.weather = new Weather(lang, city, HTMLElements, this.appStore.weather);
     this.toDo = new ToDo(lang, store.toDo.tasksArray, HTMLElements);
@@ -47,8 +39,10 @@ class App extends Base {
       this.lang = newLang;
       localStorage.setItem("lang", newLang);
     } else {
-      console.log("Ошибка - введенный язык не найден. Выбран английский язык.\n"
-      + "Attention! The selected language is not found. English was set.");
+      console.log(
+        "Ошибка - введенный язык не найден. Выбран английский язык.\n" +
+          "Attention! The selected language is not found. English was set.",
+      );
       this.lang = "en";
       localStorage.setItem("lang", "en");
     }
@@ -82,33 +76,25 @@ class App extends Base {
       todo: this.toDo,
       quotes: this.quotes,
       settings: this.settings,
-    }
+    };
     this.HTMLElements.background.element.addEventListener("click", (e) => {
       clicksHandler(e, clickOptions);
     });
 
     this.HTMLElements.background.element.addEventListener("input", (e) => {
-      this.player.changeHandler(e, /*{ player: this.player }*/)
-    })
+      this.player.changeHandler(e);
+    });
 
     const options = {
       weather: this.weather,
       name: this.background,
       todo: this.toDo,
-    }
+    };
 
-    this.HTMLElements.background.element.addEventListener('change', (e) => {
+    this.HTMLElements.background.element.addEventListener("change", (e) => {
       inputChangeHandler(e, options);
       options.name.nameHandler(e);
     });
-
-    console.log(this);
-    console.log(this.player);
-    this.lang = 'ru';
-    console.log(this);
-
-    console.log(this.player);
-
   }
 }
 

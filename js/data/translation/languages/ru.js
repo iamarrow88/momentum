@@ -1,8 +1,8 @@
 const ru = {
-  night: "Доброй ночи",
-  morning: "ДОброе утро",
-  afternoon: "Добрый день",
-  evening: "Добрый вечер",
+  night: "Доброй ночи, ",
+  morning: "ДОброе утро, ",
+  afternoon: "Добрый день, ",
+  evening: "Добрый вечер, ",
   "[placeholder]weather-city-input": "Введите название города",
   "weather-error": "Ошибка!",
   "weather-wind-text": "Скорость ветра: ",

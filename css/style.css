@@ -1,9 +1,9 @@
 /*--------------------  COMMON STYLES  ---------------------------------*/
 
 @font-face {
-  font-family: 'Arial-MT';
+  font-family: "Arial-MT";
   src: url("../assets/fonts/Arial-MT.woff"); /* Путь к файлу со шрифтом */
- }
+}
 
 * {
   box-sizing: border-box;
@@ -26,7 +26,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   font-size: 18px;
   color: #fff;
   text-align: center;
@@ -43,7 +43,8 @@ a {
   color: inherit;
 }
 
-a:hover, a:visited {
+a:hover,
+a:visited {
   color: inherit;
 }
 
@@ -63,7 +64,7 @@ button {
   align-items: flex-start;
   width: 100%;
   height: 30vh;
-  min-height: 220px;  
+  min-height: 220px;
   padding: 4%;
 }
 
@@ -71,7 +72,7 @@ button {
 
 .player {
   opacity: 1;
-  transition: opacity .5s;
+  transition: opacity 0.5s;
   width: 350px;
 }
 
@@ -106,7 +107,7 @@ button {
 }
 
 .song:hover {
-  opacity: .8;
+  opacity: 0.8;
   cursor: pointer;
 }
 
@@ -118,18 +119,17 @@ button {
 
 .player-controls__mute::after {
   display: block;
-  height: .1rem;
+  height: 0.1rem;
   width: 4.5rem;
   background-color: #fff;
-  content: '';
+  content: "";
   position: absolute;
   top: 13px;
   left: 34px;
 }
 
-
 .item-active::before {
-  color: #C5B358;
+  color: #c5b358;
 }
 /*--------------------  ICONS  ---------------------------------*/
 
@@ -140,9 +140,9 @@ button {
   height: 3rem;
   border: 0;
   outline: 0;
-  opacity: .8;
+  opacity: 0.8;
   cursor: pointer;
-  transition: .3s;  
+  transition: 0.3s;
 }
 
 .player-icon:hover,
@@ -155,7 +155,7 @@ button {
 .slider-icon:active,
 .quote__change-btn:active {
   border: 0;
-  outline: 0;  
+  outline: 0;
   transform: scale(1.1);
 }
 
@@ -167,10 +167,10 @@ button {
   align-items: flex-start;
   row-gap: 5px;
   width: 180px;
-  min-height: 180px;  
+  min-height: 180px;
   text-align: left;
   opacity: 1;
-  transition: opacity .5s;
+  transition: opacity 0.5s;
 }
 
 .weather-info {
@@ -202,17 +202,17 @@ button {
   padding: 5px;
   font-size: 20px;
   line-height: 24px;
-  color: #fff;  
+  color: #fff;
   border: 0;
   outline: 0;
   border-bottom: 1px solid #fff;
   background-color: transparent;
 }
 
-.city::placeholder {  
+.city::placeholder {
   font-size: 20px;
   color: #fff;
-  opacity: .6;
+  opacity: 0.6;
 }
 
 /*--------------------  MAIN  ---------------------------------*/
@@ -225,7 +225,7 @@ button {
   align-items: center;
   flex: 40vh;
   width: 100%;
-  min-height: 260px;  
+  min-height: 260px;
   padding: 20px;
 }
 
@@ -242,7 +242,8 @@ button {
   left: 20px;
 }
 
-.slide-prev svg, .slide-next svg {
+.slide-prev svg,
+.slide-next svg {
   display: block;
   width: 50px;
 }
@@ -256,11 +257,11 @@ button {
 .time {
   min-height: 124px;
   margin-bottom: 10px;
-  font-family: 'Arial-MT', Serif;
+  font-family: "Arial-MT", Serif;
   font-size: 100px;
   letter-spacing: -4px;
   opacity: 1;
-  transition: opacity .5s;
+  transition: opacity 0.5s;
 }
 
 /*--------------------  DATE  ---------------------------------*/
@@ -270,7 +271,7 @@ button {
   font-size: 24px;
   margin-bottom: 20px;
   opacity: 1;
-  transition: opacity .5s;
+  transition: opacity 0.5s;
 }
 
 /*--------------------  GREETINGS  ---------------------------------*/
@@ -285,11 +286,11 @@ button {
   width: 100vw;
   font-size: 40px;
   opacity: 1;
-  transition: opacity .5s;
+  transition: opacity 0.5s;
 }
 
 .greeting {
-  flex: 1;  
+  flex: 1;
   padding: 10px;
   text-align: right;
 }
@@ -308,7 +309,7 @@ button {
 
 .name::placeholder {
   color: #fff;
-  opacity: .6;
+  opacity: 0.6;
 }
 
 /*--------------------  TO DO  ---------------------------------*/
@@ -324,7 +325,7 @@ button {
   flex-direction: column;
   width: 40%;
   opacity: 1;
-  transition: opacity .5s;
+  transition: opacity 0.5s;
 }
 
 .to-do__input {
@@ -345,7 +346,6 @@ button {
   color: antiquewhite;
   border: 1px solid #737373;
 }
-
 
 .to-do__input::placeholder {
   font-family: inherit;
@@ -437,20 +437,21 @@ input[type="checkbox"]:checked {
   flex-direction: column;
   /*width: 270px;*/
   /*height: 370px;*/
-  background-color: rgba(171, 171, 171, .7);
+  background-color: rgba(171, 171, 171, 0.7);
   color: #d9d9d9;
   justify-content: space-between;
   text-align: left;
   z-index: 15;
   opacity: 0;
-  transition: all .5s;
+  transition: all 0.5s;
 }
 
 .settings-block button {
   padding: 5px;
 }
 
-.settings-block__item, .hide-block__item {
+.settings-block__item,
+.hide-block__item {
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
@@ -488,15 +489,15 @@ input[type="checkbox"]:checked {
   justify-content: flex-end;
   gap: 15px;
   opacity: 1;
-  transition: opacity .5s;
+  transition: opacity 0.5s;
 }
 
 .quote__quote {
   position: relative;
   padding: 20px 10px;
   margin-bottom: 12px;
-  background: rgba(227, 222, 216, .3);
-  border: 4px solid rgba(227, 222, 216, .3);
+  background: rgba(227, 222, 216, 0.3);
+  border: 4px solid rgba(227, 222, 216, 0.3);
   max-width: 100%;
   font-style: italic;
   color: darkgray;
@@ -504,7 +505,8 @@ input[type="checkbox"]:checked {
   border-radius: 6px;
 }
 
-.quote__quote:after, .quote__quote:before {
+.quote__quote:after,
+.quote__quote:before {
   top: 107%;
   left: 85%;
   border: solid transparent;
@@ -517,14 +519,14 @@ input[type="checkbox"]:checked {
 
 .quote__quote:after {
   border-color: rgba(136, 183, 213, 0);
-  border-top-color: rgba(227, 222, 216, .3);
-  opacity: .3;
+  border-top-color: rgba(227, 222, 216, 0.3);
+  opacity: 0.3;
   border-width: 15px;
   margin-left: 13px;
 }
 .quote__quote:before {
   border-color: rgba(194, 225, 245, 0);
-  border-top-color: rgba(227, 222, 216, .3);
+  border-top-color: rgba(227, 222, 216, 0.3);
   background-color: transparent;
   border-width: 21px;
   margin-left: 6px;
@@ -548,9 +550,8 @@ input[type="checkbox"]:checked {
 .display-none {
   /*display: none;*/
   opacity: 0;
-  transition: opacity .5s;
+  transition: opacity 0.5s;
 }
-
 
 .playing-song {
   color: #5c0ea3;
@@ -565,7 +566,7 @@ input[type="checkbox"]:checked {
 @media (max-width: 768px) {
   .time {
     min-height: 80px;
-    font-size: 72px;    
+    font-size: 72px;
   }
 
   .greeting-container {
@@ -591,7 +592,6 @@ input[type="checkbox"]:checked {
   }
 
   .player {
-
   }
 
   body {

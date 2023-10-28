@@ -5,8 +5,7 @@ import getInputValue from "../services/getInputValue.js";
 export default class ClocksBackground extends Base {
   constructor(lang, name, clocksOptions, translation, HTMLElements) {
     super(lang, name, HTMLElements);
-    this._savedLang = '';
-    this._savedLang = '';
+    this._savedLang = "";
     this._translation = translation;
     this._locales = this.setLocales(this.lang);
     this._timeOfTheDay = "";
@@ -15,7 +14,8 @@ export default class ClocksBackground extends Base {
     this._createImgsIndicator = 0;
     this._currentPictureNumber = null;
     this._dateOptions = clocksOptions.dateOptions;
-    this._isAPISource = localStorage.getItem('isSourceAPI') || clocksOptions.isAPISource;
+    this._isAPISource =
+      localStorage.getItem("isSourceAPI") || clocksOptions.isAPISource;
     this._timeOfADayBorders = clocksOptions.timeOfADayBorders;
     this.backgroundCollectionElements = [];
   }
@@ -24,7 +24,12 @@ export default class ClocksBackground extends Base {
     this.setTimeOfTheDay();
     this.createGreetsBlock();
     this.setTimeAndDateOnPage(this.lang);
-    this.insertDateToHTML(new Date(), this.HTMLElements.date.element, this._locales, this._dateOptions);
+    this.insertDateToHTML(
+      new Date(),
+      this.HTMLElements.date.element,
+      this._locales,
+      this._dateOptions,
+    );
     this.createImages(this._numberOfPictures);
     this.loadImages(this._numberOfPictures);
     this.setBackgroundImage();
@@ -34,15 +39,28 @@ export default class ClocksBackground extends Base {
     const currentDate = new Date();
     this.insertTimeToHTML(this.HTMLElements.time.element, currentDate);
     if (currentDate.toLocaleTimeString() === "00:00:00") {
-      this.insertDateToHTML(currentDate, this.HTMLElements.date.element, this._locales, this._dateOptions);
+      this.insertDateToHTML(
+        currentDate,
+        this.HTMLElements.date.element,
+        this._locales,
+        this._dateOptions,
+      );
     }
     const hours = currentDate.getHours();
-    const newTimeOfTheDay = this.getTimeOfTheDayString(hours, this._timeOfADayBorders);
+    const newTimeOfTheDay = this.getTimeOfTheDayString(
+      hours,
+      this._timeOfADayBorders,
+    );
     if (this._timeOfTheDay !== newTimeOfTheDay) {
       this._timeOfTheDay = newTimeOfTheDay;
       this.loadImages(this._numberOfPictures);
       this.setBackgroundImage();
-      this.insertGreetToHTML(this._timeOfTheDay, selectedLang, this._translation, this.HTMLElements.greeting.element);
+      this.insertGreetToHTML(
+        this._timeOfTheDay,
+        selectedLang,
+        this._translation,
+        this.HTMLElements.greeting.element,
+      );
     }
     setTimeout(() => {
       this.setTimeAndDateOnPage(selectedLang);
@@ -50,7 +68,10 @@ export default class ClocksBackground extends Base {
   }
 
   setTimeOfTheDay() {
-    this._timeOfTheDay = this.getTimeOfTheDayString(new Date().getHours(), this._timeOfADayBorders);
+    this._timeOfTheDay = this.getTimeOfTheDayString(
+      new Date().getHours(),
+      this._timeOfADayBorders,
+    );
   }
 
   setLocales(lang) {
@@ -61,7 +82,9 @@ export default class ClocksBackground extends Base {
     if (newNumber < this._numberOfPictures || newNumber >= 0) {
       this._currentPictureNumber = newNumber;
     } else {
-      throw new Error("Такого номера для фоновой картинки не существует. Установите другой номер");
+      throw new Error(
+        "Такого номера для фоновой картинки не существует. Установите другой номер",
+      );
     }
   }
 
@@ -69,10 +92,10 @@ export default class ClocksBackground extends Base {
     this.HTMLElements.greetsBlock.element.innerHTML = "";
     let greetLine; //span class greeting
     this.HTMLElements.nameBox.element = this.createElement(
-        "div",
-        "name__box",
-        null,
-        [],
+      "div",
+      "name__box",
+      null,
+      [],
     );
     let nameLine;
     if (this.name) {
@@ -86,32 +109,32 @@ export default class ClocksBackground extends Base {
         "span",
         "name__div",
         this.HTMLElements.nameBox.element,
-        []
+        [],
       );
     } else {
       greetLine = this.createElement(
         "span",
         "greeting",
         this.HTMLElements.greetsBlock.element,
-        [{ "data-translate": "hello-name" }]
+        [{ "data-translate": "hello-name" }],
       );
-      this.createElement(
-        "label",
-        null,
-        this.HTMLElements.greetsBlock.element,
-        [{ for: "name" }]
-      );
+      this.createElement("label", null, this.HTMLElements.greetsBlock.element, [
+        { for: "name" },
+      ]);
       nameLine = this.createElement(
         "input",
         "name__input",
         this.HTMLElements.nameBox.element,
-        [ { type: "text" }, { id: "name" }, { placeholder: "Enter your name" }]
+        [{ type: "text" }, { id: "name" }, { placeholder: "Enter your name" }],
       );
     }
-    greetLine.textContent = this._translation[this.lang][`${this._timeOfTheDay}`];
+    greetLine.textContent =
+      this._translation[this.lang][`${this._timeOfTheDay}`];
     nameLine.textContent = this.name;
-    this.HTMLElements.nameBox.element.innerHTML += '!';
-    this.HTMLElements.greetsBlock.element.appendChild(this.HTMLElements.nameBox.element);
+    this.HTMLElements.nameBox.element.innerHTML += "!";
+    this.HTMLElements.greetsBlock.element.appendChild(
+      this.HTMLElements.nameBox.element,
+    );
   }
 
   insertDateToHTML(date, dateBlock, locales, dateOptions) {
@@ -124,7 +147,10 @@ export default class ClocksBackground extends Base {
 
   getTimeOfTheDayString(hours, timeOfADayBorders) {
     for (const time in timeOfADayBorders) {
-      if (hours >= timeOfADayBorders[time].start && hours <= timeOfADayBorders[time].end) {
+      if (
+        hours >= timeOfADayBorders[time].start &&
+        hours <= timeOfADayBorders[time].end
+      ) {
         if (time === "night1" || time === "night2") {
           return "night";
         }
@@ -152,7 +178,7 @@ export default class ClocksBackground extends Base {
     greetBlock.innerHTML = `${translation[lang][result]} `;
   }
 
-  createImages(allPicturesNumber){
+  createImages(allPicturesNumber) {
     for (let i = 0; i < allPicturesNumber; i++) {
       const img = new Image();
       img.dataset.backgroundId = i;
@@ -187,11 +213,20 @@ export default class ClocksBackground extends Base {
       });
     } else {
       for (let i = 0; i < this._numberOfPictures; i++) {
-        this.backgroundCollectionElements[i].src = `${this.composeBGPicturePath(this._timeOfTheDay, (i + 1) <= 9 ? `0${i + 1}` : (i + 1).toString())}`;
-        if([...this.backgroundCollectionElements[i].classList].includes('API-image')) {
+        this.backgroundCollectionElements[i].src = `${this.composeBGPicturePath(
+          this._timeOfTheDay,
+          i + 1 <= 9 ? `0${i + 1}` : (i + 1).toString(),
+        )}`;
+        if (
+          [...this.backgroundCollectionElements[i].classList].includes(
+            "API-image",
+          )
+        ) {
           this.backgroundCollectionElements[i].classList.remove("API-image");
         }
-        this.HTMLElements.carousel.element.append(this.backgroundCollectionElements[i]);
+        this.HTMLElements.carousel.element.append(
+          this.backgroundCollectionElements[i],
+        );
       }
     }
   }
@@ -218,13 +253,15 @@ export default class ClocksBackground extends Base {
 
   setBackgroundImage(pictureNumber) {
     if (!pictureNumber) {
-      if(pictureNumber !== 0){
+      if (pictureNumber !== 0) {
         pictureNumber = this.getRandomNumber(this._numberOfPictures);
       }
     }
     this._currentPictureNumber = pictureNumber;
-    this.backgroundCollectionElements.forEach((block) => block.classList.remove("visible"));
-    if(!this.backgroundCollectionElements[pictureNumber]) {
+    this.backgroundCollectionElements.forEach((block) =>
+      block.classList.remove("visible"),
+    );
+    if (!this.backgroundCollectionElements[pictureNumber]) {
       pictureNumber = 0;
     }
     this.backgroundCollectionElements[pictureNumber].classList.add("visible");
@@ -240,118 +277,103 @@ export default class ClocksBackground extends Base {
       } else if (eTargetClassList[theLastClassNumber] === "slide-prev") {
         direction = "prev";
       }
-      const pictureNumber = this.getNextPictureNumber(direction, this._currentPictureNumber, this._numberOfPictures);
+      const pictureNumber = this.getNextPictureNumber(
+        direction,
+        this._currentPictureNumber,
+        this._numberOfPictures,
+      );
       this.setBackgroundImage(pictureNumber);
     } else if (eTargetClassList[0] === "name") {
-    } else if(eTargetClassList.includes('settings-icon')) {
-      this.HTMLElements.settingsBlock.element.classList.toggle('visible');;
-    } else if(eTargetClassList.includes('api')) {
-      localStorage.setItem('isSourceAPI', true);
-      this._isAPISource = true;
-      this.loadImages(this._numberOfPictures);
-      this.setBackgroundImage();
-      this.HTMLElements.settingsBlock.element.classList.toggle('visible');
-    } else if(eTargetClassList.includes('github')) {
-      localStorage.setItem('isSourceAPI', false);
-      this._isAPISource = false;
-      this.loadImages(this._numberOfPictures);
-      this.setBackgroundImage();
-      this.HTMLElements.settingsBlock.element.classList.toggle('visible');
+    } else if (eTargetClassList.includes("settings-icon")) {
+      this.HTMLElements.settingsBlock.element.classList.toggle("visible");
     }
   }
 
-  setCustomerName(newName){
+  setCustomerName(newName) {
     this.name = newName;
     return this.name;
   }
 
-  refreshLocalStorageName(newName){
-    localStorage.setItem('name', newName);
+  refreshLocalStorageName(newName) {
+    localStorage.setItem("name", newName);
     return true;
   }
 
-  deleteLocalStorageName(){
-    localStorage.removeItem('name');
+  deleteLocalStorageName() {
+    localStorage.removeItem("name");
     return true;
   }
 
-  isItDivCheck(){
+  isItDivCheck() {
     let res;
-    if(document.querySelector('.name__input')){
+    if (document.querySelector(".name__input")) {
       res = false;
-    } else if(document.querySelector('.name__div')){
+    } else if (document.querySelector(".name__div")) {
       res = true;
     } else {
       res = true;
     }
 
-    this.HTMLElements.nameBox.element = document.querySelector('.name__box').innerHTML = '';
+    this.HTMLElements.nameBox.element = document.querySelector(
+      ".name__box",
+    ).innerHTML = "";
     return res;
   }
-  /**
-   * @param проверяет ;
-   * */
-  /*createNameBox(){
-    let box;
-    if(this.isItDivCheck()){
-      if(!this.HTMLElements.nameInput || !this.HTMLElements.nameInput.element){
-        this.HTMLElements.nameInput.element = this.createElement('input', 'name__input', null, [{'id': 'name'}, {'type': 'text'}, {}]);
-        this.HTMLElements.nameInput.selector = '.name__input';
-      }
-      box = this.HTMLElements.nameInput.element;
-      box.value = this.name;
 
-    } else {
-      if(!this.HTMLElements.nameDiv || !this.HTMLElements.nameDiv.element){
-        this.HTMLElements.nameDiv.element = this.createElement('span', 'name__div', null, null);
-        this.HTMLElements.nameDiv.selector = '.name__div';
-      }
-      box = this.HTMLElements.nameDiv.element;
-      box.innerHTML = this.name;
-    }
-    this.HTMLElements.nameBox.element.innerHTML = '';
-    this.HTMLElements.nameBox.element.appendChild(box);
 
-    return box;
-  }*/
-  /**
-   * @param {HTMLElement} child can be only HTML element;
-   * @param {HTMLElement} parent can be only HTML element; always returns true
-   * */
-  addNewElementToParent(child, parent){
+  addNewElementToParent(child, parent) {
     parent.appendChild(child);
     return true;
   }
 
-  nameHandler(e){
-    if(e.target.nodeName !== 'INPUT' || e.type === 'change'){
-
-      const value = getInputValue(document.querySelector('.name__input'));
-      if(value) {
+  nameHandler(e) {
+    if (e.target.nodeName !== "INPUT" || e.type === "change") {
+      const value = getInputValue(document.querySelector(".name__input"));
+      if (value) {
         this.setCustomerName(value);
         this.setCustomerName(this.name);
         this.refreshLocalStorageName(this.name);
-        document.querySelector('.name__box').innerHTML = '';
+        document.querySelector(".name__box").innerHTML = "";
 
-        if(!this.HTMLElements.nameDiv || !this.HTMLElements.nameDiv.element){
-          this.HTMLElements.nameDiv.element = this.createElement('span', 'name__div', null, null);
-          this.HTMLElements.nameDiv.selector = '.name__div';
+        if (!this.HTMLElements.nameDiv || !this.HTMLElements.nameDiv.element) {
+          this.HTMLElements.nameDiv.element = this.createElement(
+            "span",
+            "name__div",
+            null,
+            null,
+          );
+          this.HTMLElements.nameDiv.selector = ".name__div";
         }
         this.HTMLElements.nameDiv.element.innerHTML = this.name;
 
-        this.HTMLElements.nameBox.element.appendChild(this.HTMLElements.nameDiv.element);
+        this.HTMLElements.nameBox.element.appendChild(
+          this.HTMLElements.nameDiv.element,
+        );
       } else {
-        if([...e.target.classList].includes('name__div')) {
-          e.target.innerHTML = '';
-          if(!this.HTMLElements.nameInput || !this.HTMLElements.nameInput.element){
-            this.HTMLElements.nameInput.element = this.createElement('input', 'name__input', null, [{'placeholder': `Enter your name`}, {'data-translate': '[placeholder]customerName'}, {'type': 'text'}, {'id': 'name'}, {"onfocus":"this.value=''"}]);
-            this.HTMLElements.nameInput.selector = '.name__input';
+        if ([...e.target.classList].includes("name__div")) {
+          e.target.innerHTML = "";
+          if (
+            !this.HTMLElements.nameInput ||
+            !this.HTMLElements.nameInput.element
+          ) {
+            this.HTMLElements.nameInput.element = this.createElement(
+              "input",
+              "name__input",
+              null,
+              [
+                { placeholder: `Enter your name` },
+                { "data-translate": "[placeholder]customerName" },
+                { type: "text" },
+                { id: "name" },
+                { onfocus: "this.value=''" },
+              ],
+            );
+            this.HTMLElements.nameInput.selector = ".name__input";
           }
           this.HTMLElements.nameInput.element.value = this.name;
           e.target.appendChild(this.HTMLElements.nameInput.element);
         }
       }
-
     }
   }
 }

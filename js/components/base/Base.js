@@ -20,9 +20,13 @@ export default class Base {
   searchHTMLElements() {
     for (const className in this.HTMLElements) {
       if (this.HTMLElements[className].isArray) {
-        this.HTMLElements[className].element = document.querySelectorAll(this.HTMLElements[className].selector);
+        this.HTMLElements[className].element = document.querySelectorAll(
+          this.HTMLElements[className].selector,
+        );
       } else {
-        this.HTMLElements[className].element = document.querySelector(this.HTMLElements[className].selector);
+        this.HTMLElements[className].element = document.querySelector(
+          this.HTMLElements[className].selector,
+        );
       }
     }
   }
@@ -49,18 +53,17 @@ export default class Base {
     const response = await fetch(`${url}`);
     return {
       isOk: response.ok,
-      json: await response.json()
+      json: await response.json(),
     };
   }
 
   async getDataNoCors(url) {
     const response = await fetch(`${url}`);
 
-    if(response.ok) {
+    if (response.ok) {
       return response.json();
     } else {
-
-      throw new Error('Ошибка, данные не получены   ' + `${response.status}`)
+      throw new Error("Ошибка, данные не получены   " + `${response.status}`);
     }
   }
 

@@ -160,24 +160,34 @@ const appConfig = {
       element: null,
     },
     quote: {
-      selector: '.quote__quote',
+      selector: ".quote__quote",
       element: null,
     },
     quoteAuthor: {
-      selector: '.quote__author',
+      selector: ".quote__author",
       element: null,
     },
     settingsBlock: {
-      selector: '.footer__settings',
+      selector: ".footer__settings",
       element: null,
-    }
+    },
   },
   translation,
-  blocks: ["Player", "Weather", "Clocks", "Date", "Greets", "ToDo", "Quotes", "Settings", "Background"],
+  blocks: [
+    "Player",
+    "Weather",
+    "Clocks",
+    "Date",
+    "Greets",
+    "ToDo",
+    "Quotes",
+    "Settings",
+    "Background",
+  ],
 
   player: {
     tracksMap: tracks, // [{string: number, string: string, string: string}]
-    src: ["./assets/mp3/",".mp3"],
+    src: ["./assets/mp3/", ".mp3"],
     volume: +localStorage.getItem("volume") || 30, // number
     prevPlayedTrackID: +localStorage.getItem("prevPlayedTrackID") || null, // number | null
     nextPlayedTrackID: +localStorage.getItem("nextPlayedTrackID") || null, // number | null
@@ -185,10 +195,12 @@ const appConfig = {
     pathToSVGIcon: "assets/svg/sprite.svg#", // string
     svgPathEndpoints: svgPath, // {string: string}
     buttonsToToggle: {
-      play: "pause", pause: "play", volume: "mute", mute: "volume",
+      play: "pause",
+      pause: "play",
+      volume: "mute",
+      mute: "volume",
     }, // {string: string}
     SVGClassButtons: ["play", "pause", "play-prev", "play-next", "volume"], // [number]
-
   },
   weather: {
     responseSchema: {
@@ -200,7 +212,13 @@ const appConfig = {
     },
     APIKey: "1e86aeecc6661092d35f019637c03153",
     urlToIcon: "https://openweathermap.org/img/wn/",
-    blocksToHide: ['iconPath', 'temperatureBlock', 'description', 'windBlock', 'humidityBlock']
+    blocksToHide: [
+      "iconPath",
+      "temperatureBlock",
+      "description",
+      "windBlock",
+      "humidityBlock",
+    ],
   },
   clocks: {
     isAPISource: false,
@@ -227,7 +245,10 @@ const appConfig = {
       },
     },
     dateOptions: {
-      weekday: "long", year: "numeric", month: "long", day: "numeric",
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     },
   },
   quotes: {
@@ -238,20 +259,20 @@ const appConfig = {
   toDo: {
     tasksArray: [
       {
-        taskValue: 'Something',
+        taskValue: "Something",
         done: false,
-        id: 0
+        id: 0,
       },
       {
-        taskValue: 'To',
+        taskValue: "To",
         done: false,
-        id: 1
+        id: 1,
       },
       {
-        taskValue: 'Do',
+        taskValue: "Do",
         done: false,
-        id: 2
-      }
+        id: 2,
+      },
     ], // []
   },
 };

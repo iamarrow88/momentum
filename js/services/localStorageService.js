@@ -1,22 +1,22 @@
 const LocalStorageService = {
-  setItemToLocalStorage(key, value){
+  setItemToLocalStorage(key, value) {
     localStorage.setItem(key, value);
     return value;
   },
 
-  getItemFromLocalStorage(key){
+  getItemFromLocalStorage(key) {
     return localStorage.getItem(key);
   },
 
-  deleteItemFromLocalStorage(key){
+  deleteItemFromLocalStorage(key) {
     localStorage.removeItem(key);
     return true;
   },
 
-  clearLocalStorage(){
+  clearLocalStorage() {
     localStorage.clear();
     return true;
-  }
-}
+  },
+};
 
 export default LocalStorageService;
