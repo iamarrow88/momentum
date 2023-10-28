@@ -13,31 +13,31 @@
 
 
       <div class="player">
-        <audio class="player__audio" id="player__audio" preload="auto"></audio>
+        <audio class="player__audio" id="player__audio" preload="auto" src="/src/public/sounds/0.mp3"></audio>
         <div class="player__header">
           <div class="player-controls">
             <div class="player-controls__playback">
               <div class="player-icon svg-parent" data-button-name="play-prev">
                 <svg class="svg-icon" data-button-name="play-prev">
                   <use class="use-icon" data-button-name="play-prev"
-                       xlink:href="/assets/svg/sprite.svg#play-prev"></use>
+                       xlink:href="src/assets/svg/sprite.svg#play-prev"></use>
                 </svg>
               </div>
               <div class="player-icon svg-parent" data-button-name="playManagement">
                 <svg class="svg-icon" data-button-name="playManagement">
-                  <use class="use-icon" data-button-name="playManagement" xlink:href="/assets/svg/sprite.svg#play"></use>
+                  <use class="use-icon" data-button-name="playManagement" xlink:href="src/assets/svg/sprite.svg#play"></use>
                 </svg>
               </div>
               <div class="player-icon svg-parent" data-button-name="play-next">
                 <svg class="svg-icon" data-button-name="play-next">
                   <use class="use-icon" data-button-name="play-next"
-                       xlink:href="/assets/svg/sprite.svg#play-next"></use>
+                       xlink:href="src/assets/svg/sprite.svg#play-next"></use>
                 </svg>
               </div>
             </div>
             <div class="player-controls__volume svg-parent" data-button-name="volume">
               <svg class="svg-icon" data-button-name="volume">
-                <use class="use-icon" data-button-name="volume" xlink:href="/assets/svg/sprite.svg#volume"></use>
+                <use class="use-icon" data-button-name="volume" xlink:href="src/assets/svg/sprite.svg#volume"></use>
               </svg>
               <div class="volume-bar__wrapper">
                 <input class="volume-bar__range" type="range" min="0" max="100" step="1" value="0" data-button-name="range"></div>
@@ -62,7 +62,7 @@
                 <div class="song__title" data-songid="0" data-button-name="song-content">The Moth &amp; The Flame - Simple</div>
                 <svg class="svg-icon" data-songbtn="0" data-songid="0" >
                   <use class="use-icon" data-songid="0" data-button-name="song-content"
-                       xlink:href="/assets/svg/sprite.svg#play"></use>
+                       xlink:href="src/assets/svg/sprite.svg#play"></use>
                 </svg>
               </div>
             </li>
@@ -72,7 +72,7 @@
                 <div class="song__title" data-songid="1" data-button-name="song-content">Coldplay - Paradise</div>
                 <svg class="svg-icon" data-songbtn="1" data-songid="1" data-button-name="song-content">
                   <use class="use-icon" data-songid="1" data-button-name="song-content"
-                       xlink:href="/assets/svg/sprite.svg#play"></use>
+                       xlink:href="src/assets/svg/sprite.svg#play"></use>
                 </svg>
               </div>
             </li>
@@ -82,7 +82,7 @@
                 <div class="song__title" data-songid="2" data-button-name="song-content">Lord Huron - The Night We Met</div>
                 <svg class="svg-icon" data-songbtn="2" data-songid="2" data-button-name="song-content">
                   <use class="use-icon" data-songid="2" data-button-name="song-content"
-                       xlink:href="/assets/svg/sprite.svg#play"></use>
+                       xlink:href="src/assets/svg/sprite.svg#play"></use>
                 </svg>
               </div>
             </li>
@@ -92,7 +92,7 @@
                 <div class="song__title" data-songid="3" data-button-name="song-content">Arcane Roots - Half the World</div>
                 <svg class="svg-icon" data-songbtn="3" data-songid="3" data-button-name="song-content">
                   <use class="use-icon" data-songid="3" data-button-name="song-content"
-                       xlink:href="/assets/svg/sprite.svg#play"></use>
+                       xlink:href="src/assets/svg/sprite.svg#play"></use>
                 </svg>
               </div>
             </li>
@@ -141,12 +141,12 @@
       <div class="slider-icons">
         <div class="slider-icon svg-parent slide-prev">
           <svg class="slider-icon svg-icon slide-prev">
-            <use class="slider-icon use-slide-prev slide-prev" xlink:href="assets/svg/sprite.svg#slider-prev"></use>
+            <use class="slider-icon use-slide-prev slide-prev" xlink:href="src/assets/svg/sprite.svg#slider-prev"></use>
           </svg>
         </div>
         <div class="slider-icon svg-parent slide-next">
           <svg class="slider-icon svg-icon slide-next">
-            <use class="slider-icon use-slide-next slide-next" xlink:href="assets/svg/sprite.svg#slider-prev"></use>
+            <use class="slider-icon use-slide-next slide-next" xlink:href="src/assets/svg/sprite.svg#slider-prev"></use>
           </svg>
         </div>
       </div>
@@ -171,10 +171,7 @@
             </div>
 
             <form class="to-do__task-list">
-              <div class="task__item">
-                <input type="checkbox" class="to-do__task" id="task0"/>
-                <label for="task0" data-task="0">Какие-то</label>
-              </div>
+              <div class="item__wrapper"><input class="to-do__task" id="task0" type="checkbox"><label class="to-do__task-label" id="task0" for="task0" data-task="0">Something</label></div>
               <div class="task__item">
                 <input type="checkbox" class="to-do__task" id="task1"/>
                 <label for="task1" data-task="1">разные</label>
@@ -198,7 +195,7 @@
           </div>
           <div class="quote__change-btn svg-parent change-btn">
             <svg class="svg-icon change-btn">
-              <use class="change-btn" xlink:href="assets/svg/sprite.svg#reload"></use>
+              <use class="change-btn" xlink:href="src/assets/svg/sprite.svg#reload"></use>
             </svg>
           </div>
         </div>
@@ -211,7 +208,7 @@
       <div class="footer__settings">
         <div class="settings-icon svg-parent">
           <svg class="svg-icon settings-icon">
-            <use class="use-icon settings-icon" xlink:href="assets/svg/sprite.svg#settings-bw"></use>
+            <use class="use-icon settings-icon" xlink:href="src/assets/svg/sprite.svg#settings-bw"></use>
           </svg>
         </div>
         <div class="settings-block">
@@ -322,6 +319,6 @@
     </div>
 
   </footer>
-  <script src="./js/index.js" type="module"></script>
+  <script src="./src/js/index.js" type="module"></script>
 </body>
 </html>
