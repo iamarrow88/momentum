@@ -1,5 +1,6 @@
 import Base from "./base/Base.js";
 import getInputValue from "../services/getInputValue.js";
+import localStorageService from "../services/localStorageService.js";
 
 export default class ToDo extends Base {
   constructor(lang, tasksArray, HTMLElements) {
@@ -10,11 +11,13 @@ export default class ToDo extends Base {
   }
 
   startToDo() {
-    this.tasksArray.forEach((task) => this.setTaskToLocalStorage(task));
+    this.tasksArray.forEach((task) => localStorageService.setObjectFieldsToLocalStorage(task, 'task'));
+    /*this.tasksArray.forEach((task) => this.setTaskToLocalStorage(task));*/
     this.getTasksFromLocalStorage();
-    this.tasksArray = this.sortTasks(this.tasksArray);
+    this.tasksArray = this.sortTasksByDone(this.tasksArray);
     this.idCounter = this.tasksArray.length;
     this.drawTasksList();
+    this.sortTasksByID(this.tasksArray);
   }
 
   drawTasksList() {
@@ -107,7 +110,7 @@ export default class ToDo extends Base {
     return checkbox.checked;
   }
 
-  sortTasks(taskArray) {
+  sortTasksByDone(taskArray) {
     let done = [];
     let undone = [];
     taskArray.forEach((task) => {
@@ -119,6 +122,23 @@ export default class ToDo extends Base {
     });
 
     return undone.concat(done);
+  }
+
+  sortTasksByID(taskArray){
+    const tasksIDs = taskArray.map(task => task.id);
+    tasksIDs.sort((a, b) => a - b);
+    let sortTasksArray = [];
+    tasksIDs.forEach(id => {
+      for (let i = 0; i < Object.keys(this.tasksArray).length; i++){
+        if(+this.tasksArray[i].id === +id) {
+          sortTasksArray.push(this.tasksArray[i]);
+          break;
+        }
+
+      }
+    })
+
+    return sortTasksArray;
   }
 
   addDoneStyle(checkboxElement) {
@@ -159,11 +179,11 @@ export default class ToDo extends Base {
       const taskData = this.createNewTaskData(getInputValue(e.target));
       if (taskData) {
         this.addTaskToArray(taskData);
-        this.setTaskToLocalStorage(taskData);
-        this.tasksArray = this.sortTasks(this.tasksArray);
+        localStorageService.setObjectFieldsToLocalStorage(taskData, 'task');
+        this.tasksArray = this.sortTasksByID(this.tasksArray);
+        this.tasksArray = this.sortTasksByDone(this.tasksArray);
         this.drawTasksList();
         this.cleanInput();
-        console.log(this.tasksArray);
 
       }
     } else if ([...e.target.classList].includes("to-do__btn")) {
@@ -184,7 +204,7 @@ export default class ToDo extends Base {
        */
       this.addDoneStyle(e.target);
       this.setDoneTaskData(e.target);
-      this.tasksArray = this.sortTasks(this.tasksArray);
+      this.tasksArray = this.sortTasksByDone(this.tasksArray);
       this.drawTasksList();
       /* сделать сортировку по id?*/
     } else if(e.target.dataset.action === "task-edit") {
@@ -231,7 +251,10 @@ export default class ToDo extends Base {
       })
 
       this.tasksArray = this.tasksArray.slice(0, taskToDeleteIndex).concat(this.tasksArray.slice(taskToDeleteIndex + 1));
+      this.tasksArray = this.sortTasksByID(this.tasksArray);
+      this.tasksArray = this.sortTasksByDone(this.tasksArray);
       this.drawTasksList();
+      console.log(this.tasksArray);
       /* TODO добавить возможность удаления тасков:
  * 1. + определить целевой таск
  * 2. найти его в массиве тасков прилжоения
