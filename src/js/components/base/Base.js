@@ -71,7 +71,14 @@ export default class Base {
 
   createElement(tag, className, parentElement, attributes) {
     const element = document.createElement(tag);
-    if (className) element.classList.add(className);
+    if (className) {
+
+      if(Array.isArray(className)){
+        element.classList.add(...className);
+      } else {
+        element.classList.add(className);
+      }
+    }
     if (parentElement) parentElement.append(element);
     if (attributes) {
       attributes.forEach((attr) => {

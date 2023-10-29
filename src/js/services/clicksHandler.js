@@ -22,9 +22,6 @@ export default function clicksHandler(e, options) {
     "newClass": "invisible-block"
   });
 
-  console.log(e.target);
-
-
   if (e.target.closest(".player")) {
     options.player.playerClicksHandler(e, options.player);
   } else if (
@@ -48,8 +45,24 @@ export default function clicksHandler(e, options) {
     options.todo.toDoHandler(e);
   } else if ([...e.target.classList].includes("change-btn")) {
     options.quotes.quotesHandler(e);
-  } else {
+  } else /*if ([...e.target.classList].includes("item__actions")) {
+    options.quotes.quotesHandler(e);
+  } else */{
     console.log("another element");
+    const taskInput = document.querySelector(`.item__wrapper input[type="text"]`);
+    console.log(taskInput);
+
+    if(taskInput) {
+      console.log(taskInput.closest('.item'));
+      taskInput.closest('.item').classList.remove('editing');
+      const taskValue = taskInput.value;
+      const taskID = taskInput.dataset.task;
+      console.log(taskValue, taskID);
+      options.todo.changeDivToInput(taskID, taskValue);
+      const submitChangesButton = document.querySelector(`.item[data-task="${taskID}"] .item__submit`);
+      submitChangesButton.style.display = "none";
+
+    }
     if (![...e.target.classList].includes("settings-icon")) {
       document.querySelector(".footer__settings").classList.remove("visible");
     }

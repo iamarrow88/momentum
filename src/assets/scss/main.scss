@@ -520,9 +520,46 @@ svg.slide-next {
   }
 }
 
-.task__item{
+.item{
   position: relative;
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__edit,
+  &__delete {
+    display: block;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+
+    .editing & {
+      display: none;
+    }
+  }
+
+  &:hover &__edit,
+  &:hover &__delete {
+    opacity: 1;
+    transition: opacity .3s ease-in-out;
+  }
+
+  &__submit {
+    display: none;
+
+    .editing & {
+      display: block;
+    }
+  }
+
+
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 13%;
+  }
 
 }
 

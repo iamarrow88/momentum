@@ -11,7 +11,6 @@
   <header class="header">
     <div class="header__container container">
 
-
       <div class="player">
         <audio class="player__audio" id="player__audio" preload="auto"></audio>
         <div class="player__header">
@@ -165,13 +164,24 @@
         <div class="motivation-block">
           <div class="to-do">
             <div class="to-do__header">
-              <label for="todo__input" data-translate="todo-input-label">Добавьте задачу &#8628;</label>
-              <input id="todo__input" type="text" class="to-do__input"
+              <label for="to-do__input" data-translate="todo-input-label">Добавьте задачу &#8628;</label>
+              <input id="to-do__input" type="text" class="to-do__input"
                      data-translate="[placeholder]todo-input">
             </div>
 
             <form class="to-do__task-list">
-              <div class="item__wrapper"><input class="to-do__task" id="task0" type="checkbox"><label class="to-do__task-label" id="task0" for="task0" data-task="0">Something</label></div>
+              <div class="task__item item" data-task="0">
+                <div class="item__wrapper">
+                  <input class="to-do__task" id="task0" type="checkbox">
+                  <label class="to-do__task-label" for="task0" data-task="0">Something</label>
+                  <input type="text" name="task-value" id="task-value" data-task="0">
+                </div>
+                <div class="item__actions">
+                  <span class="item__edit" data-action="task-edit">&#128393;</span>
+                  <span class="item__delete" data-action="task-delete">🗑</span>
+                  <span class="item__submit" data-action="task-submit">&#10003;</span>
+                </div>
+              </div>
               <div class="task__item">
                 <input type="checkbox" class="to-do__task" id="task1"/>
                 <label for="task1" data-task="1">разные</label>
