@@ -163,6 +163,7 @@ export default class ToDo extends Base {
         this.tasksArray = this.sortTasks(this.tasksArray);
         this.drawTasksList();
         this.cleanInput();
+        console.log(this.tasksArray);
 
       }
     } else if ([...e.target.classList].includes("to-do__btn")) {
@@ -217,17 +218,20 @@ export default class ToDo extends Base {
           ]);
 
       document.querySelector('.to-do__input').style.pointerEvents = 'none';
-      /* TODO добавить возможность редактирования тасков:
- * 1. + определить целевой таск
- * 2. +заменить див на инпут с плейсхолдером === тексту таска
- * 3 + деактивировать основное поле для ввода таска
- *
- */
 
     } else if(e.target.dataset.action === "task-delete") {
       console.log("task-delete");
-      const taskID = e.target.closest('.item').dataset.task;
-      console.log(taskID);
+      const taskID = +e.target.closest('.item').dataset.task;
+
+      let taskToDeleteIndex;
+      this.tasksArray.forEach((taskData, index) => {
+        if(+taskData.id === taskID){
+          taskToDeleteIndex = index;
+        }
+      })
+
+      this.tasksArray = this.tasksArray.slice(0, taskToDeleteIndex).concat(this.tasksArray.slice(taskToDeleteIndex + 1));
+      this.drawTasksList();
       /* TODO добавить возможность удаления тасков:
  * 1. + определить целевой таск
  * 2. найти его в массиве тасков прилжоения
