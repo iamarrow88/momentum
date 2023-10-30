@@ -190,8 +190,6 @@ const appConfig = {
     /*src: ["./assets/mp3/", ".mp3"],*/
     src: ["/sounds/", ".mp3"],
     volume: +localStorage.getItem("volume") || 30, // number
-    prevPlayedTrackID: +localStorage.getItem("prevPlayedTrackID") || null, // number | null
-    nextPlayedTrackID: +localStorage.getItem("nextPlayedTrackID") || null, // number | null
     currentTrackID: +localStorage.getItem("currentTrackID") || 1, // number
     pathToSVGIcon: "src/assets/svg/sprite.svg#", // string
     svgPathEndpoints: svgPath, // {string: string}
