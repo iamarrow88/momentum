@@ -1,5 +1,6 @@
 import Base from "./base/Base.js";
 import sprite from "../../assets/svg/sprite.svg";
+import localStorageService from "../services/localStorageService.js";
 /*import sprite from "src/assets/svg/sprite.svg";*/
 
 export default class Player extends Base {
@@ -27,32 +28,23 @@ export default class Player extends Base {
     if (elementDataset.buttonName === "playManagement") {
       this.setPlayPause(this._currentTrackID, !this._isPlaying);
     } else if (elementDataset.buttonName === "play-prev") {
-      this._currentTrackID = this.findPrevTrackID(this._currentTrackID);
-      this._prevPlayedTrackID = this.findPrevTrackID(this._currentTrackID);
-      this._nextPlayedTrackID = this.findNextTrackID(this._currentTrackID);
+      this.refreshTrackData(this.findPrevTrackID(this._currentTrackID));
+      this.setSongTitleToProgressBar(this._currentTrackID);
       this.setSrcToAudioTag(this._currentTrackID);
       if (!this._isPlaying) {
         this.HTMLElements.audioTag.element.pause();
       } else {
         this.setPlayPause(this.getCurrentTrackID(), this._isPlaying);
       }
-      /*
-      0. произвести расчет и установить текущий, предыдущий и следующие треки
-      * 1. установить выбранным треком предыдущий
-      * 2. запустить console.log('play');*/
     } else if (elementDataset.buttonName === "play-next") {
-      this._prevPlayedTrackID = this._currentTrackID;
-      this._currentTrackID = this.findNextTrackID(this._currentTrackID);
-      this._nextPlayedTrackID = this.findNextTrackID(this._currentTrackID);
+      this.refreshTrackData(this.findNextTrackID(this._currentTrackID));
+      this.setSongTitleToProgressBar(this._currentTrackID);
       this.setSrcToAudioTag(this._currentTrackID);
       if (!this._isPlaying) {
         this.HTMLElements.audioTag.element.pause();
       } else {
         this.setPlayPause(this.getCurrentTrackID(), this._isPlaying);
       }
-      /*
-       * 1. установить выбранным треком следующий
-       * 2. запустить console.log('play');*/
     } else if (elementDataset.buttonName === "volume") {
       this._isMuted = !this._isMuted;
       if (this._isMuted) {
@@ -72,14 +64,6 @@ export default class Player extends Base {
           "unmute",
         );
       }
-
-      /*
-       * 1. тоггл вкл/выкл звук в приложении
-       * 2. сменить иконку
-       * 3. убрать/включить звук
-       * 4. записать статус в локал сторажд
-       * если id трека меняется, то нужно его записывать в прев id
-       * */
     } else if (event.target.closest(".song__content")) {
       this.setCurrentTrackID = +elementDataset.songid;
       this.setPreviousTrackID = this.findPrevTrackID(this.getCurrentTrackID());
@@ -185,37 +169,39 @@ export default class Player extends Base {
   }
 
   setUp() {
-    this.searchHTMLElements();
     this.setNumberOfTracks(this.tracksMap);
-    this.setPreviousTrackID = this._currentTrackID;
-    this.setNextTrackID = this._currentTrackID;
-    this.HTMLElements.volumeRange = {
-      selector: ".volume-bar__range",
-      element: document.querySelector(
-        `${this.HTMLElements.volumeRange.selector}`,
-      ),
-    };
+    this.refreshTrackData(this._currentTrackID);
+  }
+
+  synchronizeVolumeLevelDisplay(){
     this.HTMLElements.volumeRange.element.value = this._volumeLevel;
+  }
+
+  toggleMuteIcon(){
     if (+this._volumeLevel !== 0) {
       this.changeElementSvg(
-        this.HTMLElements.volumeIcon.element,
-        this.pathToSVG + "sound-speaker",
-        "mute",
-        "unmute",
+          this.HTMLElements.volumeIcon.element,
+          this.pathToSVG + "sound-speaker",
+          "mute",
+          "unmute",
       );
     } else {
       this.changeElementSvg(
-        this.HTMLElements.volumeIcon.element,
-        this.pathToSVG + "mute",
-        "unmute",
-        "mute",
+          this.HTMLElements.volumeIcon.element,
+          this.pathToSVG + "mute",
+          "unmute",
+          "mute",
       );
     }
   }
 
   startPlayer() {
     this.setUp();
-    /*this.createPlayer();*/
+    this.createPlayer();
+    this.searchHTMLElements();
+    this.setSongTitleToProgressBar(this._currentTrackID);
+    this.synchronizeVolumeLevelDisplay();
+    this.toggleMuteIcon();
     this.checkAudioTag();
     this.HTMLElements.audioTag.element.addEventListener("ended", (e) => {
       this.endTrackListener();
@@ -223,9 +209,6 @@ export default class Player extends Base {
     this.setSrcToAudioTag(this.getCurrentTrackID());
     this.setVolume(this._volumeLevel);
     this.HTMLElements.audioTag.element.pause();
-    /*1. если текущего трека в локал сторадж нет, установить первый трек в качестве выбранного в приложении,
-        в локал сторадж и в src*/
-    this.searchHTMLElements();
   }
 
   changeHandler(e, options) {
@@ -320,6 +303,14 @@ export default class Player extends Base {
     return this._numberOfTracks;
   }
 
+  refreshTrackData(trackID){
+    this.setCurrentTrackID = trackID;
+    this.setNextTrackID = this.findNextTrackID(trackID);
+    this.setPreviousTrackID = this.findPrevTrackID(trackID);
+    localStorageService.setItemToLocalStorage('currentTrackID', trackID);
+
+  }
+
   getPrevPlayedTrackID() {
     return this._prevPlayedTrackID;
   }
@@ -353,59 +344,80 @@ export default class Player extends Base {
   createPlayer() {
     const playerWrapper = (this.HTMLElements.playerBlock.element =
       document.querySelector(".player"));
-
-    playerWrapper.insertAdjacentHTML(
-      "afterbegin",
-      '<audio class="player__audio" id="player__audio" preload="auto" autoplay></audio>\n' +
-        '<div class="player-controls">\n' +
-        '        <div class="player-controls__playback">\n' +
-        '          <div class="player-icon svg-parent play-prev" data-button-name="play-prev">\n' +
-        '            <svg class="svg-icon play-prev" data-button-name="play-prev">\n' +
-        `              <use class="use-play-prev play-prev" data-button-name="play-prev" xlink:href="${sprite}#play-prev"></use>\n` +
-        "            </svg>\n" +
-        "          </div>\n" +
-        '          <div class="player-icon svg-parent play" data-button-name="play">\n' +
-        '            <svg class="svg-icon play" data-button-name="play">\n' +
-        `              <use class="use-play play" data-button-name="play" xlink:href="${sprite}#play"></use>\n` +
-        "            </svg>\n" +
-        "          </div>\n" +
-        '          <div class="player-icon svg-parent play-next" data-button-name="play-next">\n' +
-        '            <svg class="svg-icon play-next" data-button-name="play-next">\n' +
-        `              <use class="use-play-next play-next" data-button-name="play-next" xlink:href="${sprite}#play-next"></use>\n` +
-        "            </svg>\n" +
-        "          </div>\n" +
-        "        </div>\n" +
-        '        <div class="player-controls__volume svg-parent volume" data-button-name="volume">\n' +
-        '          <svg class="svg-icon volume" data-button-name="volume">\n' +
-        `              <use class="use-volume volume" data-button-name="volume" xlink:href="${sprite}#volume"></use>\n` +
-        "          </svg>\n" +
-        '<div class="volume-bar__wrapper">\n' +
-        '              <input class="volume-bar__range" type="range" min="0" max="100" step="1" value="0">' +
-        "</div>\n" +
-        "            </div>" +
-        "        </div>\n" +
-        "      </div>",
+    playerWrapper.innerHTML = '';
+    playerWrapper.insertAdjacentHTML("afterbegin",
+        `
+              <audio class="player__audio" id="player__audio" preload="auto"></audio>
+              <div class="player__header">
+                <div class="player-controls">
+                  <div class="player-controls__playback">
+                    <div class="player-icon svg-parent" data-button-name="play-prev">
+                      <svg class="svg-icon" data-button-name="play-prev">
+                        <use class="use-icon" data-button-name="play-prev"
+                             xlink:href="${sprite}#play-prev"></use>
+                      </svg>
+                    </div>
+                    <div class="player-icon svg-parent" data-button-name="playManagement">
+                      <svg class="svg-icon" data-button-name="playManagement">
+                        <use class="use-icon" data-button-name="playManagement" xlink:href="${sprite}#play"></use>
+                      </svg>
+                    </div>
+                    <div class="player-icon svg-parent" data-button-name="play-next">
+                      <svg class="svg-icon" data-button-name="play-next">
+                        <use class="use-icon" data-button-name="play-next"
+                             xlink:href="${sprite}#play-next"></use>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="player-controls__volume svg-parent" data-button-name="volume">
+                    <svg class="svg-icon" data-button-name="volume">
+                      <use class="use-icon" data-button-name="volume" xlink:href="${sprite}#sound-speaker"></use>
+                    </svg>
+                    <div class="volume-bar__wrapper">
+                      <input class="volume-bar__range" type="range" min="0" max="100" step="1" value="0" data-button-name="range"></div>
+                  </div>
+                </div>
+                
+                <div class="player__progress progress visible">
+                  <div class="progress__title">Song TITLE</div>
+                  <div class="progress__bar">
+                    <div class="progress__start"></div>
+                    <div class="progress__end">
+                    </div>
+                  </div>
+                </div>
+              </div>
+      
+              <!--<div class="playlist">
+                <ul class="playlist__wrapper">
+                </ul>
+              </div>-->
+            `
     );
-
     const playlist = this.createElement("div", "playlist", playerWrapper);
     const playListWrapper = this.createElement(
-      "ul",
-      "playlist__wrapper",
-      playlist,
+        "ul",
+        "playlist__wrapper",
+        playlist,
     );
+
+
 
     for (let i = 0; i < this._numberOfTracks; i++) {
       playListWrapper.insertAdjacentHTML(
         "beforeend",
-        '<li class="song">\n' +
-          `<div class=\"song__content\" data-songId=\"${i}\">\n` +
-          '<div class="song__sphere"></div>\n' +
-          `<div class="song__title" data-songId="${i}">${this.tracksMap[i].author} - ${this.tracksMap[i].title}</div>\n` +
-          `<svg class="icon song-icon track${i}-play track-play" data-songbtn="${i}"data-button-name="play-${i}" >\n` +
-          `<use class="use-track${i}-play track${i}-play track-play" data-songbtn="${i}" data-button-name="play-${i}" xlink:href="${sprite}#play"></use>\n` +
-          "</svg>\n" +
-          "</div>\n" +
-          "</li>\n",
+        `
+            <li class="song">
+              <div class="song__content" data-song-id=\"${i}\" data-button-name="song-content">
+                <div class="song__sphere" data-songid=\"${i}\"></div>
+                <div class="song__title" data-songid=\"${i}\" data-button-name="song-content">${this.tracksMap[i].author} - ${this.tracksMap[i].title}</div>
+                <svg class="svg-icon" data-songbtn=\"${i}\" data-songid=\"${i}\" data-button-name="song-content">
+                  <use class="use-icon" data-songid=\"${i}\" data-button-name="song-content"
+                       xlink:href="${sprite}#play"></use>
+                </svg>
+              </div>
+            </li>
+            `
       );
     }
   }
@@ -485,11 +497,16 @@ export default class Player extends Base {
     }, 1000);
   }
 
+  setSongTitleToProgressBar(songID){
+    document.querySelector('.progress__title').innerHTML = document.querySelector(`.song__title[data-songid="${songID}"]`).innerHTML;
+  }
+
   setPlayPause(selectedTrackId, shouldStartPlay) {
     this.setSrcToAudioTag(selectedTrackId);
     if (this._refreshProgressBarProcessID) {
       clearTimeout(this._refreshProgressBarProcessID);
     }
+    this.setSongTitleToProgressBar(selectedTrackId);
     if (shouldStartPlay) {
       this._isPlaying = true;
       this.HTMLElements.audioTag.element.play();
