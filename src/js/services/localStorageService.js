@@ -29,6 +29,15 @@ const LocalStorageService = {
         localStorage.setItem(`${template}-${objectField}`, `${object[objectField]}`);
       }
     });
+  },
+
+  deleteObjectFieldsFromLocalStorage(object, objectName){
+    const key =  `${objectName}-${object.id}`; // ex 'task-1'
+    Object.keys(object).forEach((objectField) => {
+      if (objectField !== 'id' && localStorage.getItem(`${key}-${objectField}`)) {
+        localStorage.removeItem(`${key}-${objectField}`);
+      }
+    });
   }
 };
 

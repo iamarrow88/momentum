@@ -157,7 +157,7 @@ export default class ToDo extends Base {
   setDoneTaskData(taskElement) {
     this.tasksArray.forEach((task) => {
       if (+task.id === +taskElement.nextElementSibling.dataset.task)
-        task.done = true;
+        task.done = taskElement.checked;
     });
   }
 
@@ -166,16 +166,6 @@ export default class ToDo extends Base {
       [...e.target.classList].includes("to-do__input") &&
       e.type === "change"
     ) {
-      /* здесь добавляется таск в список
-       * 1. сбор данных из инпута +
-       * 2. очищение инпута +
-       * 3. создание тела таска +
-       * 4. отправка данных таска в локал сторадж
-       * 6. добавление тела таска в массив тасков приложения
-       * 7. сортировка нового массива
-       * 8. удаление старых данных из дом
-       * 9. отрисовка нового стсортировонного списка тасков
-       */
       const taskData = this.createNewTaskData(getInputValue(e.target));
       if (taskData) {
         this.addTaskToArray(taskData);
@@ -195,18 +185,10 @@ export default class ToDo extends Base {
         }
       });
     } else if ([...e.target.classList].includes("to-do__task")) {
-      /* Здесь целевой таск отмечается сделанным или несделанным
-       * 1. определяем id выбранного таска
-       * 2. находим его в массиве тасков приложения
-       * 3. отмечаем в данных таска, что он сделан/несделан
-       * 4. добавляем соответствующий стиль
-       * 5. обновляем данные в локал сторадж
-       */
       this.addDoneStyle(e.target);
       this.setDoneTaskData(e.target);
       this.tasksArray = this.sortTasksByDone(this.tasksArray);
       this.drawTasksList();
-      /* сделать сортировку по id?*/
     } else if(e.target.dataset.action === "task-edit") {
       console.log("task-edit");
       const taskID = e.target.closest('.item').dataset.task;
@@ -249,61 +231,23 @@ export default class ToDo extends Base {
           taskToDeleteIndex = index;
         }
       })
-
+      localStorageService.deleteObjectFieldsFromLocalStorage(this.tasksArray[taskToDeleteIndex], 'task');
       this.tasksArray = this.tasksArray.slice(0, taskToDeleteIndex).concat(this.tasksArray.slice(taskToDeleteIndex + 1));
       this.tasksArray = this.sortTasksByID(this.tasksArray);
       this.tasksArray = this.sortTasksByDone(this.tasksArray);
       this.drawTasksList();
-      console.log(this.tasksArray);
-      /* TODO добавить возможность удаления тасков:
- * 1. + определить целевой таск
- * 2. найти его в массиве тасков прилжоения
- * 3. удалить его из массива
- * 4. удалить данные о нем из локал сторадж
- * 5. отсортировать полученный массив приложения, присвоить его в массив тасков приложения
- * 6. удалить старые таски из дом
- * 7. отрисовать новый список тасков
- */
-
-
-    } if(e.target.dataset.action === "task-submit") {
+     } if(e.target.dataset.action === "task-submit") {
       console.log("task-submit");
       const taskID = e.target.closest('.item').dataset.task;
       const taskValue = document.querySelector('#task-value').value;
+      localStorageService.setItemToLocalStorage(`task-${taskID}-taskValue`, taskValue);
+      console.log(localStorage);
       this.changeDivToInput(taskID,taskValue);
       document.querySelector('.to-do__input').style.pointerEvents = 'auto';
       const submitChangesButton = document.querySelector(`.item[data-task="${taskID}"] .item__submit`);
       submitChangesButton.style.display = "none";
       document.querySelector(`div[data-task="${taskID}"]`).classList.remove('editing');
-
-      /*;
-      ;
-      * */
-      /* TODO добавить возможность удаления тасков:
- * 1. + определить целевой таск
- * 3. + по клику value НЕ удаляется
- * 4. после ввода по клику на галочку, любую другую область или по ентер забирается новое вэлью таска
- * 4. создается див с таким вэлью внутри
- * 5. этот такс находится в массиве тасков и его текст заменяется на новый
- * 6. также обнавляется текст таска в локал сторадж
- * 7. активировать основное поле для ввода таска
- */
-
-
     }
-  }
-
-  setTaskToLocalStorage(task) {
-    const template = `task-${task.id}`;
-
-    Object.keys(task).forEach((taskField) => {
-      if (
-        !localStorage.getItem(`${template}-${taskField}`) &&
-        taskField !== "id"
-      ) {
-        localStorage.setItem(`${template}-${taskField}`, `${task[taskField]}`);
-      }
-    });
   }
 
   changeDivToInput(taskID, taskValue){
