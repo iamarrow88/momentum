@@ -1,3 +1,20 @@
+/* LOCAL STORAGE MODEL
+initial settings:
+'lang' - app's language (default: 'en')
+'city' - city to find weather (default: 'Minsk')
+'name' - customer name (default: '')
+'volume' - уровень громкости музыки (default: 30)
+
+additional:
+'task-1-done' -
+'task-1-taskValue'----- добавленные задачи, введенные пользователем.
+        Состоят из статуса "сделанности" и собственно задачи
+
+ 'currentTrackID' - ID текущего проигрываемого трека
+
+* */
+
+
 const LocalStorageService = {
   setItemToLocalStorage(key, value) {
     localStorage.setItem(key, value);
