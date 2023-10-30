@@ -8,6 +8,7 @@ import ToDo from "./ToDo.js";
 import inputChangeHandler from "../services/inputChangeHandler.js";
 import clicksHandler from "../services/clicksHandler.js";
 import Settings from "./Settings.js";
+import localStorageService from "../services/localStorageService.js";
 
 class App extends Base {
   constructor(lang, name, city, store, HTMLElements) {
@@ -37,15 +38,14 @@ class App extends Base {
   set setLang(newLang) {
     if (Object.keys(this.appStore.translation).includes(newLang)) {
       this.lang = newLang;
-      localStorage.setItem("lang", newLang);
     } else {
       console.log(
         "Ошибка - введенный язык не найден. Выбран английский язык.\n" +
           "Attention! The selected language is not found. English was set.",
       );
       this.lang = "en";
-      localStorage.setItem("lang", "en");
     }
+    localStorageService.setItemToLocalStorage("lang", this.lang);
   }
 
   set setName(newName) {
