@@ -65,7 +65,7 @@ export default class Player extends Base {
         );
       }
     } else if (event.target.closest(".song__content")) {
-      this.setCurrentTrackID = +elementDataset.songid;
+      this.setCurrentTrackID = +elementDataset.songId;
       this.setPreviousTrackID = this.findPrevTrackID(this.getCurrentTrackID());
       this.setNextTrackID = this.findNextTrackID(this.getCurrentTrackID());
       console.log("this._isFirstClick " + this._isFirstClick);
@@ -75,7 +75,7 @@ export default class Player extends Base {
       }
       if (
         this._isPlaying &&
-        this.getCurrentTrackID() !== +elementDataset.songid
+        this.getCurrentTrackID() !== +elementDataset.songId
       ) {
         this._isPlaying = false;
       }
@@ -85,10 +85,8 @@ export default class Player extends Base {
       /*
        * 1. установить текущим треком выбранный
        * 2. запустить console.log('play');*/
-    } else if (elementDataset.buttonName === "track-play") {
-      /*
-       * 1. установить текущим треком выбранный
-       * 2. запустить console.log('play');*/
+    } else {
+      console.log('unknown dataset');
     }
   }
 
@@ -409,10 +407,10 @@ export default class Player extends Base {
         `
             <li class="song">
               <div class="song__content" data-song-id=\"${i}\" data-button-name="song-content">
-                <div class="song__sphere" data-songid=\"${i}\"></div>
-                <div class="song__title" data-songid=\"${i}\" data-button-name="song-content">${this.tracksMap[i].author} - ${this.tracksMap[i].title}</div>
-                <svg class="svg-icon" data-songbtn=\"${i}\" data-songid=\"${i}\" data-button-name="song-content">
-                  <use class="use-icon" data-songid=\"${i}\" data-button-name="song-content"
+                <div class="song__sphere" data-song-id=\"${i}\"></div>
+                <div class="song__title" data-song-id=\"${i}\" data-button-name="song-content">${this.tracksMap[i].author} - ${this.tracksMap[i].title}</div>
+                <svg class="svg-icon" data-song-id=\"${i}\" data-button-name="song-content">
+                  <use class="use-icon" data-song-id=\"${i}\" data-button-name="song-content"
                        xlink:href="${sprite}#play"></use>
                 </svg>
               </div>
@@ -427,7 +425,7 @@ export default class Player extends Base {
       bulb.classList.remove("isPlaying");
       if (
         !this.HTMLElements.audioTag.element.paused &&
-        +bulb.dataset.songid === this.getCurrentTrackID()
+        +bulb.dataset.songId === this.getCurrentTrackID()
       ) {
         bulb.classList.add("isPlaying");
       }
@@ -454,7 +452,7 @@ export default class Player extends Base {
       ? "play"
       : "pause";
 
-    const songDataset = `data-songid="${trackId}"`; //dataset конкретной песни
+    const songDataset = `data-song-id="${trackId}"`; //dataset конкретной песни
     const buttonDataset = `data-button-name="playManagement"`; // datasset общая кнопка play
 
     const songButton = document.querySelector(`.use-icon[${songDataset}]`);
@@ -498,7 +496,7 @@ export default class Player extends Base {
   }
 
   setSongTitleToProgressBar(songID){
-    document.querySelector('.progress__title').innerHTML = document.querySelector(`.song__title[data-songid="${songID}"]`).innerHTML;
+    document.querySelector('.progress__title').innerHTML = document.querySelector(`.song__title[data-song-id="${songID}"]`).innerHTML;
   }
 
   setPlayPause(selectedTrackId, shouldStartPlay) {
