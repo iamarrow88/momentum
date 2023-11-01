@@ -69,6 +69,7 @@ class App extends Base {
     this.quotes.startQuotes();
     this.toDo.startToDo();
     this.settings.startSettings();
+    document.querySelectorAll('div.slider-icon').forEach(icon => icon.style.height = `${window.innerHeight}`);
     const clickOptions = {
       player: this.player,
       background: this.background,
@@ -93,7 +94,6 @@ class App extends Base {
 
     this.HTMLElements.background.element.addEventListener("change", (e) => {
       inputChangeHandler(e, options);
-      options.name.nameHandler(e);
     });
   }
 }
