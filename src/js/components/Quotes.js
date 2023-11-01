@@ -51,7 +51,10 @@ export default class Quotes extends Base {
   animationStart() {
     document.querySelector("div.change-btn").classList.add("refresh");
     this.getActualQuotesArray();
-    document.querySelector("div.change-btn").classList.remove("refresh");
+    setTimeout(()=> {
+      document.querySelector("div.change-btn").classList.remove("refresh");
+
+    }, 1000)
   }
 
   setQuotesCounterValue(n) {

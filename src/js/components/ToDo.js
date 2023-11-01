@@ -6,8 +6,9 @@ export default class ToDo extends Base {
   constructor(lang, tasksArray, HTMLElements) {
     super(lang);
     this.tasksArray = tasksArray;
-    this.idCounter = null;
+    this.idCounter = new Date().getTime();
     this.HTMLElements = HTMLElements;
+    this._isDoneTasksHide = localStorageService.getItemFromLocalStorage('isDoneTasksHide');
   }
 
   startToDo() {
@@ -15,9 +16,9 @@ export default class ToDo extends Base {
     /*this.tasksArray.forEach((task) => this.setTaskToLocalStorage(task));*/
     this.getTasksFromLocalStorage();
     this.tasksArray = this.sortTasksByDone(this.tasksArray);
-    this.idCounter = this.tasksArray.length;
-    this.drawTasksList();
     this.sortTasksByID(this.tasksArray);
+    this.drawTasksList();
+    this.hideDoneTasks();
   }
 
   drawTasksList() {
@@ -161,7 +162,22 @@ export default class ToDo extends Base {
     });
   }
 
+  hideDoneTasks(){
+    const taskElements = document.querySelectorAll(".item__wrapper");
+
+    taskElements.forEach((task) => {
+      if (task.firstChild.checked) {
+        task.classList.toggle("invisible");
+        this._isDoneTasksHide = !this._isDoneTasksHide;
+        localStorageService.setItemToLocalStorage('isDoneTasksHide', `${this._isDoneTasksHide}`);
+      }
+    });
+  }
+
   toDoHandler(e) {
+
+    console.log(e.type);
+    console.log(e.target);
     if (
       [...e.target.classList].includes("to-do__input") &&
       e.type === "change"
@@ -177,16 +193,12 @@ export default class ToDo extends Base {
 
       }
     } else if ([...e.target.classList].includes("to-do__btn")) {
-      const taskElements = document.querySelectorAll(".task__item");
-
-      taskElements.forEach((task) => {
-        if (task.firstChild.checked) {
-          task.classList.toggle("invisible");
-        }
-      });
+      this.hideDoneTasks();
     } else if ([...e.target.classList].includes("to-do__task")) {
       this.addDoneStyle(e.target);
       this.setDoneTaskData(e.target);
+      localStorageService.setItemToLocalStorage(`task-${e.target.closest('.item').dataset.task}-done`, e.target.checked);
+
       this.tasksArray = this.sortTasksByDone(this.tasksArray);
       this.drawTasksList();
     } else if(e.target.dataset.action === "task-edit") {
@@ -236,12 +248,12 @@ export default class ToDo extends Base {
       this.tasksArray = this.sortTasksByID(this.tasksArray);
       this.tasksArray = this.sortTasksByDone(this.tasksArray);
       this.drawTasksList();
-     } if(e.target.dataset.action === "task-submit") {
+     } if(e.target.dataset.action === "task-submit" ||
+    e.type === 'change' && [...e.target.classList].includes('item__input')) {
       console.log("task-submit");
       const taskID = e.target.closest('.item').dataset.task;
       const taskValue = document.querySelector('#task-value').value;
       localStorageService.setItemToLocalStorage(`task-${taskID}-taskValue`, taskValue);
-      console.log(localStorage);
       this.changeDivToInput(taskID,taskValue);
       document.querySelector('.to-do__input').style.pointerEvents = 'auto';
       const submitChangesButton = document.querySelector(`.item[data-task="${taskID}"] .item__submit`);

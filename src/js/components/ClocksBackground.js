@@ -1,6 +1,7 @@
 import Base from "./base/Base";
 import UnsplashApi from "./unsplashApi";
 import getInputValue from "../services/getInputValue.js";
+import localStorageService from "../services/localStorageService.js";
 
 export default class ClocksBackground extends Base {
   constructor(lang, name, clocksOptions, translation, HTMLElements) {
@@ -14,15 +15,14 @@ export default class ClocksBackground extends Base {
     this._createImgsIndicator = 0;
     this._currentPictureNumber = null;
     this._dateOptions = clocksOptions.dateOptions;
-    this._isAPISource =
-      localStorage.getItem("isSourceAPI") || clocksOptions.isAPISource;
+    this._isAPISource = clocksOptions.isAPISource;
     this._timeOfADayBorders = clocksOptions.timeOfADayBorders;
     this.backgroundCollectionElements = [];
+    this.isSettingsOpen = false;
   }
-
   startClocksBackground() {
     this.setTimeOfTheDay();
-    this.createGreetsBlock();
+    this.firstGreetBlockCreate();
     this.setTimeAndDateOnPage(this.lang);
     this.insertDateToHTML(
       new Date(),
@@ -30,9 +30,19 @@ export default class ClocksBackground extends Base {
       this._locales,
       this._dateOptions,
     );
+    this.checkIsAPISource();
     this.createImages(this._numberOfPictures);
     this.loadImages(this._numberOfPictures);
     this.setBackgroundImage();
+  }
+
+  checkIsAPISource(){
+    const LSSource = localStorage.getItem("isSourceAPI_bg");
+    if(LSSource === false || LSSource === 'false') {
+      this._isAPISource = false;
+    } else if(LSSource == 'true') {
+      this._isAPISource = true;
+    }
   }
 
   setTimeAndDateOnPage(selectedLang) {
@@ -88,53 +98,56 @@ export default class ClocksBackground extends Base {
     }
   }
 
-  createGreetsBlock() {
-    this.HTMLElements.greetsBlock.element.innerHTML = "";
-    let greetLine; //span class greeting
-    this.HTMLElements.nameBox.element = this.createElement(
-      "div",
-      "name__box",
-      null,
-      [],
-    );
-    let nameLine;
-    if (this.name) {
-      greetLine = this.createElement(
-        "span",
-        "greeting",
-        this.HTMLElements.greetsBlock.element,
-        [{ "data-translate": "hello-name" }],
-      );
-      nameLine = this.createElement(
-        "span",
+
+  createGreetsDiv(){
+    this.HTMLElements.nameBox.element.innerHTML = "";
+    let nameLine = this.createElement(
+        "div",
         "name__div",
         this.HTMLElements.nameBox.element,
-        [],
-      );
-    } else {
-      greetLine = this.createElement(
-        "span",
-        "greeting",
-        this.HTMLElements.greetsBlock.element,
-        [{ "data-translate": "hello-name" }],
-      );
-      this.createElement("label", null, this.HTMLElements.greetsBlock.element, [
-        { for: "name" },
-      ]);
-      nameLine = this.createElement(
+        [{"data-action": "name__div"}],
+    );
+    nameLine.textContent = this.name;
+  }
+
+  createGreetsInput(){
+    this.HTMLElements.nameBox.element.innerHTML = "";
+    this.createElement("label", null, this.HTMLElements.nameBox.element, [
+      { for: "name" },
+    ]);
+    const nameLine = this.createElement(
         "input",
         "name__input",
         this.HTMLElements.nameBox.element,
-        [{ type: "text" }, { id: "name" }, { placeholder: "Enter your name" }],
-      );
-    }
-    greetLine.textContent =
-      this._translation[this.lang][`${this._timeOfTheDay}`];
-    nameLine.textContent = this.name;
-    this.HTMLElements.nameBox.element.innerHTML += "!";
-    this.HTMLElements.greetsBlock.element.appendChild(
-      this.HTMLElements.nameBox.element,
+        [{ type: "text" }, { id: "name" },
+          { placeholder: "Enter your name" }, {"data-action": "name__input"},
+          { "data-translate": "[placeholder]customerName" },
+          { value: `${this.name}` }],
     );
+  }
+
+  firstGreetBlockCreate(){
+    this.name ? this.createGreetsDiv() : this.createGreetsInput();
+  }
+
+  createGreetsBlock() {
+
+    let nameLine;
+    const input = document.querySelector(`[data-action="name__input"]`);
+    this.HTMLElements.nameBox.element.innerHTML = "";
+    if (input) {
+      if(input.value !== ''){
+        this.name = input.value;
+        localStorageService.setItemToLocalStorage('name', this.name);
+
+      }
+      this.createGreetsDiv();
+
+    } else {
+      this.createGreetsInput();
+    }
+    /*nameLine.textContent = this.name;
+    this.HTMLElements.nameBox.element.appendChild(nameLine);*/
   }
 
   insertDateToHTML(date, dateBlock, locales, dateOptions) {
@@ -268,15 +281,46 @@ export default class ClocksBackground extends Base {
   }
 
   changeBackground(event) {
-    const eTargetClassList = Array.from(event.target.classList);
-    const theLastClassNumber = eTargetClassList.length - 1;
-    let direction;
-    if (eTargetClassList.includes("slider-icon")) {
-      if (eTargetClassList[theLastClassNumber] === "slide-next") {
-        direction = "next";
-      } else if (eTargetClassList[theLastClassNumber] === "slide-prev") {
-        direction = "prev";
+    const dataset = event.target.dataset.action;
+    switch (dataset) {
+      case 'slide-next':
+      case 'slide-prev': {
+        const direction = "slide-next" ? "next" : "prev";
+        const pictureNumber = this.getNextPictureNumber(
+            direction,
+            this._currentPictureNumber,
+            this._numberOfPictures,
+        );
+        this.setBackgroundImage(pictureNumber);
+        break;
       }
+
+      case 'settings-icon': {
+        this.isSettingsOpen ? this.HTMLElements.settingsBlock.element.classList.remove("visible") :
+            this.HTMLElements.settingsBlock.element.classList.add("visible");
+        this.isSettingsOpen = !this.isSettingsOpen;
+        break;
+      }
+
+      case 'another-element': {
+        this.HTMLElements.settingsBlock.element.classList.remove("visible");
+        this.isSettingsOpen = false;
+        break;
+      }
+
+      case 'settings-edit-data-btn': {
+        console.log('settings-edit-data-btn.log');
+        document.querySelector('#edit-block').classList.toggle('visible');
+        break;
+      }
+
+      case 'settings-change-lang-ru': {
+
+      }
+    }
+    /*const eTargetClassList = Array.from(event.target.classList);
+    if (event.target.dataset.action === 'slide-next' || event.target.dataset.action === 'slide-prev') {
+      const direction = "slide-next" ? "next" : "prev";
       const pictureNumber = this.getNextPictureNumber(
         direction,
         this._currentPictureNumber,
@@ -284,96 +328,48 @@ export default class ClocksBackground extends Base {
       );
       this.setBackgroundImage(pictureNumber);
     } else if (eTargetClassList[0] === "name") {
-    } else if (eTargetClassList.includes("settings-icon")) {
+    } else if (event.target.dataset.action === "settings-icon") {
       this.HTMLElements.settingsBlock.element.classList.toggle("visible");
-    }
+    } else if(event.target.dataset.action === 'settings-edit-data-btn'){
+      console.log('settings-edit-data-btn.log');
+      document.querySelector('#edit-block').classList.toggle('visible');
+    }*/
   }
 
   setCustomerName(newName) {
-    this.name = newName;
+    if(newName !== ''){
+      this.name = newName;
+    } else {
+      console.log('Имя не может быть пустым. Пробуйте ввести его еще раз');
+    }
     return this.name;
   }
 
-  refreshLocalStorageName(newName) {
-    localStorage.setItem("name", newName);
-    return true;
-  }
-
-  deleteLocalStorageName() {
-    localStorage.removeItem("name");
-    return true;
-  }
-
-  isItDivCheck() {
-    let res;
-    if (document.querySelector(".name__input")) {
-      res = false;
-    } else if (document.querySelector(".name__div")) {
-      res = true;
-    } else {
-      res = true;
-    }
-
-    this.HTMLElements.nameBox.element = document.querySelector(
-      ".name__box",
-    ).innerHTML = "";
-    return res;
-  }
-
-
-  addNewElementToParent(child, parent) {
-    parent.appendChild(child);
-    return true;
-  }
-
-  nameHandler(e) {
-    if (e.target.nodeName !== "INPUT" || e.type === "change") {
+  nameHandler(e){
+    if(e.target.dataset.action === 'name__div'){
+      this.createGreetsBlock();
+    } else if(e.target.dataset.action !== 'name__input' && document.querySelector('.name__input') ||
+        e.target.dataset.action === 'name__input' && e.type === "change"){
       const value = getInputValue(document.querySelector(".name__input"));
-      if (value) {
-        this.setCustomerName(value);
-        this.setCustomerName(this.name);
-        this.refreshLocalStorageName(this.name);
-        document.querySelector(".name__box").innerHTML = "";
+      this.setCustomerName(value);
+      localStorageService.setItemToLocalStorage('name', this.name);
+      this.createGreetsBlock();
+    }
+  }
 
-        if (!this.HTMLElements.nameDiv || !this.HTMLElements.nameDiv.element) {
-          this.HTMLElements.nameDiv.element = this.createElement(
-            "span",
-            "name__div",
-            null,
-            null,
-          );
-          this.HTMLElements.nameDiv.selector = ".name__div";
-        }
-        this.HTMLElements.nameDiv.element.innerHTML = this.name;
-
-        this.HTMLElements.nameBox.element.appendChild(
-          this.HTMLElements.nameDiv.element,
-        );
-      } else {
-        if ([...e.target.classList].includes("name__div")) {
-          e.target.innerHTML = "";
-          if (
-            !this.HTMLElements.nameInput ||
-            !this.HTMLElements.nameInput.element
-          ) {
-            this.HTMLElements.nameInput.element = this.createElement(
-              "input",
-              "name__input",
-              null,
-              [
-                { placeholder: `Enter your name` },
-                { "data-translate": "[placeholder]customerName" },
-                { type: "text" },
-                { id: "name" },
-                { onfocus: "this.value=''" },
-              ],
-            );
-            this.HTMLElements.nameInput.selector = ".name__input";
-          }
-          this.HTMLElements.nameInput.element.value = this.name;
-          e.target.appendChild(this.HTMLElements.nameInput.element);
-        }
-      }
+  blockLayoutsAction(action){
+    const blocksSelectors = ['.player', '.weather', '.time',
+      '.date', '.greeting-container', '.motivation-block', '.quote'];
+    if(action === 'on'){
+      blocksSelectors.forEach(selector => {
+        document.querySelector(selector).classList.add('dark-layout');
+      })
+    } else if(action === 'off'){
+      blocksSelectors.forEach(selector => {
+        document.querySelector(selector).classList.remove('dark-layout');
+      })
+    } else {
+      console.log('не выбрано действие с подложками блоков. Проверьте');
     }
   }
 }

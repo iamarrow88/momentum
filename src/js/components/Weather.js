@@ -1,9 +1,11 @@
 import Base from "./base/Base.js";
+import localStorageService from "../services/localStorageService.js";
 
 export default class Weather extends Base {
   constructor(lang, city, HTMLElements, weatherOptions) {
     super(lang);
     this.city = city;
+    this.savedCity = '';
     this.HTMLElements = HTMLElements;
     this._APIKey = weatherOptions.APIKey;
     this._url = "";
@@ -16,7 +18,7 @@ export default class Weather extends Base {
 
   startWeather() {
     this.setUrl();
-    this.insertCityNameToHTML();
+    this.drawCityName(this.HTMLElements.cityNameDiv.element);
     this.getWeather();
   }
 
@@ -25,69 +27,70 @@ export default class Weather extends Base {
     return this._url;
   }
 
-  insertCityNameToHTML() {
-    this.HTMLElements.cityNameDiv.element.innerHTML = this.city;
+  drawCityName(element) {
+    element.innerHTML = this.city;
   }
 
-  createInput() {
-    if (!this.HTMLElements.cityInput) {
-      this.HTMLElements.cityInput = {};
-      this.HTMLElements.cityInput.element = this.createElement(
+  createWeatherInput() {
+    this.HTMLElements.cityNameBlock.element.innerHTML = '';
+    this.createElement("label", null, this.HTMLElements.cityNameBlock.element, [
+      { for: "city-name" },
+    ]);
+    this.createElement(
         "input",
-        "city-name-input",
-        null,
-        [
-          { type: "text" },
-          { placeholder: "Enter the city" },
-          { value: `${this.city}` },
+        "city-name__input",
+        this.HTMLElements.cityNameBlock.element,
+        [{ type: "text" }, { id: "city-name" },
+          { placeholder: "Enter your city" }, {"data-action": "city-name-input"},
           { "data-translate": "[placeholder]weather-city-input" },
-          { onfocus: "this.value=''" },
-        ],
-      );
-      this.HTMLElements.cityInput.selector = ".city-name-input";
-    }
-  }
-
-  clearCityBlock() {
-    this.HTMLElements.cityNameBlock.element.innerHTML = "";
-  }
-
-  displayCityNameInput() {
-    this.createInput();
-    this.clearCityBlock();
-    this.HTMLElements.cityNameBlock.element.appendChild(
-      this.HTMLElements.cityInput.element,
+          { value: `${this.city}` }],
     );
   }
 
-  refreshThisCity(input) {
-    if (input.value !== this.city) {
-      localStorage.setItem("city", `${input.value}`);
-      this.city = input.value;
+  createWeatherDiv() {
+    this.HTMLElements.cityNameBlock.element.innerHTML = '';
+    const cityName = this.createElement(
+        "div",
+        "city-name__div",
+        this.HTMLElements.cityNameBlock.element,
+        [
+          { "data-action": "city-name-div" },
+        ],
+    );
+    this.drawCityName(cityName);
+    if(this.shouldRefreshWeather()){
+      this.refreshWeatherData();
+    }
+  }
+
+  shouldRefreshWeather() {
+    if (this.savedCity !== this.city) {
+      localStorageService.setItemToLocalStorage('city', this.city)
       return true;
     }
   }
 
-  insertDiv() {
-    const input = document.querySelector(".city-name-input");
-    if (input) {
-      this.refreshThisCity(input);
-      this.getWeather();
-      this.HTMLElements.cityNameBlock.element.innerHTML = "";
-      this.HTMLElements.cityNameDiv.element.innerHTML = this.city;
-      this.HTMLElements.cityNameBlock.element.appendChild(
-        this.HTMLElements.cityNameDiv.element,
-      );
+  weatherHandling(event) {
+    if(event.target.dataset.action === 'city-name-div') {
+      this.createWeatherInput();
+    } else if(event.target.dataset.action !== 'city-name-input' && document.querySelector('.city-name__input') ||
+        event.target.dataset.action === 'city-name-input' && event.type === 'change'){
+      const value = document.querySelector('.city-name__input').value;
+      this.setCityName(value);
+      this.createWeatherDiv();
     }
   }
 
-  weatherHandling(event) {
-    const eTargetClassList = [...event.target.classList];
-    if (eTargetClassList.includes("city-name-div")) {
-      this.displayCityNameInput();
-    } else if (!eTargetClassList.includes("city-name-input")) {
-      this.insertDiv();
+  setCityName(newCityName){
+    this.savedCity = this.city;
+    if(newCityName === ''){
+      document.querySelector('.weather__error-block').innerHTML =
+          '<div class="weather-error__text">There is no city name. Try again.</div>' +
+          '<div class="weather-error__text">Название города не введено. Попробуйте еще раз</div>';
+    } else {
+      this.city = newCityName;
     }
+    return this.city;
   }
 
   getWeather() {
@@ -136,8 +139,8 @@ export default class Weather extends Base {
         this._lastUpdateTime = new Date().getTime();
       } else {
         this.HTMLElements.errorBlock.element.innerHTML =
-          "Error! this city was not found. Try another. \n" +
-          "Ошибка! Город не найден. Попробуйте другой город";
+            '<div class="weather-error__text">Error! this city was not found. Try another.</div>' +
+            '<div class="weather-error__text">Ошибка! Город не найден. Попробуйте другой город</div>';
         this._blocksToHide.forEach((block) =>
           this.HTMLElements[block].element.classList.add("invisible"),
         );
@@ -163,6 +166,5 @@ export default class Weather extends Base {
   refreshWeatherData() {
     this.setUrl();
     this.getWeather();
-    this.insertDiv();
   }
 }
