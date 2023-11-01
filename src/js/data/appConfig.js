@@ -5,6 +5,35 @@ import quotes from "./quotes.js";
 
 const appConfig = {
   HTMLElements: {
+    background: {
+      selector: ".body",
+      element: null,
+    },
+    prevBG: {
+      selector: ".prev-item",
+      element: null,
+    },
+    mainBG: {
+      selector: ".main-item",
+      element: null,
+    },
+    nextBG: {
+      selector: ".next-item",
+      element: null,
+    },
+    carousel: {
+      selector: ".carousel",
+      element: null,
+    },
+    prev: {
+      selector: ".slide-prev",
+      element: null,
+    },
+    next: {
+      selector: ".slide-next",
+      element: null,
+    },
+
     playerBlock: {
       selector: ".player",
       element: null,
@@ -37,6 +66,11 @@ const appConfig = {
       selector: "[data-button-name='range']",
       element: null,
     },
+    /*trackPlay: {
+      selector: ".track-play",
+      element: null,
+      isArray: true,
+    },*/
     playlist: {
       selector: ".playlist",
       element: null,
@@ -46,69 +80,21 @@ const appConfig = {
       element: null,
       isArray: true,
     },
-    time: {
-      selector: ".time",
-      element: null,
-    },
-    date: {
-      selector: ".date",
-      element: null,
-    },
-    greeting: {
-      selector: ".greeting",
-      element: null,
-    },
-    greetsBlock: {
-      selector: ".greeting-container",
-      element: null,
-    },
-    nameBox: {
-      selector: ".name__box",
-      element: null,
-    },
-    nameDiv: {
-      selector: ".name__div",
-      element: null,
-    },
-    nameInput: {
-      selector: ".name__input",
-      element: null,
-    },
-    background: {
-      selector: ".body",
-      element: null,
-    },
-    prevBG: {
-      selector: ".prev-item",
-      element: null,
-    },
-    mainBG: {
-      selector: ".main-item",
-      element: null,
-    },
-    nextBG: {
-      selector: ".next-item",
-      element: null,
-    },
-    carousel: {
-      selector: ".carousel",
-      element: null,
-    },
-    prev: {
-      selector: ".slide-prev",
-      element: null,
-    },
-    next: {
-      selector: ".slide-next",
-      element: null,
-    },
-    trackPlay: {
-      selector: ".track-play",
-      element: null,
-      isArray: true,
-    },
+
     weatherBlock: {
       selector: ".weather",
+      element: null,
+    },
+    cityNameBlock: {
+      selector: ".city-name-block",
+      element: null,
+    },
+    cityNameDiv: {
+      selector: ".city-name__div",
+      element: null,
+    },
+    cityInput: {
+      selector: ".city-name__input",
       element: null,
     },
     errorBlock: {
@@ -147,18 +133,51 @@ const appConfig = {
       selector: ".humidity__number",
       element: null,
     },
-    cityNameBlock: {
-      selector: ".city-name-block",
+
+
+    time: {
+      selector: ".time",
       element: null,
     },
-    cityNameDiv: {
-      selector: ".city-name-div",
+    date: {
+      selector: ".date",
+      element: null,
+    },
+    greetsBlock: {
+      selector: ".greeting-container",
+      element: null,
+    },
+    greeting: {
+      selector: ".greeting",
+      element: null,
+    },
+    nameBox: {
+      selector: ".name__box",
+      element: null,
+    },
+    nameDiv: {
+      selector: ".name__div",
+      element: null,
+    },
+    nameInput: {
+      selector: ".name__input",
+      element: null,
+    },
+
+
+    ToDoInputWrapper: {
+      selector: ".to-do__header",
+      element: null,
+    },
+    ToDoInput: {
+      selector: ".to-do__input",
       element: null,
     },
     tasksList: {
       selector: ".to-do__task-list",
       element: null,
     },
+
     quote: {
       selector: ".quote__quote",
       element: null,

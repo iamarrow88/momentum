@@ -11,6 +11,9 @@ additional:
         Состоят из статуса "сделанности" и собственно задачи
 
  'currentTrackID' - ID текущего проигрываемого трека
+ 'isDoneTasksHide' - срятаны ли сделанные таски
+ 'isSourceAPI_bg' - откуда берутся обои для рабочего стола (true - API, false - github)
+ 'isSourceAPI_q' - откуда берутся цитаты (true - API, false - github)
 
 * */
 
