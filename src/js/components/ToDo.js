@@ -5,16 +5,23 @@ import localStorageService from "../services/localStorageService.js";
 export default class ToDo extends Base {
   constructor(lang, tasksArray, HTMLElements) {
     super(lang);
-    this.tasksArray = tasksArray;
+    this.initTasks = tasksArray;
+    this.tasksArray = [];
     this.idCounter = new Date().getTime();
     this.HTMLElements = HTMLElements;
     this._isDoneTasksHide = localStorageService.getItemFromLocalStorage('isDoneTasksHide');
   }
 
   startToDo() {
-    this.tasksArray.forEach((task) => localStorageService.setObjectFieldsToLocalStorage(task, 'task'));
+    /*this.tasksArray.forEach((task) => localStorageService.setObjectFieldsToLocalStorage(task, 'task'));*/
     /*this.tasksArray.forEach((task) => this.setTaskToLocalStorage(task));*/
-    this.getTasksFromLocalStorage();
+
+    if(!this.checkTasksInLocalStorage()) {
+      this.tasksArray = this.initTasks;
+    } else {
+      this.getTasksFromLocalStorage();
+    }
+    console.log(this.tasksArray);
     this.tasksArray = this.sortTasksByDone(this.tasksArray);
     this.sortTasksByID(this.tasksArray);
     this.drawTasksList();
@@ -289,6 +296,14 @@ export default class ToDo extends Base {
     ]);
     label.innerHTML = `${taskValue}`;
 
+  }
+
+  checkTasksInLocalStorage(){
+    let res = false;
+    Object.keys(localStorage).forEach(key => {
+      if(key.split('-').includes('task')) res = true;
+    })
+    return res;
   }
 
   getTasksFromLocalStorage() {
