@@ -13,8 +13,6 @@ export default function clicksHandler(e, options) {
       settings: settings,
    }*/
 
-  console.log(e.target);
-
   if (e.target.closest(".player")) {
     options.player.playerClicksHandler(e, options.player);
   } else if (
@@ -30,11 +28,12 @@ export default function clicksHandler(e, options) {
   } else if (
     e.target.dataset.action === 'slide-next' ||
     e.target.dataset.action === 'slide-prev' ||
-      e.target.dataset.action === "settings-icon" ||
-      e.target.dataset.action === 'settings-edit-data-btn'
+      e.target.closest('.settings-block') ||
+      e.target.dataset.action === 'settings-icon'
   ) {
     console.log("slider or settings clicks");
     options.background.changeBackground(e);
+    options.settings.settingsClicks(e, options);
   } else if (e.target.closest(".to-do")) {
     options.todo.toDoHandler(e);
   } else if ([...e.target.classList].includes("change-btn")) {
@@ -42,6 +41,7 @@ export default function clicksHandler(e, options) {
   } else {
     console.log("another element");
     options.background.nameHandler(e);
+    options.background.changeBackground(e);
     options.weather.weatherHandling(e);
 
 

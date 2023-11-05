@@ -21,7 +21,6 @@ export default class ToDo extends Base {
     } else {
       this.getTasksFromLocalStorage();
     }
-    console.log(this.tasksArray);
     this.tasksArray = this.sortTasksByDone(this.tasksArray);
     this.sortTasksByID(this.tasksArray);
     this.drawTasksList();

@@ -21,9 +21,10 @@ export default class ClocksBackground extends Base {
     this.isSettingsOpen = false;
   }
   startClocksBackground() {
-    this.setTimeOfTheDay();
+    /*this.setTimeOfTheDay();*/
+    this.createImages(this._numberOfPictures);
     this.firstGreetBlockCreate();
-    this.setTimeAndDateOnPage(this.lang);
+    this.setTimeAndDateOnPage();
     this.insertDateToHTML(
       new Date(),
       this.HTMLElements.date.element,
@@ -31,7 +32,7 @@ export default class ClocksBackground extends Base {
       this._dateOptions,
     );
     this.checkIsAPISource();
-    this.createImages(this._numberOfPictures);
+
     this.loadImages(this._numberOfPictures);
     this.setBackgroundImage();
   }
@@ -39,13 +40,17 @@ export default class ClocksBackground extends Base {
   checkIsAPISource(){
     const LSSource = localStorage.getItem("isSourceAPI_bg");
     if(LSSource === false || LSSource === 'false') {
-      this._isAPISource = false;
-    } else if(LSSource == 'true') {
-      this._isAPISource = true;
+      this.setBgSource(false);
+          } else if(LSSource == 'true') {
+      this.setBgSource(true);
     }
   }
 
-  setTimeAndDateOnPage(selectedLang) {
+  setBgSource(newValue){
+    this._isAPISource = newValue;
+  }
+
+  setTimeAndDateOnPage() {
     const currentDate = new Date();
     this.insertTimeToHTML(this.HTMLElements.time.element, currentDate);
     if (currentDate.toLocaleTimeString() === "00:00:00") {
@@ -67,13 +72,13 @@ export default class ClocksBackground extends Base {
       this.setBackgroundImage();
       this.insertGreetToHTML(
         this._timeOfTheDay,
-        selectedLang,
+        this.lang,
         this._translation,
-        this.HTMLElements.greeting.element,
+        document.querySelector('.greeting'),
       );
     }
     setTimeout(() => {
-      this.setTimeAndDateOnPage(selectedLang);
+      this.setTimeAndDateOnPage();
     }, 1000);
   }
 
@@ -131,7 +136,6 @@ export default class ClocksBackground extends Base {
   }
 
   createGreetsBlock() {
-
     let nameLine;
     const input = document.querySelector(`[data-action="name__input"]`);
     this.HTMLElements.nameBox.element.innerHTML = "";
@@ -139,19 +143,22 @@ export default class ClocksBackground extends Base {
       if(input.value !== ''){
         this.name = input.value;
         localStorageService.setItemToLocalStorage('name', this.name);
-
+        this.createGreetsDiv();
+      } else {
+        this.createGreetsInput();
       }
-      this.createGreetsDiv();
-
     } else {
       this.createGreetsInput();
     }
-    /*nameLine.textContent = this.name;
-    this.HTMLElements.nameBox.element.appendChild(nameLine);*/
   }
 
   insertDateToHTML(date, dateBlock, locales, dateOptions) {
-    dateBlock.textContent = date.toLocaleDateString(locales, dateOptions);
+    if(!date) {
+      dateBlock = document.querySelector('.date');
+      dateBlock.textContent = new Date().toLocaleDateString(this.setLocales(this.lang), this._dateOptions);
+    } else {
+      dateBlock.textContent = date.toLocaleDateString(locales, dateOptions);
+    }
   }
 
   insertTimeToHTML(timeBlock, currentDate) {
@@ -189,6 +196,7 @@ export default class ClocksBackground extends Base {
         break;
     }
     greetBlock.innerHTML = `${translation[lang][result]} `;
+    greetBlock.dataset.translate = result;
   }
 
   createImages(allPicturesNumber) {
@@ -220,7 +228,7 @@ export default class ClocksBackground extends Base {
             this.HTMLElements.carousel.element.append(img);
           });
         } else {
-          this._isAPISource = false;
+          this.setBgSource(false);
           this.loadImages(this._numberOfPictures);
         }
       });
@@ -298,42 +306,23 @@ export default class ClocksBackground extends Base {
       case 'settings-icon': {
         this.isSettingsOpen ? this.HTMLElements.settingsBlock.element.classList.remove("visible") :
             this.HTMLElements.settingsBlock.element.classList.add("visible");
+        document.querySelector('#edit-block').classList.remove('visible');
         this.isSettingsOpen = !this.isSettingsOpen;
         break;
       }
 
-      case 'another-element': {
-        this.HTMLElements.settingsBlock.element.classList.remove("visible");
-        this.isSettingsOpen = false;
-        break;
-      }
-
       case 'settings-edit-data-btn': {
-        console.log('settings-edit-data-btn.log');
         document.querySelector('#edit-block').classList.toggle('visible');
         break;
       }
 
-      case 'settings-change-lang-ru': {
-
+      default: {
+        this.HTMLElements.settingsBlock.element.classList.remove("visible");
+        document.querySelector('#edit-block').classList.remove('visible');
+        this.isSettingsOpen = false;
+        break;
       }
     }
-    /*const eTargetClassList = Array.from(event.target.classList);
-    if (event.target.dataset.action === 'slide-next' || event.target.dataset.action === 'slide-prev') {
-      const direction = "slide-next" ? "next" : "prev";
-      const pictureNumber = this.getNextPictureNumber(
-        direction,
-        this._currentPictureNumber,
-        this._numberOfPictures,
-      );
-      this.setBackgroundImage(pictureNumber);
-    } else if (eTargetClassList[0] === "name") {
-    } else if (event.target.dataset.action === "settings-icon") {
-      this.HTMLElements.settingsBlock.element.classList.toggle("visible");
-    } else if(event.target.dataset.action === 'settings-edit-data-btn'){
-      console.log('settings-edit-data-btn.log');
-      document.querySelector('#edit-block').classList.toggle('visible');
-    }*/
   }
 
   setCustomerName(newName) {

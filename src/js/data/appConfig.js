@@ -2,6 +2,7 @@ import translation from "./translation/translation.js";
 import tracks from "./tracks.js";
 import svgPath from "./svgPath.js";
 import quotes from "./quotes.js";
+import localStorageService from "../services/localStorageService.js";
 
 const appConfig = {
   HTMLElements: {
@@ -66,11 +67,6 @@ const appConfig = {
       selector: "[data-button-name='range']",
       element: null,
     },
-    /*trackPlay: {
-      selector: ".track-play",
-      element: null,
-      isArray: true,
-    },*/
     playlist: {
       selector: ".playlist",
       element: null,
@@ -206,10 +202,10 @@ const appConfig = {
 
   player: {
     tracksMap: tracks, // [{string: number, string: string, string: string}]
-    /*src: ["./assets/mp3/", ".mp3"],*/
     src: ["/sounds/", ".mp3"],
-    volume: +localStorage.getItem("volume") || 30, // number
-    currentTrackID: +localStorage.getItem("currentTrackID") || 1, // number
+    volume: +localStorageService.getItemFromLocalStorage("volume") || 30, // number 0 - 100
+    isMuted: +localStorageService.getItemFromLocalStorage('isMuted') || false,
+    currentTrackID: +localStorageService.getItemFromLocalStorage("currentTrackID") || 1, // number
     pathToSVGIcon: "src/assets/svg/sprite.svg#", // string
     svgPathEndpoints: svgPath, // {string: string}
     buttonsToToggle: {
@@ -239,7 +235,7 @@ const appConfig = {
     ],
   },
   clocks: {
-    isAPISource: false,
+    isAPISource: localStorageService.getItemFromLocalStorage('isSourceAPI_bg'),
     timeOfADayBorders: {
       morning: {
         start: 5,
@@ -273,6 +269,7 @@ const appConfig = {
     url: "https://type.fit/api/quotes",
     APIKey: "",
     quotesArray: quotes,
+    source: localStorageService.getItemFromLocalStorage('isSourceAPI_q') || 'project'
   },
   toDo: {
     tasksArray: [

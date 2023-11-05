@@ -3,14 +3,16 @@ function getAction(dataset){
   }
 
 
-function toggleDataset(element){
-  if(this.datasetName === 'translate'){
-    const field = element.dataset.translate
-    let oldDataset = field;
-    const action = field.split('-')[field.split('-').length - 1] === 'off' ? 'on' : 'off';
-    let newDataset = field.split('-').slice(0, field.split('-').length - 1).concat([action]).join('-');
+function toggleDatasetName(element, datasetName){
+  if(datasetName === 'translate'){
+    const oldDataset = element.dataset.translate
+    const action = oldDataset.split('-')[oldDataset.split('-').length - 1] === 'off' ? 'on' : 'off';
+    let newDataset = oldDataset.split('-').slice(0, oldDataset.split('-').length - 1).concat([action]).join('-');
     return [oldDataset, newDataset];
   }
-};
+}
 
-export {toggleDataset, getAction};
+
+
+
+export {toggleDatasetName, getAction};
