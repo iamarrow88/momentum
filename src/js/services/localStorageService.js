@@ -11,9 +11,20 @@ additional:
         Состоят из статуса "сделанности" и собственно задачи
 
  'currentTrackID' - ID текущего проигрываемого трека
- 'isDoneTasksHide' - срятаны ли сделанные таски
+ 'isMuted' - выключен ли звук
+ 'isDoneTasksHide' - спрятаны ли сделанные таски
+ 'IsBlocksLayoutHidden' - спрятаны ли затемненные подложки у блоков
  'isSourceAPI_bg' - откуда берутся обои для рабочего стола (true - API, false - github)
  'isSourceAPI_q' - откуда берутся цитаты (true - API, false - github)
+ 'isPlayerVisible' - виден ли плеер (true/false)
+ 'isWeatherVisible' - видна ли погода (true/false)
+ 'isClocksVisible' - видны ли часы (true/false)
+ 'isDateVisible' - видна ли дата (true/false)
+ 'isGreetingsVisible' - видно ли приветствие (true/false)
+ 'isToDoVisible' - виден ли туду лист (true/false)
+ 'isQuotesVisible' - видны ли цитаты (true/false)
+ 'isLayoutsVisible' - видны ли затемненные подложки (true/false)
+
 
 * */
 
