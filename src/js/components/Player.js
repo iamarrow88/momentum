@@ -7,7 +7,7 @@ export default class Player extends Base {
   constructor(lang, name, city, HTMLElements, playerOptions) {
     super(lang, name, HTMLElements, city);
     this._volumeLevel = playerOptions.volume;
-    this._isMuted = false;
+    this._isMuted = playerOptions.isMuted; /*todo*/
     this._prevPlayedTrackID = null;
     this._nextPlayedTrackID = null;
     this._currentTrackID = playerOptions.currentTrackID;
@@ -46,9 +46,9 @@ export default class Player extends Base {
         this.setPlayPause(this.getCurrentTrackID(), this._isPlaying);
       }
     } else if (elementDataset.buttonName === "volume") {
-      this._isMuted = !this._isMuted;
+      this.setMuted(!this._isMuted);
       if (this._isMuted) {
-        this.setVolume(0);
+        this.setVolumeToAudioTag(0);
         this.changeElementSvg(
           this.HTMLElements.volumeIcon.element,
           this.pathToSVG + "mute",
@@ -56,7 +56,7 @@ export default class Player extends Base {
           "mute",
         );
       } else {
-        this.setVolume(this._volumeLevel);
+        this.setVolumeToAudioTag(this._volumeLevel);
         this.changeElementSvg(
           this.HTMLElements.volumeIcon.element,
           this.pathToSVG + "sound-speaker",
@@ -205,7 +205,7 @@ export default class Player extends Base {
       this.endTrackListener();
     });
     this.setSrcToAudioTag(this.getCurrentTrackID());
-    this.setVolume(this._volumeLevel);
+    this.setVolumeToAudioTag(this._volumeLevel);
     this.HTMLElements.audioTag.element.pause();
   }
 
@@ -213,7 +213,7 @@ export default class Player extends Base {
     if ([...e.target.classList].includes("volume-bar__range")) {
       this._volumeLevel = +e.target.value;
       if (this._volumeLevel === 0) {
-        this._isMuted = true;
+        this.setMuted(true);
         this.changeElementSvg(
           this.HTMLElements.volumeIcon.element,
           this.pathToSVG + "mute",
@@ -221,7 +221,7 @@ export default class Player extends Base {
           "mute",
         );
       } else {
-        this._isMuted = false;
+        this.setMuted(false);
         this.changeElementSvg(
           this.HTMLElements.volumeIcon.element,
           this.pathToSVG + "sound-speaker",
@@ -229,7 +229,7 @@ export default class Player extends Base {
           "unmute",
         );
       }
-      this.setVolume(this._volumeLevel);
+      this.setVolumeToAudioTag(this._volumeLevel);
       /*
        * 1. если звук включен, уменьшить/уввеличить звук
        * 2. записать новое значение в приложение
@@ -244,8 +244,13 @@ export default class Player extends Base {
     this.setPlayPause(this.getCurrentTrackID(), this._isPlaying);
   }
 
-  setVolume(newVolumeValue) {
+  setVolumeToAudioTag(newVolumeValue) {
     this.HTMLElements.audioTag.element.volume = newVolumeValue / 100;
+  }
+
+  setMuted(newValue){
+    this._isMuted = newValue;
+    localStorageService.setItemToLocalStorage('isMuted', newValue);
   }
 
   findPrevTrackID(currentTrackID) {
@@ -287,6 +292,7 @@ export default class Player extends Base {
   set setCurrentTrackID(newTrackID) {
     if (newTrackID >= 0 && newTrackID < this._numberOfTracks) {
       this._currentTrackID = newTrackID;
+      localStorageService.setItemToLocalStorage('currentTrackID', this._currentTrackID);
     } else {
       throw new Error(
         `Ошибка! ID текущего трека не может быть более ${
