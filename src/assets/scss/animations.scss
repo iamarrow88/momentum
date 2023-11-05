@@ -1,0 +1,21 @@
+@keyframes isPlaying {
+  0%, 100% {
+    transform: scale(1.0);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+
+@keyframes refreshQuotes {
+  0%, 100% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  99% {
+    transform: rotate(359deg);
+  }
+}

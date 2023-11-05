@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div class="player">
+  <audio class="player__audio" id="player__audio" preload="auto"></audio>
+  <div class="player__header">
+    <div class="player-controls">
+      <div class="player-controls__playback">
+        <div class="player-icon svg-parent" data-button-name="play-prev">
+          <svg class="svg-icon" data-button-name="play-prev">
+            <use class="use-icon" data-button-name="play-prev"
+                 xlink:href="src/assets/svg/sprite.svg#play-prev"></use>
+          </svg>
+        </div>
+        <div class="player-icon svg-parent" data-button-name="playManagement">
+          <svg class="svg-icon" data-button-name="playManagement">
+            <use class="use-icon" data-button-name="playManagement" xlink:href="src/assets/svg/sprite.svg#play"></use>
+          </svg>
+        </div>
+        <div class="player-icon svg-parent" data-button-name="play-next">
+          <svg class="svg-icon" data-button-name="play-next">
+            <use class="use-icon" data-button-name="play-next"
+                 xlink:href="src/assets/svg/sprite.svg#play-next"></use>
+          </svg>
+        </div>
+      </div>
+      <div class="player-controls__volume svg-parent" data-button-name="volume">
+        <svg class="svg-icon" data-button-name="volume">
+          <use class="use-icon" data-button-name="volume" xlink:href="src/assets/svg/sprite.svg#volume"></use>
+        </svg>
+        <div class="volume-bar__wrapper">
+          <input class="volume-bar__range" type="range" min="0" max="100" step="1" value="0" data-button-name="range"></div>
+      </div>
+    </div>
+
+    <div class="player__progress progress visible">
+      <div class="progress__title">Song TITLE</div>
+      <div class="progress__bar">
+        <div class="progress__start"></div>
+        <div class="progress__end">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="playlist">
+    <ul class="playlist__wrapper">
+      <li class="song">
+        <div class="song__content" data-song-id="0" data-button-name="song-content">
+          <div class="song__sphere" data-song-id="0"></div>
+          <div class="song__title" data-song-id="0" data-button-name="song-content">The Moth &amp; The Flame - Simple</div>
+          <svg class="svg-icon" data-songbtn="0" data-song-id="0" >
+            <use class="use-icon" data-song-id="0" data-button-name="song-content"
+                 xlink:href="src/assets/svg/sprite.svg#play"></use>
+          </svg>
+        </div>
+      </li>
+      <li class="song">
+        <div class="song__content" data-song-id="1" data-button-name="song-content">
+          <div class="song__sphere" data-song-id="1"></div>
+          <div class="song__title" data-song-id="1" data-button-name="song-content">Coldplay - Paradise</div>
+          <svg class="svg-icon" data-songbtn="1" data-song-id="1" data-button-name="song-content">
+            <use class="use-icon" data-song-id="1" data-button-name="song-content"
+                 xlink:href="src/assets/svg/sprite.svg#play"></use>
+          </svg>
+        </div>
+      </li>
+      <li class="song">
+        <div class="song__content" data-song-id="2" data-button-name="song-content">
+          <div class="song__sphere" data-songid="2"></div>
+          <div class="song__title" data-songid="2" data-button-name="song-content">Lord Huron - The Night We Met</div>
+          <svg class="svg-icon" data-songbtn="2" data-songid="2" data-button-name="song-content">
+            <use class="use-icon" data-songid="2" data-button-name="song-content"
+                 xlink:href="src/assets/svg/sprite.svg#play"></use>
+          </svg>
+        </div>
+      </li>
+      <li class="song">
+        <div class="song__content" data-song-id="3" data-button-name="song-content">
+          <div class="song__sphere" data-songid="3"></div>
+          <div class="song__title" data-songid="3" data-button-name="song-content">Arcane Roots - Half the World</div>
+          <svg class="svg-icon" data-songbtn="3" data-songid="3" data-button-name="song-content">
+            <use class="use-icon" data-songid="3" data-button-name="song-content"
+                 xlink:href="src/assets/svg/sprite.svg#play"></use>
+          </svg>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+<script>
+  /*playerWrapper.insertAdjacentHTML(
+      "afterbegin",
+      '<audio class="player__audio" id="player__audio" preload="auto"></audio>\n' +
+        '<div class="player__header">\n' +
+        '<div class="player-controls">\n' +
+        '        <div class="player-controls__playback">\n' +
+        '          <div class="player-icon svg-parent" data-button-name="play-prev">\n' +
+        '            <svg class="svg-icon" data-button-name="play-prev">\n' +
+        `              <use class="use-icon" data-button-name="play-prev"
+xlink:href="${sprite}#play-prev"></use>\n` +
+        "            </svg>\n" +
+        "          </div>\n" +
+        '          <div class="player-icon svg-parent play" data-button-name="play">\n' +
+        '            <svg class="svg-icon play" data-button-name="play">\n' +
+        `              <use class="use-play play" data-button-name="play" xlink:href="${sprite}#play"></use>\n` +
+        "            </svg>\n" +
+        "          </div>\n" +
+        '          <div class="player-icon svg-parent play-next" data-button-name="play-next">\n' +
+        '            <svg class="svg-icon play-next" data-button-name="play-next">\n' +
+        `              <use class="use-play-next play-next" data-button-name="play-next" xlink:href="${sprite}#play-next"></use>\n` +
+        "            </svg>\n" +
+        "          </div>\n" +
+        "        </div>\n" +
+        '        <div class="player-controls__volume svg-parent volume" data-button-name="volume">\n' +
+        '          <svg class="svg-icon volume" data-button-name="volume">\n' +
+        `              <use class="use-volume volume" data-button-name="volume" xlink:href="${sprite}#volume"></use>\n` +
+        "          </svg>\n" +
+        '<div class="volume-bar__wrapper">\n' +
+        '              <input class="volume-bar__range" type="range" min="0" max="100" step="1" value="0">' +
+        "</div>\n" +
+        "            </div>" +
+        "        </div>\n" +
+        "      </div>",
+    );
+    const playlist = this.createElement("div", "playlist", playerWrapper);
+    const playListWrapper = this.createElement(
+      "ul",
+      "playlist__wrapper",
+      playlist,
+    );*/
+  /*for (let i = 0; i < this._numberOfTracks; i++) {
+  playListWrapper.insertAdjacentHTML(
+    "beforeend",
+    '<li class="song">\n' +
+      `<div class=\"song__content\" data-songId=\"${i}\">\n` +
+      '<div class="song__sphere"></div>\n' +
+      `<div class="song__title" data-songId="${i}">${this.tracksMap[i].author} - ${this.tracksMap[i].title}</div>\n` +
+      `<svg class="icon song-icon track${i}-play track-play" data-songbtn="${i}"data-button-name="play-${i}" >\n` +
+      `<use class="use-track${i}-play track${i}-play track-play" data-songbtn="${i}" data-button-name="play-${i}" xlink:href="${sprite}#play"></use>\n` +
+      "</svg>\n" +
+      "</div>\n" +
+      "</li>\n",
+  );
+}*/
+
+</script>
+
+<div class="settings">
+  <!--<li class="hide-block__item item__player">
+                <div class="hide-block-name hide-block-name__player"
+                     data-translate="settings-hide-player">Hide player</div>
+                <div class="switcher">
+                  <button class="player-btn on hide-block__btn"
+                          data-translate="settings-hide-player-on">ON</button> |
+                  <button class="player-btn off hide-block__btn"
+                          data-translate="settings-hide-player-off">OFF</button>
+                </div></li>
+              <li class="hide-block__item item__weather">
+                <div class="hide-block-name hide-block-name__weather"
+                     data-translate="settings-hide-weather">Hide weather </div>
+                <div class="switcher">
+                  <button class="weather-btn on hide-block__btn"
+                          data-translate="settings-hide-weather-on">ON</button> |
+                  <button class="weather-btn off hide-block__btn"
+                          data-translate="settings-hide-weather-off">OFF</button>
+                </div></li>
+              <li class="hide-block__item item__time">
+                <div class="hide-block-name hide-block-name__time"
+                     data-translate="settings-hide-clocks">Hide time </div>
+                <div class="switcher">
+                  <button class="time-btn on hide-block__btn"
+                          data-translate="settings-hide-clocks-on">ON</button> |
+                  <button class="time-btn off hide-block__btn"
+                          data-translate="settings-hide-clocks-off">OFF</button>
+                </div></li>
+              <li class="hide-block__item item__date">
+                <div class="hide-block-name hide-block-name__date"
+                     data-translate="settings-hide-date">Hide date </div>
+                <div class="switcher">
+                  <button class="date-btn on hide-block__btn"
+                          data-translate="settings-hide-date-on">ON</button> |
+                  <button class="date-btn off hide-block__btn"
+                          data-translate="settings-hide-date-off">OFF</button>
+                </div></li>
+              <li class="hide-block__item item__greeting">
+                <div class="hide-block-name hide-block-name__greeting"
+                     data-translate="settings-hide-greetings">Hide greetings </div>
+                <div class="switcher">
+                  <button class="greeting-container-btn on hide-block__btn"
+                          data-translate="settings-hide-greetings-on">ON</button> |
+                  <button class="greeting-container-btn off hide-block__btn"
+                          data-translate="settings-hide-greetings-off">OFF</button>
+                </div></li>
+              <li class="hide-block__item item__todo">
+                <div class="hide-block-name hide-block-name__todo"
+                     data-translate="settings-hide-todo">Hide todo </div>
+                <div class="switcher">
+                  <button class="to-do-btn on hide-block__btn"
+                          data-translate="settings-hide-todo-on">ON</button> |
+                  <button class="to-do-btn off hide-block__btn"
+                          data-translate="settings-hide-todo-off">OFF</button>
+                </div></li>
+              <li class="hide-block__item item__quote">
+                <div class="hide-block-name hide-block-name__quote"
+                     data-translate="settings-hide-quotes">Hide quotes </div>
+                <div class="switcher">
+                  <button class="quote-btn on hide-block__btn"
+                          data-translate="settings-hide-quotes-on">ON</button> |
+                  <button class="quote-btn off hide-block__btn"
+                          data-translate="settings-hide-quotes-off">OFF</button>
+                </div>
+              </li>
+              <li class="hide-block__item item__background">
+                <div class="hide-block-name hide-block-name__background"
+                     data-translate="settings-hide-background">Background source </div>
+                <div class="switcher">
+                  <button class="background-btn api hide-block__btn"
+                          data-translate="settings-hide-background-api">Unsplash</button> |
+                  <button class="background-btn github hide-block__btn"
+                          data-translate="settings-hide-background-github">GitHub</button>
+                </div>
+              </li>-->
+</div>
+
+<div class="weather">
+  <div class="city-name__div" data-action="city-name-div"></div>
+
+  <label for="city-name"></label>
+  <input type="text" id="city-name" placeholder="Enter your city"
+  data-action="city-name-input" data-translate="[placeholder]weather-city-input"
+  value="`${this.city}`">
+</div>
+
+<time class="time">Времечко *меняется*</time>
+<div class="date">Сегодня 16 или 15</div>
+<div class="greeting-container">
+  <span class="greeting" data-translate="hello-name">Привет, </span>
+  <div class="name__box">
+    <label for="name"></label>
+    <input id="name" type="text" class="name__input" onfocus="this.value=''"
+           data-action="name__input">
+
+    <div class="name__div" data-action="name__div"></div>
+  </div>
+  <div class="greeting__mark">!</div>
+</div>
+
+<div class="to-do__task-list">
+  <div class="task__item item" data-task="0">
+    <div class="item__wrapper">
+      <input class="to-do__task" id="task0" type="checkbox">
+      <label class="to-do__task-label" for="task0" data-task="0"></label>
+      <input type="text" name="task-value" id="task-value" data-task="0">
+    </div>
+    <div class="item__actions">
+      <span class="item__edit" data-action="task-edit">&#128393;</span>
+      <span class="item__delete" data-action="task-delete">🗑</span>
+      <span class="item__submit" data-action="task-submit">&#10003;</span>
+    </div>
+  </div>
+  <div class="task__item">
+    <input type="checkbox" class="to-do__task" id="task1"/>
+    <label for="task1" data-task="1"></label>
+  </div>
+  <div class="task__item">
+    <input type="checkbox" class="to-do__task" id="task2"/>
+    <label for="task2" data-task="2"></label>
+  </div>
+</div>
+
+
+
+
+</body>
+</html>
