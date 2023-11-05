@@ -135,7 +135,7 @@ button {
       justify-content: space-between;
       align-items: flex-start;
       width: 100%;
-      height: 100%;
+      height: 103%;
     }
   }
 
@@ -185,6 +185,10 @@ button {
       align-items: center;
       height: 100%;
       width: 100%;
+    }
+
+    &__range {
+      width: 112px;
     }
   }
 
@@ -321,7 +325,6 @@ button {
 .weather {
   display: flex;
   flex-direction: column;
-  height: calc(100% - 2rem);
   width: 200px;
   line-height: 200%;
   text-align: right;
@@ -717,8 +720,8 @@ div.settings__icon {
   max-width: 4rem;
 }
 .settings__icon.svg-icon {
-  height: 2rem;
-  width: 2rem;
+  height: 50px;
+  width: 50px;
 }
 
 
@@ -736,8 +739,8 @@ div.settings__icon {
   div.settings__icon,
   .settings__icon.svg-icon  {
     position: fixed;
-    bottom: 52px;
-    left: 55px;
+    bottom: 45px;
+    left: 57px;
     z-index: 15;
   }
 
@@ -754,8 +757,8 @@ div.settings__icon {
   }
 
   .settings__icon.svg-icon {
-    height: 2rem;
-    width: 2rem;
+    height: 50px;
+    width: 50px;
     fill: #5b5959;
   }
 }
@@ -816,36 +819,37 @@ div.settings__icon {
     }
   }
 
-  .footer__about {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    justify-items: center;
-    align-items: center;
-    height: 100%;
-    line-height: 3.5;
-  }
+}
 
-  .invisible {
-    display: none;
-  }
+.footer__about {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
+  align-items: center;
+  height: 100%;
+  line-height: 3.5;
+}
 
-  .weather,
-  .time,
-  .date,
-  .greeting-container,
-  .motivation-block,
-  .quote {
-    padding: 10px 15px;
-  }
+.invisible {
+  display: none;
+}
 
-  .player.dark-layout,
-  .weather.dark-layout,
-  .time.dark-layout,
-  .date.dark-layout,
-  .greeting-container.dark-layout,
-  .motivation-block.dark-layout,
-  .quote.dark-layout {
-    background-color: rgba(115, 115, 115, 0.5);
-    border-radius: 10px;
-  }
+.weather,
+.time,
+.date,
+.greeting-container,
+.motivation-block,
+.quote {
+  padding: 10px 15px;
+}
+
+.player.dark-layout,
+.weather.dark-layout,
+.time.dark-layout,
+.date.dark-layout,
+.greeting-container.dark-layout,
+.motivation-block.dark-layout,
+.quote.dark-layout {
+  background-color: rgba(115, 115, 115, 0.5);
+  border-radius: 10px;
 }
