@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import Sass from "sass";
 
 export default defineConfig({
-  base: "Momentum"
+  base: "/momentum"
   /* plugins: [
     new Sass(),
   ], */
