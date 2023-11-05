@@ -29,10 +29,11 @@ class App extends Base {
       store.translation,
       store.HTMLElements,
     );
+    this.langs = Object.keys(store.translation);
     this.quotes = new Quotes(lang, store.quotes, HTMLElements);
     this.weather = new Weather(lang, city, HTMLElements, this.appStore.weather);
     this.toDo = new ToDo(lang, store.toDo.tasksArray, HTMLElements);
-    this.settings = new Settings(lang, store.translation);
+    this.settings = new Settings(lang, this.langs, store.translation);
   }
 
   set setLang(newLang) {
@@ -69,7 +70,8 @@ class App extends Base {
     this.quotes.startQuotes();
     this.toDo.startToDo();
     this.settings.startSettings();
-    document.querySelectorAll('div.slider-icon').forEach(icon => icon.style.height = `${window.innerHeight}`);
+
+    document.querySelectorAll('div.slider-icon').forEach(button => button.style.height = `${window.innerHeight}`);
     const clickOptions = {
       player: this.player,
       background: this.background,
@@ -77,6 +79,7 @@ class App extends Base {
       todo: this.toDo,
       quotes: this.quotes,
       settings: this.settings,
+      app: this,
     };
     this.HTMLElements.background.element.addEventListener("click", (e) => {
       clicksHandler(e, clickOptions);
