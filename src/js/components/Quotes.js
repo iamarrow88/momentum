@@ -1,4 +1,5 @@
 import Base from "./base/Base.js";
+import localStorageService from "../services/localStorageService.js";
 
 export default class Quotes extends Base {
   constructor(lang, options, HTMLElements) {
@@ -7,7 +8,7 @@ export default class Quotes extends Base {
     this._APIkey = options.APIKey;
     this.basicQuotesArray = options.quotesArray;
     this.quotesArray = [];
-    this.source = "";
+    this.source = options.source;
     this.HTMLElements = HTMLElements;
     this.quotesCounter = 0;
   }
@@ -18,18 +19,18 @@ export default class Quotes extends Base {
 
   checkSource() {
     if (this.source !== "API") {
-      this.setSource("project");
+      this.setQuotesSource("project");
     }
-
     return this.source;
   }
 
-  setSource(source) {
+  setQuotesSource(source) {
     if (source === "API" || source === "project") {
       this.source = source;
     } else {
       this.source = "project";
     }
+    localStorageService.setItemToLocalStorage('isSourceAPI_q', this.source);
 
     return this.source;
   }
@@ -39,22 +40,26 @@ export default class Quotes extends Base {
     return this.source === "API";
   }
 
-  getActualQuotesArray() {
+  async getActualQuotesArray() {
     if (this.isSourceAPI()) {
-      this.quotesArray = this.getRandomNumber(this._url);
+      const response = await this.getData(this._url);
+      if(response.isOk){
+        this.quotesArray = response.json;
+      }
     } else {
-      this.quotesArray = this.basicQuotesArray;
+      this.quotesArray = await this.basicQuotesArray;
     }
     return this.quotesArray;
   }
 
   animationStart() {
     document.querySelector("div.change-btn").classList.add("refresh");
-    this.getActualQuotesArray();
-    setTimeout(()=> {
-      document.querySelector("div.change-btn").classList.remove("refresh");
+    this.getActualQuotesArray().then(data => {
+      setTimeout(()=> {
+        document.querySelector("div.change-btn").classList.remove("refresh");
 
-    }, 1000)
+      }, 1000)
+    })
   }
 
   setQuotesCounterValue(n) {
@@ -89,9 +94,8 @@ export default class Quotes extends Base {
   }
 
   quotesHandler() {
-    this.checkSource();
-    this.getActualQuotesArray();
+    this.getActualQuotesArray().then(data => this.printQuote());
     this.animationStart();
-    this.printQuote();
+
   }
 }
