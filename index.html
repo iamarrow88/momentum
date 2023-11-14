@@ -71,7 +71,12 @@
          <div class="motivation-block">
            <div class="to-do">
              <div class="to-do__header">
-               <label for="to-do__input" data-translate="todo-input-label"></label>
+               <div class="to-do__header-wrapper">
+                 <label for="to-do__input" data-translate="todo-input-label"></label>
+                 <svg class="to-do__filter" data-action="filter">
+                   <use xlink:href="src/assets/svg/sprite.svg#filter" data-action="filter"></use>
+                 </svg>
+               </div>
                <input id="to-do__input" type="text" class="to-do__input"
                       data-translate="[placeholder]todo-input"
                       data-action="todo-input">

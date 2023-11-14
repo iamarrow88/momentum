@@ -9,25 +9,28 @@ export default class ToDo extends Base {
     this.tasksArray = [];
     this.idCounter = new Date().getTime();
     this.HTMLElements = HTMLElements;
-    this._isDoneTasksHide = localStorageService.getItemFromLocalStorage('isDoneTasksHide');
+    this._isDoneTasksHide = false;
+    this._isFakeTasksDestroyed = false;
+    this._filterType = 'desc'; /*'desc || 'asc'*/
   }
 
   startToDo() {
-    /*this.tasksArray.forEach((task) => localStorageService.setObjectFieldsToLocalStorage(task, 'task'));*/
-    /*this.tasksArray.forEach((task) => this.setTaskToLocalStorage(task));*/
-
-    if(!this.checkTasksInLocalStorage()) {
+    this.checkIsDoneTasksHide();
+    if(!this.areAnyTasksInLocalStorage()) {
       this.tasksArray = this.initTasks;
     } else {
       this.getTasksFromLocalStorage();
     }
     this.tasksArray = this.sortTasksByDone(this.tasksArray);
-    this.sortTasksByID(this.tasksArray);
+    /*this.tasksArray = this.sortTasksByID(this.tasksArray);*/
     this.drawTasksList();
-    this.hideDoneTasks();
+    if(this._isDoneTasksHide){
+      this.hideDoneTasks();
+    }
   }
 
   drawTasksList() {
+    console.log('draw');
     document.querySelector(".to-do__task-list").innerHTML = "";
     this.tasksArray.forEach((task) => {
       this.drawTaskLine(task);
@@ -88,6 +91,7 @@ export default class ToDo extends Base {
       if (taskData.done === "true" || taskData.done === true) {
         checkbox.checked = true;
         label.classList.add("crossed-out");
+        if(this._isDoneTasksHide) taskWrapper.classList.add('invisible');
       } else {
         const editIcon = this.createElement("span", "item__edit", actionsWrapper, [
           { "data-action": "task-edit" },
@@ -127,13 +131,17 @@ export default class ToDo extends Base {
         undone.push(task);
       }
     });
+    const a = this.sortTasksByID(undone, this._filterType);
+    const b = this.sortTasksByID(done, this._filterType);
 
-    return undone.concat(done);
+    return a.concat(b);
   }
 
-  sortTasksByID(taskArray){
+  sortTasksByID(taskArray, type='desc'){
     const tasksIDs = taskArray.map(task => task.id);
-    tasksIDs.sort((a, b) => a - b);
+    const func = type === 'desc' ? function(a, b){return a - b} : function(a, b){return b - a};
+    tasksIDs.sort(func);
+    console.log(tasksIDs);
     let sortTasksArray = [];
     tasksIDs.forEach(id => {
       for (let i = 0; i < Object.keys(this.tasksArray).length; i++){
@@ -144,7 +152,7 @@ export default class ToDo extends Base {
 
       }
     })
-
+    console.log(sortTasksArray);
     return sortTasksArray;
   }
 
@@ -170,14 +178,22 @@ export default class ToDo extends Base {
 
   hideDoneTasks(){
     const taskElements = document.querySelectorAll(".item__wrapper");
-
     taskElements.forEach((task) => {
       if (task.firstChild.checked) {
         task.classList.toggle("invisible");
-        this._isDoneTasksHide = !this._isDoneTasksHide;
-        localStorageService.setItemToLocalStorage('isDoneTasksHide', `${this._isDoneTasksHide}`);
       }
     });
+  }
+
+  destroyFakeTasks(){
+    const fakeTasksIDs = [0, 1, 2];
+    let newTasksArray = [];
+    this.tasksArray.forEach(task => {
+      if(!fakeTasksIDs.includes(task.id)){
+        newTasksArray.push(task)
+      }
+    })
+    return newTasksArray;
   }
 
   toDoHandler(e) {
@@ -191,6 +207,10 @@ export default class ToDo extends Base {
       const taskData = this.createNewTaskData(getInputValue(e.target));
       if (taskData) {
         this.addTaskToArray(taskData);
+        if(!this._isFakeTasksDestroyed) {
+          this.tasksArray = this.destroyFakeTasks();
+          this.drawTasksList();
+        }
         localStorageService.setObjectFieldsToLocalStorage(taskData, 'task');
         this.tasksArray = this.sortTasksByID(this.tasksArray);
         this.tasksArray = this.sortTasksByDone(this.tasksArray);
@@ -199,9 +219,15 @@ export default class ToDo extends Base {
 
       }
     } else if ([...e.target.classList].includes("to-do__btn")) {
+      this._isDoneTasksHide = !this._isDoneTasksHide;
+      localStorageService.setItemToLocalStorage('isDoneTasksHide', `${this._isDoneTasksHide}`);
       this.hideDoneTasks();
+      /*this.unHideTasks();*/
     } else if ([...e.target.classList].includes("to-do__task")) {
       this.addDoneStyle(e.target);
+      if(this._isDoneTasksHide){
+        this.hideDoneTasks();
+      }
       this.setDoneTaskData(e.target);
       localStorageService.setItemToLocalStorage(`task-${e.target.closest('.item').dataset.task}-done`, e.target.checked);
 
@@ -265,7 +291,12 @@ export default class ToDo extends Base {
       const submitChangesButton = document.querySelector(`.item[data-task="${taskID}"] .item__submit`);
       submitChangesButton.style.display = "none";
       document.querySelector(`div[data-task="${taskID}"]`).classList.remove('editing');
+    } else if(e.target.dataset.action === 'filter'){
+      this._filterType = this._filterType === 'desc' ? 'asc' : 'desc';
+      this.tasksArray = this.sortTasksByDone(this.tasksArray);
+      this.drawTasksList();
     }
+
   }
 
   changeDivToInput(taskID, taskValue){
@@ -297,7 +328,7 @@ export default class ToDo extends Base {
 
   }
 
-  checkTasksInLocalStorage(){
+  areAnyTasksInLocalStorage(){
     let res = false;
     Object.keys(localStorage).forEach(key => {
       if(key.split('-').includes('task')) res = true;
@@ -334,5 +365,14 @@ export default class ToDo extends Base {
       this.tasksArray.push(objectsStorage[task]);
     });
     return this.tasksArray;
+  }
+
+  checkIsDoneTasksHide() {
+    const value = localStorageService.getItemFromLocalStorage('isDoneTasksHide');
+    this._isDoneTasksHide = !(value === 'false' || !value);
+  }
+
+  unHideTasks() {
+
   }
 }

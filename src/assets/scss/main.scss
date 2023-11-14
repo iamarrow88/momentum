@@ -564,6 +564,20 @@ svg.slide-next {
     justify-content: center;
     align-items: flex-start;
     font-size: 18px;
+
+    &-wrapper {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 40px;
+    }
+  }
+  &__filter {
+    padding: 12px;
+    height: 50px;
+    width: 50px;
+    fill: white;
+    cursor: pointer;
   }
 
   &__task-label {
