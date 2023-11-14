@@ -45,6 +45,10 @@ export default class Quotes extends Base {
       const response = await this.getData(this._url);
       if(response.isOk){
         this.quotesArray = response.json;
+      } else {
+        console.log('извините, цитаты не были получены с API. Источником цитат установлен проект');
+        this.setQuotesSource("project");
+        this.quotesArray = await this.basicQuotesArray;
       }
     } else {
       this.quotesArray = await this.basicQuotesArray;
