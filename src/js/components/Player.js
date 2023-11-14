@@ -7,7 +7,7 @@ export default class Player extends Base {
   constructor(lang, name, city, HTMLElements, playerOptions) {
     super(lang, name, HTMLElements, city);
     this._volumeLevel = playerOptions.volume;
-    this._isMuted = playerOptions.isMuted; /*todo*/
+    this._isMuted = playerOptions.isMuted;
     this._prevPlayedTrackID = null;
     this._nextPlayedTrackID = null;
     this._currentTrackID = playerOptions.currentTrackID;
@@ -378,7 +378,7 @@ export default class Player extends Base {
                       <use class="use-icon" data-button-name="volume" xlink:href="${sprite}#sound-speaker"></use>
                     </svg>
                     <div class="volume-bar__wrapper">
-                      <input class="volume-bar__range" type="range" min="0" max="100" step="1" value="0" data-button-name="range"></div>
+                      <input class="volume-bar__range" type="range" min="0" max="100" step="1" value="${this._volumeLevel}" data-button-name="range"></div>
                   </div>
                 </div>
                 
