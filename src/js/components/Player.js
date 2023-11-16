@@ -55,6 +55,7 @@ export default class Player extends Base {
           "unmute",
           "mute",
         );
+        this.synchronizeVolumeLevelDisplay(0);
       } else {
         this.setVolumeToAudioTag(this._volumeLevel);
         this.changeElementSvg(
@@ -63,6 +64,7 @@ export default class Player extends Base {
           "mute",
           "unmute",
         );
+        this.synchronizeVolumeLevelDisplay(this._volumeLevel);
       }
     } else if (event.target.closest(".song__content")) {
       this.setCurrentTrackID = +elementDataset.songId;
@@ -171,8 +173,8 @@ export default class Player extends Base {
     this.refreshTrackData(this._currentTrackID);
   }
 
-  synchronizeVolumeLevelDisplay(){
-    this.HTMLElements.volumeRange.element.value = this._volumeLevel;
+  synchronizeVolumeLevelDisplay(value){
+    this.HTMLElements.volumeRange.element.value = value;
   }
 
   toggleMuteIcon(){
@@ -198,7 +200,7 @@ export default class Player extends Base {
     this.createPlayer();
     this.searchHTMLElements();
     this.setSongTitleToProgressBar(this._currentTrackID);
-    this.synchronizeVolumeLevelDisplay();
+    this.synchronizeVolumeLevelDisplay(this._volumeLevel);
     this.toggleMuteIcon();
     this.checkAudioTag();
     this.HTMLElements.audioTag.element.addEventListener("ended", (e) => {
