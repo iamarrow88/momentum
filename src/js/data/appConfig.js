@@ -3,6 +3,7 @@ import tracks from "./tracks.js";
 import svgPath from "./svgPath.js";
 import quotes from "./quotes.js";
 import localStorageService from "../services/localStorageService.js";
+import sprite from '../../assets/svg/sprite.svg'
 
 const appConfig = {
   HTMLElements: {
@@ -202,11 +203,12 @@ const appConfig = {
 
   player: {
     tracksMap: tracks, // [{string: number, string: string, string: string}]
-    src: ["/sounds/", ".mp3"],
+    src: ["./", ".mp3"],
     volume: +localStorageService.getItemFromLocalStorage("volume") || 30, // number 0 - 100
     isMuted: +localStorageService.getItemFromLocalStorage('isMuted') || false,
     currentTrackID: +localStorageService.getItemFromLocalStorage("currentTrackID") || 1, // number
-    pathToSVGIcon: "src/assets/svg/sprite.svg#", // string
+    /*pathToSVGIcon: "./assets/svg/sprite.svg#",*/ // string
+    pathToSVGIcon: sprite +"#", // string
     svgPathEndpoints: svgPath, // {string: string}
     buttonsToToggle: {
       play: "pause",
