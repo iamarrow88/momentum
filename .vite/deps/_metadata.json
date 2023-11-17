@@ -1,0 +1,13 @@
+{
+  "hash": "3db1e8f9",
+  "browserHash": "17981a26",
+  "optimized": {
+    "unsplash-js": {
+      "src": "../../node_modules/unsplash-js/dist/unsplash-js.esm.js",
+      "file": "unsplash-js.js",
+      "fileHash": "624abdf1",
+      "needsInterop": false
+    }
+  },
+  "chunks": {}
+}
