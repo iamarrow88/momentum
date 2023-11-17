@@ -30,7 +30,6 @@ export default class ToDo extends Base {
   }
 
   drawTasksList() {
-    console.log('draw');
     document.querySelector(".to-do__task-list").innerHTML = "";
     this.tasksArray.forEach((task) => {
       this.drawTaskLine(task);
@@ -141,7 +140,6 @@ export default class ToDo extends Base {
     const tasksIDs = taskArray.map(task => task.id);
     const func = type === 'desc' ? function(a, b){return a - b} : function(a, b){return b - a};
     tasksIDs.sort(func);
-    console.log(tasksIDs);
     let sortTasksArray = [];
     tasksIDs.forEach(id => {
       for (let i = 0; i < Object.keys(this.tasksArray).length; i++){
@@ -152,7 +150,6 @@ export default class ToDo extends Base {
 
       }
     })
-    console.log(sortTasksArray);
     return sortTasksArray;
   }
 
@@ -198,8 +195,6 @@ export default class ToDo extends Base {
 
   toDoHandler(e) {
 
-    console.log(e.type);
-    console.log(e.target);
     if (
       [...e.target.classList].includes("to-do__input") &&
       e.type === "change"
@@ -234,7 +229,6 @@ export default class ToDo extends Base {
       this.tasksArray = this.sortTasksByDone(this.tasksArray);
       this.drawTasksList();
     } else if(e.target.dataset.action === "task-edit") {
-      console.log("task-edit");
       const taskID = e.target.closest('.item').dataset.task;
       const taskList = document.querySelector('.to-do__task-list');
       const taskItems = taskList.querySelectorAll('input[type="text"]');
@@ -266,7 +260,6 @@ export default class ToDo extends Base {
       document.querySelector('.to-do__input').style.pointerEvents = 'none';
 
     } else if(e.target.dataset.action === "task-delete") {
-      console.log("task-delete");
       const taskID = +e.target.closest('.item').dataset.task;
 
       let taskToDeleteIndex;
@@ -282,7 +275,6 @@ export default class ToDo extends Base {
       this.drawTasksList();
      } if(e.target.dataset.action === "task-submit" ||
     e.type === 'change' && [...e.target.classList].includes('item__input')) {
-      console.log("task-submit");
       const taskID = e.target.closest('.item').dataset.task;
       const taskValue = document.querySelector('#task-value').value;
       localStorageService.setItemToLocalStorage(`task-${taskID}-taskValue`, taskValue);
