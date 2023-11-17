@@ -15,25 +15,13 @@ class App extends Base {
     super(lang, name, HTMLElements, city);
     this.date = new Date();
     this.appStore = store;
-    this.player = new Player(
-      lang,
-      name,
-      city,
-      store.HTMLElements,
-      store.player,
-    );
-    this.background = new ClocksBackground(
-      lang,
-      name,
-      store.clocks,
-      store.translation,
-      store.HTMLElements,
-    );
+    this.player = {};
+    this.background = {};
     this.langs = Object.keys(store.translation);
-    this.quotes = new Quotes(lang, store.quotes, HTMLElements);
-    this.weather = new Weather(lang, city, HTMLElements, this.appStore.weather);
-    this.toDo = new ToDo(lang, store.toDo.tasksArray, HTMLElements);
-    this.settings = new Settings(lang, this.langs, store.translation);
+    this.quotes = {};
+    this.weather = {};
+    this.toDo = {};
+    this.settings = {};
   }
 
   set setLang(newLang) {
@@ -62,6 +50,24 @@ class App extends Base {
   }
 
   startApp() {
+    this.player = new Player(
+        this.lang,
+        this.name,
+        this.city,
+        this.HTMLElements,
+        this.appStore.player,
+    );
+    this.background = new ClocksBackground(
+        this.lang,
+        this.name,
+        this.appStore.clocks,
+        this.appStore.translation,
+        this.HTMLElements,
+    );
+    this.quotes = new Quotes(this.lang, this.appStore.quotes, this.HTMLElements);
+    this.weather = new Weather(this.lang, this.city, this.HTMLElements, this.appStore.weather);
+    this.toDo = new ToDo(this.lang, this.appStore.toDo.tasksArray, this.HTMLElements);
+    this.settings = new Settings(this.lang, this.langs, this.appStore.translation);
     this.searchHTMLElements.apply(this.appStore);
     this.player.startPlayer();
     this.background.startClocksBackground();
@@ -98,6 +104,8 @@ class App extends Base {
     this.HTMLElements.background.element.addEventListener("change", (e) => {
       inputChangeHandler(e, options);
     });
+
+    document.addEventListener('refresh',  () => this.startApp(), {once: true})
   }
 }
 

@@ -99,6 +99,7 @@ export default class Settings {
         Object.keys(options).forEach(app => options[app].lang = this.lang);
         options.weather.refreshWeatherData();
         options.background.insertDateToHTML();
+        options.quotes.quotesHandler();
 
         break;
       case "settings-change-lang-en":
@@ -113,6 +114,7 @@ export default class Settings {
         Object.keys(options).forEach(app => options[app].lang = this.lang);
         options.weather.refreshWeatherData();
         options.background.insertDateToHTML();
+        options.quotes.quotesHandler();
 
         break;
       case "settings-edit-data-btn": /*todo сделать обработку формы редаксирования*/
@@ -133,6 +135,8 @@ export default class Settings {
       case "settings-remove-data-btn":
         console.log("удалить все данные пользователя из локал сторадж");
         localStorageService.clearLocalStorage();
+        const refreshEvent = new Event('refresh');
+        document.dispatchEvent(refreshEvent);
         /*обновить страницу*/
         break;
       case "settings-background-api":
