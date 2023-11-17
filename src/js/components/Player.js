@@ -26,7 +26,8 @@ export default class Player extends Base {
   playerClicksHandler(event, playerObject) {
     const elementDataset = event.target.dataset;
     if (elementDataset.buttonName === "playManagement") {
-      this.setPlayPause(this._currentTrackID, !this._isPlaying);
+      /*this.setPlayPause(this._currentTrackID, !this._isPlaying);*/
+      this.setPlayPause(this._currentTrackID, this.shouldPlay(event.target.dataset.buttonName));
     } else if (elementDataset.buttonName === "play-prev") {
       this.refreshTrackData(this.findPrevTrackID(this._currentTrackID));
       this.setSongTitleToProgressBar(this._currentTrackID);
@@ -34,7 +35,8 @@ export default class Player extends Base {
       if (!this._isPlaying) {
         this.HTMLElements.audioTag.element.pause();
       } else {
-        this.setPlayPause(this.getCurrentTrackID(), this._isPlaying);
+        /*this.setPlayPause(this.getCurrentTrackID(), this._isPlaying);*/
+        this.setPlayPause(this._currentTrackID, this.shouldPlay(event.target.dataset.buttonName));
       }
     } else if (elementDataset.buttonName === "play-next") {
       this.refreshTrackData(this.findNextTrackID(this._currentTrackID));
@@ -43,7 +45,8 @@ export default class Player extends Base {
       if (!this._isPlaying) {
         this.HTMLElements.audioTag.element.pause();
       } else {
-        this.setPlayPause(this.getCurrentTrackID(), this._isPlaying);
+        /*this.setPlayPause(this.getCurrentTrackID(), this._isPlaying);*/
+        this.setPlayPause(this._currentTrackID, this.shouldPlay(event.target.dataset.buttonName));
       }
     } else if (elementDataset.buttonName === "volume") {
       this.setMuted(!this._isMuted);
@@ -82,8 +85,8 @@ export default class Player extends Base {
         this._isPlaying = false;
       }
 
-      this.setPlayPause(this.getCurrentTrackID(), this._isPlaying);
-
+      /*this.setPlayPause(this.getCurrentTrackID(), this._isPlaying);*/
+      this.setPlayPause(this._currentTrackID, this.shouldPlay(event.target.dataset.buttonName));
       /*
        * 1. установить текущим треком выбранный
        * 2. запустить console.log('play');*/
@@ -98,28 +101,30 @@ export default class Player extends Base {
         switch (buttonName) {
           case "playManagement": {
             console.log("поставить на паузу");
-            break;
+            this._isPlaying = false;
+            return false;
           }
 
           case "play-prev": {
             console.log("пусть играет дальше");
-            break;
+            return this._isPlaying;
           }
 
           case "play-next": {
             console.log("пусть играет дальше");
-            break;
+            return this._isPlaying;
           }
 
           case "song__content": {
             console.log("пусть играет дальше");
-            break;
+            return this._isPlaying;
           }
         }
       } else {
         switch (buttonName) {
           case "playManagement": {
             console.log("запустить, чтобы играло");
+            this._isPlaying = true;
             break;
           }
 
@@ -135,6 +140,7 @@ export default class Player extends Base {
 
           case "song__content": {
             console.log("запустить, чтобы играло");
+            this._isPlaying = true;
             break;
           }
         }
@@ -144,11 +150,13 @@ export default class Player extends Base {
         switch (buttonName) {
           case "playManagement": {
             console.log("поставить на паузу");
+            this._isPlaying = false;
             break;
           }
 
           case "song__content": {
             console.log("поставить на паузу");
+            this._isPlaying = false;
             break;
           }
         }
@@ -156,16 +164,20 @@ export default class Player extends Base {
         switch (buttonName) {
           case "playManagement": {
             console.log("запустить, чтобы играло");
+            this._isPlaying = true;
             break;
           }
 
           case "song__content": {
             console.log("запустить, чтобы играло");
+            this._isPlaying = true;
             break;
           }
         }
       }
     }
+
+    return this._isPlaying;
   }
 
   setUp() {
