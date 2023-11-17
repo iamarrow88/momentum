@@ -268,7 +268,8 @@ const appConfig = {
     },
   },
   quotes: {
-    url: "https://type.fit/api/quotes",
+    /*url: "https://type.fit/api/quotes",*/
+    url: "http://api.forismatic.com/api/1.0/?method=getQuote&key=457653&format=json&lang=",
     APIKey: "",
     quotesArray: quotes,
     source: localStorageService.getItemFromLocalStorage('isSourceAPI_q') || 'project'

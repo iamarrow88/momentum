@@ -17,12 +17,13 @@ export default class Quotes extends Base {
     this.quotesHandler();
   }
 
-  checkSource() {
+
+  /*checkSource() {
     if (this.source !== "API") {
       this.setQuotesSource("project");
     }
     return this.source;
-  }
+  }*/
 
   setQuotesSource(source) {
     if (source === "API" || source === "project") {
@@ -36,13 +37,22 @@ export default class Quotes extends Base {
   }
 
   isSourceAPI() {
-    this.checkSource();
+    /*this.checkSource();*/
     return this.source === "API";
   }
 
+  checkLang(){
+    this.lang = localStorageService.getItemFromLocalStorage('lang') || 'en';
+  }
+
   async getActualQuotesArray() {
+    this.checkLang();
+    console.log(this.lang);
+
+    console.log(this.lang);
     if (this.isSourceAPI()) {
-      const response = await this.getData(this._url);
+      /*const response = await this.getData(this._url);*/
+      const response = await this.postRequest(this.#setUrl(this.lang));
       if(response.isOk){
         this.quotesArray = response.json;
       } else {
@@ -53,6 +63,7 @@ export default class Quotes extends Base {
     } else {
       this.quotesArray = await this.basicQuotesArray;
     }
+    console.log(this.quotesArray);
     return this.quotesArray;
   }
 
@@ -64,6 +75,10 @@ export default class Quotes extends Base {
 
       }, 1000)
     })
+  }
+
+  #setUrl(lang){
+    return this._url + lang;
   }
 
   setQuotesCounterValue(n) {
@@ -90,9 +105,11 @@ export default class Quotes extends Base {
 
     this.HTMLElements.quote.element.innerHTML =
       this.quotesArray[this.quotesCounter].text ||
+      this.quotesArray[this.quotesCounter].quoteText ||
       this.quotesArray[this.quotesCounter].quote;
     this.HTMLElements.quoteAuthor.element.innerHTML =
       this.quotesArray[this.quotesCounter].author ||
+      this.quotesArray[this.quotesCounter].quoteAuthor ||
       this.quotesArray[this.quotesCounter].source;
     this.setQuotesCounterValue(this.quotesCounter + 1);
   }
